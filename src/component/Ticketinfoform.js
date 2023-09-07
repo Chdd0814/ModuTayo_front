@@ -1,5 +1,4 @@
-import { Button, ButtonGroup, FormControl,  ListSubheader, Select, InputLabel, MenuItem, Menu, Modal, Box, Grid, Tabs, Tab} from "@mui/material";
-import { styled } from "@mui/material/styles";
+import { Button, ButtonGroup, FormControl,  ListSubheader, Select, InputLabel, MenuItem, Menu, Modal, Box,  Tabs, Tab} from "@mui/material";
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -23,7 +22,7 @@ function Ticketinfoform() {
   const [Province, setProvince] = useState(null); // 폼에서 지역 선택 했을때 기차 or 버스 예약 페이지로 보내는 변수.
   const [selectLocation, setSelectLocation] = useState([]);
   const [ktxStationsByCity, setKtxStationsByCity] = useState({}); // 도시코드에 따른 지하철역 데이터
-  const [terminalData, setTerminalData] = useState([]); // 버스데이터
+  const [terminalData, setterminalData] = useState([]); // 버스데이터
   const [Modalopen, setModalOpen] = React.useState(false); // 모달 온,오프 관련 
   const [selectedTab, setSelectedTab] = useState(0); 
   const handleModalOpen = () => setModalOpen(true);
@@ -105,54 +104,31 @@ useEffect(() => {
 }, []);
 
 
-// 여기서부터 버스관련 함수
-useEffect(() => {
-  // 컴포넌트가 마운트될 때 API 데이터를 가져오는 함수 호출
-  fetchBusTerminalData();
-}, []);
-
-// API 데이터를 가져오는 함수
-const fetchBusTerminalData = () => {
-  // API 엔드포인트 URL
-  const apiUrl = '/publicApi/getBusList'; // API의 URL을 적절하게 수정해야 합니다.
-
-  // Axios를 사용하여 API 요청
-  axios.get(apiUrl)
-    .then((response) => {
-      // API 응답 데이터를 받아서 상태에 저장
-      setTerminalData(response.data);
-    })
-    .catch((error) => {
-      console.error('API 요청 오류:', error);
-    });
-};
-
-const busTerminals = terminalData.map((terminal) => ({
-  id: terminal.terminalId,
-  regionKey: terminal.regionKey,
-  name: terminal.terminalName,
-}));
+  useEffect(() => {
+   const fetchbusTerminalList = async () => {
+    try {
+      const response = await axios.get('/publicApi/getBusList')
+      const responseData = response.data;
+      console.log(responseData);
+      setterminalData(responseData);
+    } catch (error) {
+      console.error("API 호출 실패 (버스터미널리스트)", error);
+    }
+   };
+   fetchbusTerminalList();
+  }, []);
+     
 
 
-const handleTabChange = (event, newValue) => {
-  setSelectedTab(newValue);
-};
+ const handleTabChange = (event, newValue) => {
+    setSelectedTab(newValue);
+  };
 
 
 
 // Modal style
 
-const Modalstyle = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 400,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 4,
-};
+
 
 
 
@@ -402,39 +378,40 @@ const Modalstyle = {
           </form>
             )}
 
+{/* 여기 부분 버스인데 수정하면됨. 0907 PM 10 : 05  까지 작업 모달 수정해서 받아올 폼 제작해주면됨. 이거 해결되면 검색버튼하고, 그 위에 select 버튼 두개 제작해야함. 
+선택한 값이 그 버튼에 담기게 해야함.*/}
 {transportType === 'bus' && tripType === 'one-way' && (
         <>
-    <Button onClick={handleModalOpen}>Open modal</Button>
-          <Modal
-            open={Modalopen}
-            onClose={handleModalClose}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
-          >
-            <Box sx={{ flexGrow: 1, bgcolor: 'background.paper', display: 'flex', height: 500 }}>
-              <Tabs
-                orientation="vertical"
-                variant="scrollable"
-                value={selectedTab}
-                onChange={handleTabChange}
-                aria-label="Vertical tabs example"
-              >
-                {busTerminals.map((terminal, index) => (
-                  <Tab label={terminal.regionKey} key={terminal.terminalId} value={terminal.terminalId} />
-                ))}
-              </Tabs>
-              {busTerminals.map((terminal, index) => (
-                <TabPanel key={terminal.regionKey} value={selectedTab} index={terminal.terminalId}>
-                  {/* Display the bus terminal information here */}
-                  <p>{terminal.terminalName}</p>
-                  {/* Add more details if needed */}
-                </TabPanel>
-              ))}
-            </Box>
-          </Modal>
-        </>
-      )}
-
+   <Button onClick={handleModalOpen}>Open modal</Button>
+    <Modal
+      open={Modalopen}
+      onClose={handleModalClose}
+      aria-labelledby="modal-modal-title"
+      aria-describedby="modal-modal-description"
+    >
+      <Box sx={{ flexGrow: 1, bgcolor: 'background.paper', display: 'flex', height: 500 }}>
+        <Tabs
+          orientation="vertical"
+          variant="scrollable"
+          value={selectedTab}
+          onChange={handleTabChange}
+          aria-label="Vertical tabs example"
+        >
+          {terminalData.map((terminal, index) => (
+            <Tab label={terminal.regionKey} key={terminal.regionKey} value={terminal.terminalId} />
+          ))}
+        </Tabs>
+        {terminalData.map((terminal, index) => (
+          <TabPanel key={terminal.regionKey} value={selectedTab} index={terminal.terminalId}>
+            {/* Display the bus terminal information here */}
+            {terminal.terminalName}
+            {/* Add more details if needed */}
+          </TabPanel>
+        ))}
+      </Box>
+    </Modal>
+  </>
+)}
 
 </div>     
 
