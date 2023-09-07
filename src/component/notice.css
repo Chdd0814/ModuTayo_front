@@ -1,0 +1,62 @@
+/* notice.css */
+
+/* 공지사항 테이블 스타일 */
+table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  th,
+  td {
+    padding: 10px;
+    border: 1px solid #ccc;
+    text-align: center;
+  }
+  
+  th {
+    background-color: #f0f0f0;
+  }
+  
+  /* 공지사항 번호 스타일 */
+  td:first-child {
+    font-weight: bold;
+  }
+  
+  /* 공지사항 제목 스타일 */
+  td:nth-child(2) {
+    font-weight: bold;
+  }
+  
+  /* 공지사항 조회수 스타일 */
+  td:nth-child(3) {
+    color: blue;
+    font-weight: bold;
+  }
+  
+  /* 공지사항 작성일 스타일 */
+  td:last-child {
+    color: gray;
+  }
+  .notice-container {
+    position: relative;
+}
+
+.notice-card-link {
+  cursor : pointer;
+  padding : 10px;
+}
+
+.notice-card-body {
+  padding : 10px;
+}
+.write-button {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    margin: 20px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+} 

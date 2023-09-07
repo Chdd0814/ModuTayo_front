@@ -1,0 +1,22 @@
+.carousel-inner > .carousel.item > img {
+    min-width: 100%;
+    min-height: 400px;
+  } 
+
+  .ticket-info-form {
+
+    padding : 24px;
+    border-radius : 8px;
+    background-color: seashell;
+  }
+  .ticket-info-form-buttonGroup {
+    
+    padding : 16px;
+  }
+
+  .notice-list {
+    padding : 24px;
+    border-radius:  8px;
+    background-color: seashell;
+  }
+  

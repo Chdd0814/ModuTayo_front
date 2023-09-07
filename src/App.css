@@ -1,0 +1,34 @@
+
+
+@media (prefers-reduced-motion: no-preference) {
+  
+}
+.App {
+  text-align: center; /* 예시 스타일, 필요한 스타일을 추가/변경하세요 */
+}
+
+.App-Header {
+  position: relative; /* 네비바와 다른 컨텐츠 간 겹침 방지 */
+  z-index: 1; /* 네비바의 레이어 우선순위 조절 */
+}
+
+.App-main {
+  padding-top: 60px;
+  padding : 30px; /* 네비바 높이만큼 상단 패딩 추가 */
+}
+.App-footer {
+  
+  bottom : 0;
+}
+/* .App-link {
+  color: #61dafb;
+} */
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
