@@ -14,7 +14,9 @@ function TabPanel(props) {
       {...other}
     >
       {value === index && (
+        
         <Typography>{children}</Typography>
+        
       )}
     </div>
   );

@@ -15,7 +15,7 @@ const Footer = () => {
             <Row>
                 <Col>
                     <p>
-                        Copyright &copy; <span>{thisYear()} Korea Polytechnics 2-B 1th Group Project</span>
+                        Copyright &copy; <span>{thisYear()} Korea Polytechnics 2-B 1st Group Project</span>
                     </p>
                 </Col>
             </Row>

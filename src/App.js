@@ -9,6 +9,7 @@ import NoticeDetail from './component/noticeDetail';
 import NotcieWrite from './component/noticeWrite';
 import NoticeEdit from './component/noticeEdit';
 import Register from './component/Register';
+import LineInfo from './component/LineInfo';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -40,6 +41,7 @@ function App() {
           <Route path="/notice/write" element={<NotcieWrite />} />
           <Route path="/notice/:num/edit" element={<NoticeEdit />} />
           <Route path="/register" element = {<Register/>} />
+          <Route path="/lineinfo" element = {<LineInfo/>} />
           {/* 여기서 Route 관련 코드들을 복사해서 App-main 영역에 출력될 부분만 추가.*/}
         </Routes>
       </div>
