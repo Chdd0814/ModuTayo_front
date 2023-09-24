@@ -10,12 +10,17 @@ import NotcieWrite from './component/noticeWrite';
 import NoticeEdit from './component/noticeEdit';
 import Register from './component/Register';
 import LineInfo from './component/LineInfo';
+import Trainticket  from './component/Trainticket';
+import MyPage from './component/Mypage';
+import EditMember from './component/EditMember';
+import DeleteMember from './component/DeleteMember';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+
 
   const handleLogin = () => {
     // 로그인 처리 로직
@@ -42,6 +47,11 @@ function App() {
           <Route path="/notice/:num/edit" element={<NoticeEdit />} />
           <Route path="/register" element = {<Register/>} />
           <Route path="/lineinfo" element = {<LineInfo/>} />
+          <Route path="/train" element = {<Trainticket/>} />
+          <Route path="/bus"  /> 
+          <Route path = "/mypage" element = {<MyPage/>} />
+          <Route path = "/EditMember" element = {<EditMember/>} />
+          <Route path = "/DeleteMember" element = {<DeleteMember />} />
           {/* 여기서 Route 관련 코드들을 복사해서 App-main 영역에 출력될 부분만 추가.*/}
         </Routes>
       </div>

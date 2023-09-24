@@ -15,119 +15,7 @@ import { CardGroup } from 'reactstrap';
 import Card from 'react-bootstrap/Card';
 import logoExpress from '../logoExpress.png';
 import Ticketinfoform from './Ticketinfoform';
-// import { Autocomplete, TextField, Box, Button } from '@mui/material';
-// import ExampleCarouselImage from 'components/ExampleCarouselImage';
 
-// function TicketInfoform() {
-//   const [tripType, setTripType] = useState('one-way');
-//   const [transportType, setTransportType] = useState('train');
-//   const [selectedType, setSelectedType] = useState('');
-
-//   const handleTripTypeChange = (type) => {
-//     setTripType(type);
-//     setSelectedType(selectedType);
-//   };
-
-//   const handleTransportTypeChange = (type) => {
-//     setTransportType(type);
-//     setSelectedType(type === 'train' ? '기차' : '버스');
-//   };
-  
-
-
-
-  // return (
-    
-//     <div className="ticket-info-form">
-//       <h3>빠른 검색</h3>
-//       <Form>
-//         <ButtonGroup className = "ticket-info-form-buttonGroup">
-//           <Button onClick={() => handleTripTypeChange('round-trip')} variant="light">왕복</Button>
-//           <Button onClick={() => handleTripTypeChange('one-way')} variant="light">편도</Button>
-//           <DropdownButton as={ButtonGroup} title={selectedType ? selectedType : '종류'} id="bg-nested-dropdown" variant="light">
-//             <Dropdown.Item eventKey="train" onClick={() => handleTransportTypeChange('train')}>기차</Dropdown.Item>
-//             <Dropdown.Item eventKey="bus" onClick={() => handleTransportTypeChange('bus')}>버스</Dropdown.Item>
-//           </DropdownButton>
-//         </ButtonGroup>
-
-//         {tripType === 'round-trip' && transportType === 'train' && (
-//           <Row xs="auto">
-//             <FormSelectControl label="출발지" />
-//             <FormSelectControl label="도착지" />
-//             <FormSelectControl label="출발시간" />
-//             <FormSelectControl label="인원" />
-            
-//             <br />
-//             <FormSelectControl label="출발지" />
-//             <FormSelectControl label="도착지" />
-//             <FormSelectControl label="출발시간" />
-//             <FormSelectControl label="인원" />
-           
-//           </Row>
-          
-//         )}
-
-//         {tripType === 'one-way' && transportType === 'train' && (
-//           <Row xs="auto">
-//             <FormSelectControl label="출발지" />
-//             <FormSelectControl label="도착지" />
-//             <FormSelectControl label="출발시간" />
-//             <FormSelectControl label="인원" />
-            
-//           </Row>
-//         )}
-
-// {tripType === 'round-trip' && transportType === 'bus' && (
-//           <Row xs="auto">
-//             <FormSelectControl label="출발지" />
-//             <FormSelectControl label="도착지" />
-//             <FormSelectControl label="출발시간" />
-//             <FormSelectControl label="인원" />
-           
-//             <br />
-//             <FormSelectControl label="출발지" />
-//             <FormSelectControl label="도착지" />
-//             <FormSelectControl label="출발시간" />
-//             <FormSelectControl label="인원" />
-            
-//           </Row>
-          
-//         )}
-
-//         {tripType === 'one-way' && transportType === 'bus' && (
-//           <Row xs="auto">
-//             <FormSelectControl label="출발지" />
-//             <FormSelectControl label="도착지" />
-//             <FormSelectControl label="출발시간" />
-//             <FormSelectControl label="인원" />
-            
-//           </Row>
-//         )}
-      
-
-//         <Button className = "ticket-info-form-submitButton"variant="secondary" size="lg" type="submit" xs = "auto">
-//           검색
-//         </Button>
-//       </Form>
-//     </div>
-//   );
-
-// }
-
-// function FormSelectControl({ label }) {
-//   return (
-//     <Col>
-//       <FloatingLabel controlId={`floatingSelectGrid-${label}`} label={label}>
-//         <Form.Select aria-label={`Floating label select for ${label}`}>
-//           <option>Open this select menu</option>
-//           <option value="1">One</option>
-//           <option value="2">Two</option>
-//           <option value="3">Three</option>
-//         </Form.Select>
-//       </FloatingLabel>
-//     </Col>
-//   );
-// }
 
 export default function Home() {
   const [notices, setNotices] = useState([]);
@@ -136,7 +24,7 @@ export default function Home() {
   useEffect(() => {
     async function callNotices() {
       try {
-        const response = await axios.get('/api/notices'); // 수정해야 할 경로
+        const response = await axios.get('/notices'); // 수정해야 할 경로
         setNotices(response.data);
       } catch (error) {
         console.error('Error fetching notices:', error);

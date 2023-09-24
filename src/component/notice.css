@@ -1,6 +1,12 @@
 /* notice.css */
 
 /* 공지사항 테이블 스타일 */
+@font-face {
+  font-family: 'GmarketSansMedium';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
 table {
     width: 100%;
     border-collapse: collapse;
@@ -11,10 +17,12 @@ table {
     padding: 10px;
     border: 1px solid #ccc;
     text-align: center;
+    
   }
   
   th {
     background-color: #f0f0f0;
+    
   }
   
   /* 공지사항 번호 스타일 */
@@ -25,6 +33,7 @@ table {
   /* 공지사항 제목 스타일 */
   td:nth-child(2) {
     font-weight: bold;
+    
   }
   
   /* 공지사항 조회수 스타일 */
