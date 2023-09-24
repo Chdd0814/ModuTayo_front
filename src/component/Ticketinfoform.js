@@ -646,3 +646,5 @@ return(
 
  );
 }
+
+export default Ticketinfoform;
