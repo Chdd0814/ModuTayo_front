@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import {Unstable_Grid2,Button,Table,TableBody,TableCell,TableRow,TextField,TableContainer,Paper,IconButton,ToggleButton } from '@mui/material';
+import './noticeEdit.css';
+import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
 
 const NoticeEdit = () => {
   const { num } = useParams();
@@ -11,10 +14,12 @@ const NoticeEdit = () => {
   const [visitcount, setVisitCount] = useState(0);
   const [postdate, setPostDate] = useState('');
   const [loading, setLoading] = useState(true);
+  const [imageSrc, setImageSrc] = useState("");
+ const [selectedFile,setSelectedFile]=useState('');
 
   const getNoticeDetail = useCallback(async () => {
     try {
-      const response = await axios.get(`/api/notices/${num}`);
+      const response = await axios.get(`/notices/${num}`);
       const { title, content, visitcount, postdate } = response.data;
       setTitle(title);
       setContent(content);
@@ -31,6 +36,24 @@ const NoticeEdit = () => {
     getNoticeDetail();
   }, [getNoticeDetail]);
 
+  const handleFileChange= e=>{
+    setSelectedFile(e.target.files[0]);
+
+    // 파일이 선택되지 않았다면 함수 종료
+    if (!selectedFile) return;
+
+    // 선택된 파일이 이미지 파일이 아니라면 함수 종료
+    if (!selectedFile.type.match('image.*')) {
+      alert('Please select a valid image file.');
+      return;
+  }
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setImageSrc(e.target.result);
+      };
+      reader.readAsDataURL(selectedFile);
+};
+
   const handleUpdate = async () => {
     const shouldUpdate = window.confirm('정말로 수정하시겠습니까?');
     if (shouldUpdate) {
@@ -42,7 +65,7 @@ const NoticeEdit = () => {
           postdate, // Include postdate in the data
         };
 
-        await axios.put(`/api/notices/${num}`, dataToUpdate);
+        await axios.put(`/notices/${num}`, dataToUpdate);
         // 수정 후 상세 페이지로 이동
         navigate(`/notice/${num}`);
       } catch (error) {

@@ -1,0 +1,18 @@
+.main{
+    font-family: 'GmarketSansMedium';
+}
+
+.errorfalse{
+    font-size: 10px;
+    color: rgb(207, 84, 84);
+}
+.errortrue{
+    font-size: 10px;
+    color: rgb(92, 92, 230);
+}
+@font-face {
+    font-family: 'GmarketSansMedium';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}

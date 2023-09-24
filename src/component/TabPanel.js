@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Typography from '@mui/material/Typography';
+import { Box } from '@mui/material';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -14,7 +15,9 @@ function TabPanel(props) {
       {...other}
     >
       {value === index && (
+        //<Box sx={{ p: 1 }}>
         <Typography>{children}</Typography>
+        //</Box>
       )}
     </div>
   );
@@ -22,8 +25,8 @@ function TabPanel(props) {
 
 TabPanel.propTypes = {
   children: PropTypes.node,
-  index: PropTypes.string.isRequired,
-  value: PropTypes.string.isRequired,
+  index: PropTypes.number.isRequired,
+  value: PropTypes.number.isRequired,
 };
 
 export default TabPanel;
