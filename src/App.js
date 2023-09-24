@@ -9,6 +9,7 @@ import NoticeDetail from './component/noticeDetail';
 import NotcieWrite from './component/noticeWrite';
 import NoticeEdit from './component/noticeEdit';
 import Register from './component/Register';
+import LineInfo from './component/LineInfo';
 import Trainticket  from './component/Trainticket';
 import MyPage from './component/Mypage';
 import EditMember from './component/EditMember';
@@ -38,7 +39,7 @@ function App() {
         <Header isLoggedIn={isLoggedIn} onLogout={handleLogout} />
       </div>
       <div className="App-main">
-        <Routes>
+         <Routes>
           <Route exact path="/" Component={<Home/>} />
           <Route exact path="/login" Component={<Login onLogin={handleLogin} />} />
           <Route path="/notice" Component={<Notice />} />
