@@ -9,6 +9,7 @@ import NoticeDetail from './component/noticeDetail';
 import NotcieWrite from './component/noticeWrite';
 import NoticeEdit from './component/noticeEdit';
 import Register from './component/Register';
+import LineInfo from './component/LineInfo';
 import Trainticket  from './component/Trainticket';
 import MyPage from './component/Mypage';
 import EditMember from './component/EditMember';
@@ -45,9 +46,9 @@ function App() {
           <Route path="/notice/write" element={<NotcieWrite />} />
           <Route path="/notice/:num/edit" element={<NoticeEdit />} />
           <Route path="/register" element = {<Register/>} />
+          <Route path="/lineinfo" element = {<LineInfo/>} />
           <Route path="/train" element = {<Trainticket/>} />
           <Route path="/bus"  /> 
-          <Route path = "/lineinfo" element = {}/>
           <Route path = "/mypage" element = {<MyPage/>} />
           <Route path = "/EditMember" element = {<EditMember/>} />
           <Route path = "/DeleteMember" element = {<DeleteMember />} />
