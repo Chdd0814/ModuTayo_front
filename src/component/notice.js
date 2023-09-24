@@ -7,7 +7,7 @@
         const [notices, setNotices] = useState([]);
 
         useEffect(() => {
-            axios.get('/api/notices')
+            axios.get('/notices')
                 .then((response) => {
                     setNotices(response.data);
                 })
