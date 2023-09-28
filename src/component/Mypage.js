@@ -1,15 +1,25 @@
-import React, {useState} from 'react';
+import React, { useEffect,useState} from 'react';
 import {List, ListSubheader, ListItemButton, ListItemText, ListItem, ListItemIcon, Typography, Divider } from '@mui/material';
 import {useNavigate} from 'react-router-dom';
 import './Mypage.css';
 import {Person,Payment,PersonOff,PersonSearch,ContentPaste,DirectionsBus,DirectionsTransit,ManageAccounts,ManageSearch} from '@mui/icons-material';
+import vaildAdmin from './vaildAdmin';
+
 
 const Mypage = () =>{
-    const navigate=useNavigate()
+    const navigate=useNavigate();
+    const [isAdmin, setisAdmin] = useState(false); // isAdmin 상태 추가
     const handleNavigation = (path) => {
         navigate(path); // 내비게이션 함수 호출
       };
 
+      useEffect(() => {
+        if (vaildAdmin()) {
+          setisAdmin(true);
+        } else {
+          setisAdmin(false);
+        }
+      }, []);
     return (
             <List
                 sx={{width:'100%',maxWidth:220,borderRight:'1px solid #dcdcdc'}}
@@ -83,7 +93,9 @@ const Mypage = () =>{
                         </ListItemText>
                      </ListItemButton>
                 </ListItem>
-                <ListItem sx={{borderTop:'1px solid #dcdcdc'}}>
+                {isAdmin && (
+                    <>
+                  <ListItem sx={{borderTop:'1px solid #dcdcdc'}}>
                     <ListItemIcon><ManageAccounts fontSize='large' color="primary" /></ListItemIcon>
                     <Typography variant="h6" fontFamily="GmarketSansMedium">관리자</Typography>
                 </ListItem>
@@ -95,8 +107,10 @@ const Mypage = () =>{
                         </ListItemText>
                      </ListItemButton>
                 </ListItem>
+                    </> 
+            )}
             </List>
     );
-}
+};
 
 export default Mypage;

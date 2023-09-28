@@ -140,57 +140,6 @@ const busTerminals = terminalData.map((terminal) => ({
   name: terminal.terminalName,
 }));
 
-const uniqueRegionKeys = ["서울", "인천/경기", "강원","대전/충남","충북","광주/전남","전북","부산/경남","경북"];
-
-const handleTabChange = (event, newValue) => {
-  setSelectedTab(newValue);
-  busTerminals.forEach(terminal => {
-    console.log(terminal.regionKey);
-  });
-  const filteredTerminals = busTerminals.filter(terminal => terminal.regionKey === uniqueRegionKeys[uniqueRegionKeys.indexOf(newValue)]);
-    setFilteredTerminals(filteredTerminals);
-    console.log(filteredTerminals);
-    console.log(newValue);
-    console.log(uniqueRegionKeys);
-    console.log(selectedTab);
-};
-
-
-// Modal style
-
-const Modalstyle = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 400,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 4,
-
-// API 데이터를 가져오는 함수
-const fetchBusTerminalData = () => {
-  // API 엔드포인트 URL
-  const apiUrl = '/publicApi/getBusList'; // API의 URL을 적절하게 수정해야 합니다.
-
-  // Axios를 사용하여 API 요청
-  axios.get(apiUrl)
-    .then((response) => {
-      // API 응답 데이터를 받아서 상태에 저장
-      setTerminalData(response.data);
-    })
-    .catch((error) => {
-      console.error('API 요청 오류:', error);
-    });
-};
-
-const busTerminals = terminalData.map((terminal) => ({
-  id: terminal.terminalId,
-  regionKey: terminal.regionKey,
-  name: terminal.terminalName,
-}));
-
 const ArrBusTerminals = ArrTerminalData.map((terminal) => ({
   arrid: terminal.terminalId,
   arrregionKey: terminal.regionKey,
@@ -233,7 +182,7 @@ const handleTerminalClick2 = (terminalName2, terminalId2) => {
 
 return(
 
-<div className="ticket-info-form">
+ <div className="ticket-info-form">
 <h2>빠른 검색</h2>
 
 <div className= "form-state-button-groups">
@@ -479,15 +428,6 @@ return(
 
 {transportType === 'bus' && tripType === 'one-way' && (
         <>
-    <Button onClick={handleModalOpen}>Open modal</Button>
-          <Modal
-            open={Modalopen}
-            onClose={handleModalClose}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
-          >
-            <Box sx={{ flexGrow: 1, bgcolor: 'background.paper', display: 'flex', height: 500 }}>
-              <Tabs
         <form onSubmit = {handleSubmit} className = "form-ticketinfo-form">
 <FormControl sx={{ m: 1, minWidth: 120 }}>
       {selectedTerminal ? null : <InputLabel htmlFor="grouped-select">출발지</InputLabel>}
@@ -551,23 +491,6 @@ return(
                 value={selectedTab}
                 onChange={handleTabChange}
                 aria-label="Vertical tabs example"
-              >
-               
-                {uniqueRegionKeys.map(regionKey => (
-          <Tab label={regionKey} key={regionKey} value={regionKey} />
-        ))}
-              </Tabs>
-              {filteredTerminals.map((terminal,index) => (
-          <TabPanel key={terminal.id} value={uniqueRegionKeys.indexOf(selectedTab)} index={uniqueRegionKeys.indexOf(selectedTab)}>
-            {terminal.name}
-            {console.log(terminal.name)}
-            {console.log(index)}
-            {console.log(selectedTab)}
-            {console.log(terminal.id)}
-            {console.log(terminal.regionKey)}
-          </TabPanel>
-        ))}
-            </Box>
              >  
                 {uniqueRegionKey.map((regionKey) => (
           <Tab label={regionKey} key={regionKey} value={regionKey} />
@@ -616,8 +539,6 @@ return(
         </>
       )}
 
-
-</div>     
 {transportType === 'bus' && tripType === 'round-trip' && (
 
         <>

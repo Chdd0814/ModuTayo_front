@@ -25,26 +25,32 @@
       setPassword(e.target.value);
     };
 
-
     const handleLogin = () => {
 
+      
       const data = {
         username: username,
         password: password,
       };
-      
-      axios.post('/login', data)
+    
+      axios.post('/login', data, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
         .then((response) => {
           console.log(response.data);
           // 서버에서 반환한 토큰을 사용
-          const token = response.data.token;
-      
+          const token = response.data.accessToken;
+          console.log(token);
+    
           if (token) {
             // 토큰이 존재하는 경우 로그인 성공 처리
-            localStorage.setItem('token', token); 
-            setLogin(data);
-            onLogin();
-            history('/');
+            localStorage.setItem('token', token);
+            // 로그인 상태를 설정하거나 필요한 작업을 수행하세요.
+            // setLogin(true); // 예시: 로그인 상태를 true로 설정
+            onLogin(true);
+            history("/");
           } else {
             // 토큰이 존재하지 않는 경우 로그인 실패 처리
             setLoginError('로그인에 실패했습니다.');
@@ -55,8 +61,6 @@
           console.error(error);
           setLoginError('로그인 중 오류가 발생했습니다.');
         });
-
-
     };
 
     return (
