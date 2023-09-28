@@ -14,7 +14,6 @@ import Trainticket  from './component/Trainticket';
 import MyPage from './component/Mypage';
 import EditMember from './component/EditMember';
 import DeleteMember from './component/DeleteMember';
-import LineInfo from './component/LineInfo';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -39,7 +38,6 @@ function App() {
         <Header isLoggedIn={isLoggedIn} onLogout={handleLogout} />
       </div>
       <div className="App-main">
-<<<<<<< HEAD
         <Routes>
           <Route exact path="/" element ={<Home/>} />
           <Route exact path="/login" element ={<Login onLogin={handleLogin} />} />
@@ -49,17 +47,6 @@ function App() {
           <Route path="/notice/:num/edit" element={<NoticeEdit />} />
           <Route path="/register" element = {<Register/>} />
           <Route path="/train" element = {<Trainticket/>} />
-=======
-         <Routes>
-          <Route exact path="/" Component={<Home/>} />
-          <Route exact path="/login" Component={<Login onLogin={handleLogin} />} />
-          <Route path="/notice" Component={<Notice />} />
-          <Route path="/notice/:num" Component={<NoticeDetail />} />
-          <Route path="/notice/write" Component={<NotcieWrite />} />
-          <Route path="/notice/:num/edit" Component={<NoticeEdit />} />
-          <Route path="/register" Component = {<Register/>} />
-          <Route path="/train" Component = {<Trainticket/>} />
->>>>>>> 0ed1b86e31de3c9343af89ebe392e56450fabf09
           <Route path="/bus"  /> 
           <Route path = "/lineinfo" element= {<LineInfo/> } />
           <Route path = "/mypage" element = {<MyPage/>} />
