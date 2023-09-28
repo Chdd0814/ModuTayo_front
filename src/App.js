@@ -39,19 +39,19 @@ function App() {
       </div>
       <div className="App-main">
         <Routes>
-          <Route exact path="/" Component={<Home/>} />
-          <Route exact path="/login" Component={<Login onLogin={handleLogin} />} />
-          <Route path="/notice" Component={<Notice />} />
-          <Route path="/notice/:num" Component={<NoticeDetail />} />
-          <Route path="/notice/write" Component={<NotcieWrite />} />
-          <Route path="/notice/:num/edit" Component={<NoticeEdit />} />
-          <Route path="/register" Component = {<Register/>} />
-          <Route path="/train" Component = {<Trainticket/>} />
+          <Route exact path="/" element ={<Home/>} />
+          <Route exact path="/login" element ={<Login onLogin={handleLogin} />} />
+          <Route path="/notice" element={<Notice />} />
+          <Route path="/notice/:num" element={<NoticeDetail />} />
+          <Route path="/notice/write" element={<NotcieWrite />} />
+          <Route path="/notice/:num/edit" element={<NoticeEdit />} />
+          <Route path="/register" element = {<Register/>} />
+          <Route path="/train" element = {<Trainticket/>} />
           <Route path="/bus"  /> 
-          <Route path = "/lineinfo" Component= {<LineInfo/> } />
-          <Route path = "/mypage" Component = {<MyPage/>} />
-          <Route path = "/EditMember" Component= {<EditMember/>} />
-          <Route path = "/DeleteMember" Component= {<DeleteMember />} />
+          <Route path = "/lineinfo" element= {<LineInfo/> } />
+          <Route path = "/mypage" element = {<MyPage/>} />
+          <Route path = "/EditMember" element = {<EditMember/>} />
+          <Route path = "/DeleteMember" element = {<DeleteMember />} />
           {/* 여기서 Route 관련 코드들을 복사해서 App-main 영역에 출력될 부분만 추가.*/}
         </Routes>
       </div>

@@ -2,9 +2,11 @@
     import { Link } from 'react-router-dom'; // React Router v6 사용
     import './notice.css';
     import axios from 'axios';
+import vaildAdmin from './vaildAdmin';
 
     const Notice = () => {
         const [notices, setNotices] = useState([]);
+        const [isAdmin, setisAdmin] = useState(false);
 
         useEffect(() => {
             axios.get('/notices')
@@ -14,6 +16,14 @@
                 .catch((error) => {
                     console.error('Error fetching notices:', error);
                 });
+
+             if (vaildAdmin()) {
+
+                setisAdmin(true);
+
+             } else {
+                setisAdmin(false);
+             }
         }, []);
 
         return (
@@ -40,7 +50,9 @@
                         ))}
                     </tbody>
                 </table>
-                <Link to="/notice/write" className="write-button">글작성</Link>
+                {isAdmin && (
+                    <Link to="/notice/write" className="write-button">글작성</Link>
+                )}
             </div>
         );
     };

@@ -4,10 +4,12 @@ import {Unstable_Grid2, Typography, Table,TableBody,TableRow,TableCell,TableCont
  import axios from 'axios';
  import {Delete,ModeEdit} from '@mui/icons-material';
  import './noticeDetail.css';
+import vaildAdmin from './vaildAdmin';
  const NoticeDetail = () => {
     const { num } = useParams();
     const [notice, setNotice] = useState({});
     const [loading, setLoading] = useState(true);
+    const [isAdmin, setisAdmin] = useState(false);
     const navigate = useNavigate(); 
     
     const getNoticeDetail = useCallback(async () => {
@@ -23,6 +25,11 @@ import {Unstable_Grid2, Typography, Table,TableBody,TableRow,TableCell,TableCont
     
     useEffect(() => {
         getNoticeDetail();
+        if(vaildAdmin()) {
+          setisAdmin(true)
+        } else {
+          setisAdmin(false)
+        }
     }, [getNoticeDetail]);
 
     const handleEdit = () => {
@@ -81,7 +88,8 @@ import {Unstable_Grid2, Typography, Table,TableBody,TableRow,TableCell,TableCont
           </Table>
           </TableContainer> 
           </Unstable_Grid2>
-          <Unstable_Grid2 container direction="row">
+          {isAdmin && (
+            <Unstable_Grid2 container direction="row">
           <Unstable_Grid2>
             <Button variant="contained" startIcon={<ModeEdit />}  onClick={handleEdit}>수정</Button>
           </Unstable_Grid2>
@@ -89,6 +97,7 @@ import {Unstable_Grid2, Typography, Table,TableBody,TableRow,TableCell,TableCont
             <Button variant="contained" startIcon={<Delete />}  onClick={handleDelete}>삭제</Button>
             </Unstable_Grid2>
             </Unstable_Grid2>
+            )}
         </Unstable_Grid2>
     );
 };
