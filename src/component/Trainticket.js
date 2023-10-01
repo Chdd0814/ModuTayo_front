@@ -4,7 +4,7 @@ import { Typography } from "@mui/material";
 import TrainTicketForm from "./TrainticketForm";
 // 0910 pm 10 : 11 
 
-function Trainticket() {
+function Trainticket({ isLoggedIn }) {
 
     
     useEffect(() => { 
@@ -24,7 +24,7 @@ function Trainticket() {
 
         <div className = "TrainTicketForm">
             <Typography variant="h5">기차표</Typography>
-            <TrainTicketForm/>
+            <TrainTicketForm isLoggedIn = {isLoggedIn}/>
         </div>
 
         

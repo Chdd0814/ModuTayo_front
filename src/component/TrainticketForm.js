@@ -10,30 +10,43 @@ import dayjs from "dayjs";
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import EventSeatIcon from '@mui/icons-material/EventSeat';
 import calluserInfo from "./calluserInfo";
+import { useNavigate } from 'react-router-dom';
 
 
-function TrainTicketForm() {
+function TrainTicketForm({ isLoggedIn }) {
 
     const [tripType, setTripType] = useState("one-way"); 
     const [selectedType, setSelectedType] = useState(''); 
     const [selectLocation, setSelectLocation] = useState([]);
     const [ktxStationsByCity, setKtxStationsByCity] = useState({}); 
     const [datevalue, setdatevalue] = useState(dayjs()); // 날짜 
-    const [party, setParty] = useState(''); // 인원
+    const [party, setParty] = useState(1); // 인원
     const [trainTicketinfo, settrainTicketinfo] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedItem, setSelectedItem] = useState(null);
     const [selectedSeat, setSelectedSeat] = useState(null);
-
+    const [selectedCar, setSelectedCar] = useState(null);
     const [name, setName] = useState(''); // 이름 상태
     const [phoneNumber, setPhoneNumber] = useState(''); // 전화번호 상태
     const [mileage, setMileage] = useState(''); // 마일리지 상태
+    const [id, setid] = useState('');
     const [isUsingMileage, setIsUsingMileage] = useState(false);
     const [mileageDiscount, setMileageDiscount] = useState(0);
+    const [ticketPrice, setTicketPrice] = useState(0);
     const [totalPrice, setTotalPrice] = useState(0);
-    const mileageDiscountRate = 0.2;
-
+    const navigate = useNavigate(); 
+    const [usedMileage, setusedMileage] = useState(0);
     
+
+    const handleLoginCheck = () => {
+      if (!isLoggedIn) {
+        // 비로그인 사용자인 경우 /login 페이지로 이동
+        alert('로그인이 필요합니다.'); // 또는 원하는 메시지를 표시할 수 있습니다.
+        navigate('/login');
+      } else {
+        // 로그인된 사용자의 경우 다른 작업 수행
+      }
+    };
 
     const handleSubmit = async (event) => {
 
@@ -61,6 +74,9 @@ function TrainTicketForm() {
       // 응답 데이터 출력
       console.log("응답 데이터:", response.data);
       settrainTicketinfo(response.data);
+
+    
+   
     } catch (error) {
       console.error("API 호출 실패:", error);
     }
@@ -82,6 +98,7 @@ function TrainTicketForm() {
           setName(userinfo.name);
           setPhoneNumber(userinfo.phonenumber);
           setMileage(userinfo.mileage);
+          setid(userinfo.sub);
         }
       }, []);
       useEffect(() => {
@@ -114,7 +131,7 @@ function TrainTicketForm() {
       const handleSelection = (item) => {
         // 선택된 데이터(selectedItem)를 예매 페이지로 전달하는 로직을 구현
         // 예: 예매 페이지로 이동하면서 선택된 데이터를 URL 매개변수로 전달
-        // 예매 페이지로 이동하는 부분은 React Router나 다른 라우팅 방식을 사용하실 수 있습니다.
+        setTicketPrice(item.Fare * party);
         setSelectedItem(item);
         setIsModalOpen(true);
       };
@@ -123,8 +140,8 @@ function TrainTicketForm() {
         // 모달 닫기
         setIsModalOpen(false);
         
-        // 여기에서 결제 페이지로 이동하도록 구현
-        window.location.href = "/PaymentPage"; // 예시 URL
+        saveDataTobeforePay();
+        navigate("/payment");
       };
       
       const handleCloseModal = () => {
@@ -132,35 +149,75 @@ function TrainTicketForm() {
 
       }
 
+  
 
 
 
-      const handleSeatSelect = (seat) => {
+
+      const handleSeatSelect = (seat, car) => {
         setSelectedSeat(seat);
+        setSelectedCar(car);
       };
 
+
       const handleMileageUsage = () => {
+        // 사용자의 마일리지
+        const userMileage = mileage;
+    
+        // 20% 할인율
+        const mileagePercentageDiscount = 0.20;
+      
         if (!isUsingMileage) {
           // 마일리지를 사용하는 경우
-          const discountAmount = (selectedItem.Fare * mileageDiscountRate).toFixed(0);
-          const discountedPrice = selectedItem.Fare - discountAmount;
+          const maxDiscountAmount = Math.min(userMileage, ticketPrice * mileagePercentageDiscount);
       
-          // 할인된 가격과 마일리지 사용 여부를 업데이트
-          setMileageDiscount(discountAmount);
-          setTotalPrice(discountedPrice);
+          if (maxDiscountAmount > 0) {
+            // 할인된 가격과 마일리지 사용 여부를 업데이트
+            const discountedPrice = ticketPrice - maxDiscountAmount;
+            setMileageDiscount(maxDiscountAmount);
+            setTotalPrice(discountedPrice);
+
+            // 사용하고 남은 마일리지를 계산하고 업데이트
+      const remainingMileage = userMileage - maxDiscountAmount;
+      setusedMileage(remainingMileage);
+          }
         } else {
           // 마일리지를 사용하지 않는 경우
           // 할인된 가격을 초기화
           setMileageDiscount(0);
           // 원래 가격으로 복원
-          setTotalPrice(selectedItem.Fare);
+          setTotalPrice(ticketPrice);
         }
       
         // 마일리지 사용 여부를 토글
         setIsUsingMileage(!isUsingMileage);
       };
     
-
+      const saveDataTobeforePay = () => {
+        const dataToSave = {
+          depPlace: selectedItem.depPlaceName, // 출발지
+          arrPlace: selectedItem.arrPlaceName, // 도착지
+          depPlandTime: selectedItem.depPlandTime, // 출발시간
+          arrPlandTime: selectedItem.arrPlandTime, // 도착시간
+          trainGradeName: selectedItem.trainGradeName, // 기차종류
+          trainNum: selectedItem.trainNum, // 기차번호
+          datevalue: datevalue.format("YYYYMMDD"), // 선택한 날짜
+          selectedItem: selectedItem, // 혹시 몰라서 기차정보 전부다 들고감.
+          party: party, // 인원수
+          name: name, // 예매자 이름
+          id : id, //예매자 아이디
+          phoneNumber: phoneNumber, // 예매자 번호
+          totalPrice: totalPrice, // 총 가격
+          ticketPrice : ticketPrice, //기차표 가격
+          Mileage: usedMileage, // 사용하고 남은 마일리지
+          useMileage : mileageDiscount, //사용한 마일리지 (결제 내역에 뽑아주기 위함)
+          trainCarNumber : selectedCar, // 선택한 호차 
+          trainSeatNumber : selectedSeat, // 선택한 좌석
+        };
+      
+        // 데이터를 JSON 문자열로 변환하여 `localStorage`에 저장
+        localStorage.setItem('saveTicketinfo', JSON.stringify(dataToSave));
+      };
 
     return (
     <div className = "Trainticket-form">
@@ -227,13 +284,10 @@ function TrainTicketForm() {
         <Select
           labelId="demo-simple-select-helper-label"
           id="demo-simple-select-helper"
-          value={party}
+          value={party || 1} 
           label="Age"
           onChange={handleParty}
           >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
           {[...Array(10)].map((_, index) => (
               <MenuItem key={index + 1} value={index + 1}>
         {index + 1}
@@ -241,7 +295,7 @@ function TrainTicketForm() {
     ))}
         </Select>
         </FormControl>
-        <IconButton type="sumbit" color = "primary" aria-label = "search submit" size = "large">
+        <IconButton type="sumbit" color = "primary" aria-label = "search submit" size = "large" onClick = {handleLoginCheck}>
             <SearchOutlinedIcon fontSize="inherit"/>
         </IconButton>
           </form>
@@ -270,7 +324,7 @@ function TrainTicketForm() {
                   <TableCell>{item.depPlandTime}</TableCell>
                   <TableCell>{item.arrPlandTime}</TableCell>
                   <TableCell>{item.trainGradeName}-{item.trainNum}</TableCell>
-                  <TableCell>{item.Fare}</TableCell>
+                  <TableCell>{item.Fare * party}</TableCell>
                   {/* 추가 열 데이터들 */}
                   <TableCell>
                     <Button
@@ -313,7 +367,7 @@ function TrainTicketForm() {
                 <Typography sx={{ textAlign: 'left', fontWeight: 'bold', fontSize: 14 }}>탑승정보</Typography>
                 <TextField id="standard-basic" label="이름" variant="standard" className="fieldStyles" defaultValue= {name} InputProps={{ readOnly: true }}/>
                 <TextField id="standard-basic" label="전화번호" variant="standard" className="fieldStyles" defaultValue = {phoneNumber} InputProps={{ readOnly: true }} />
-                <ChildModal onSelectSeat={handleSeatSelect}/>
+                <ChildModal onSelectSeat={handleSeatSelect} />
                 
                 {/* 좌석 선택 칸 만들기 */}
               </Box>
@@ -378,7 +432,7 @@ function TrainTicketForm() {
               >
                 <Typography sx={{ textAlign: 'left', fontWeight: 'bold', fontSize: 14 }}>요금정보</Typography>
                 <Typography>기차표 운임</Typography>
-                <Typography sx = {{ textAlign: 'center', fontWeight : 'light', fontSize : 12}}>{selectedItem.Fare} 원</Typography>
+                <Typography sx = {{ textAlign: 'center', fontWeight : 'light', fontSize : 12}}>{ticketPrice} 원</Typography>
                 <Typography>마일리지 할인</Typography>
                 <Typography sx = {{ textAlign: 'center', fontWeight : 'light', fontSize : 12}}>{mileageDiscount} 원</Typography>
                 <Divider/>
@@ -496,10 +550,10 @@ function TrainTicketForm() {
     const handleSeatClick = (seat) => {
       // 좌석을 선택하면 해당 좌석을 상태에 저장
       setSelectedSeat(seat);
-      setSelectedCar(selectedCar); 
-      onSelectSeat(selectedSeat);
+      setSelectedCar(CarText); // 선택한 호차 정보 업데이트
       setSeatText(seat);
       setopen(false);
+      onSelectSeat(seat, selectedCar); // 좌석과 호차 정보를 콜백 함수로 전달
     };
 
 
@@ -535,7 +589,7 @@ function TrainTicketForm() {
       variant="standard"
       className="fieldStyles"
       onClick={handleOpen}
-      value = {seatText}
+      value = {`${CarText}-${seatText}`}
       
     />
 
