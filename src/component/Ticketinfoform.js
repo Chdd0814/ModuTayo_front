@@ -6,6 +6,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import axios from "axios";
 import React ,{ useState, useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
 import dayjs from "dayjs";
 import TabPanel from "./TabPanel";
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
@@ -34,6 +35,7 @@ function Ticketinfoform() {
   const [selectedTerminal2, setSelectedTerminal2] = useState(''); // 선택된 터미널 이름 상태 추가2
   const [selectedTerminalId, setSelectedTerminalId] = useState(''); // 선택된 터미널 아이디 상태 추가
   const [selectedTerminalId2, setSelectedTerminalId2] = useState(''); // 선택된 터미널 아이디 상태 추가2
+  const navigate = useNavigate(); 
   
 //기차관련 함수
   const handleParty = (event) => {
@@ -41,15 +43,14 @@ function Ticketinfoform() {
   };
 
   const handleSubmit = (event) => {
-    
-    console.log("Selected Departure:", Province);
-    // 선택한 출발지, 도착지, 날짜, 인원 등의 상태를 활용하여 필요한 작업을 수행합니다.
-
-    // 예시: 선택된 정보를 콘솔에 출력해보기
-    console.log("Selected Departure:", Province[selectLocation]);
-    console.log("Selected Destination:", Province[selectLocation]);
-    console.log("Selected Date:", datevalue.format("YYYY-MM-DD"));
-    console.log("Selected Party Size:", party);
+    event.preventDefault(); 
+    if (transportType === 'bus') {
+      // 버스 선택 시 버스 페이지로 리다이렉트
+      navigate('/bus');
+    } else if (transportType === 'train') {
+      // 기차 선택 시 기차 페이지로 리다이렉트
+      navigate('/train');
+    }
 
     // TODO: 필요한 작업을 수행하거나 서버로 데이터 전송
   };

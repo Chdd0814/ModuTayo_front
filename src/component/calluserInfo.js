@@ -7,6 +7,7 @@ function calluserInfo() {
 
     if (token) {
         const decodeToken = jwt_decode(token);
+       
         return decodeToken;
     }
 return null;
