@@ -27,14 +27,21 @@ function Ticketinfoform() {
   const [terminalData, setTerminalData] = useState([]); // 버스데이터
   const [ArrTerminalData, setArrTerminalData] = useState([]); // 도착버스데이터
   const [Modalopen, setModalOpen] = React.useState(false); // 모달 온,오프 관련 
-  const [selectedTab, setSelectedTab] = useState(0); 
+  const [selectedTab, setSelectedTab] = useState(0);
+  const [SecondModalOpen, setSecondModalOpen] = React.useState(false); // 두 번째 모달 온,오프 관련
+  const handleSecondModalOpen = () => setSecondModalOpen(true);
+  const handleSecondModalClose = () => setSecondModalOpen(false); // 두 번째 Modal ---
   const handleModalOpen = () => setModalOpen(true);
   const handleModalClose = () => setModalOpen(false); // Modal --- 
   const [filteredTerminals, setFilteredTerminals] = useState([]);
   const [selectedTerminal, setSelectedTerminal] = useState(''); // 선택된 터미널 이름 상태 추가
   const [selectedTerminal2, setSelectedTerminal2] = useState(''); // 선택된 터미널 이름 상태 추가2
+  const [selectedroundTerminal, setSelectedroundTerminal] = useState(''); // 선택된 터미널 이름 상태 추가3
+  const [selectedroundTerminal2, setSelectedroundTerminal2] = useState(''); // 선택된 터미널 이름 상태 추가4
   const [selectedTerminalId, setSelectedTerminalId] = useState(''); // 선택된 터미널 아이디 상태 추가
   const [selectedTerminalId2, setSelectedTerminalId2] = useState(''); // 선택된 터미널 아이디 상태 추가2
+  const [selectedRoundTerminalId, setSelectedRoundTerminalId] = useState(''); // 선택된 터미널 아이디 상태 추가
+  const [selectedRoundTerminalId2, setSelectedRoundTerminalId2] = useState(''); // 선택된 터미널 아이디 상태 추가2
   const navigate = useNavigate(); 
   
 //기차관련 함수
@@ -174,6 +181,22 @@ const handleTerminalClick = (terminalName, terminalId) => {
     });
 };
 
+  const handleRoundTerminalClick = (terminalName, terminalId) => {
+    setSelectedroundTerminal(terminalName); // 선택된 터미널 이름을 상태로 설정
+    setSelectedRoundTerminalId(terminalId);
+    const apiUrl = `/publicApi/getArrBusList?tmnCd=${terminalId}`;
+
+    axios.get(apiUrl)
+        .then((response) => {
+          console.log('API 호출 성공:', response); // API 응답 확인
+          setArrTerminalData(response.data);
+        })
+        .catch((error) => {
+              setArrTerminalData([]);
+              console.error('API 요청 오류:', error);
+            }
+        );
+  };
 const handleTerminalClick2 = (terminalName2, terminalId2) => {
   setSelectedTerminal2(terminalName2); // 선택된 터미널 이름을 상태로 설정
  // handleModalClose(); // 모달을 닫음
@@ -181,6 +204,11 @@ const handleTerminalClick2 = (terminalName2, terminalId2) => {
   handleModalClose(); // 모달 닫기
 };
 
+  const handleroundTerminalClick2 = (terminalName2, terminalId2) => {
+    setSelectedroundTerminal2(terminalName2); // 선택된 터미널 이름을 상태로 설정
+    setSelectedRoundTerminalId2(terminalId2);
+    handleSecondModalClose(); // 모달 닫기
+  };
 return(
 
  <div className="ticket-info-form">
@@ -427,219 +455,349 @@ return(
           </form>
             )}
 
-{transportType === 'bus' && tripType === 'one-way' && (
-        <>
-        <form onSubmit = {handleSubmit} className = "form-ticketinfo-form">
-<FormControl sx={{ m: 1, minWidth: 120 }}>
-      {selectedTerminal ? null : <InputLabel htmlFor="grouped-select">출발지</InputLabel>}
-      <TextField value={selectedTerminal} id="grouped-select" label="출발지" onClick={handleModalOpen} variant="outlined"/>
-</FormControl>
+   {transportType === 'bus' && tripType === 'one-way' && (
+       <>
+         <form onSubmit = {handleSubmit} className = "form-ticketinfo-form">
+           <FormControl sx={{ m: 1, minWidth: 120 }}>
+             {selectedTerminal ? null : <InputLabel htmlFor="grouped-select">출발지</InputLabel>}
+             <TextField value={selectedTerminal} id="grouped-select" label="출발지" onClick={handleModalOpen} variant="outlined"/>
+           </FormControl>
 
-<FormControl sx={{ m: 1, minWidth: 120 }}>
-      {selectedTerminal2 ? null : <InputLabel htmlFor="grouped-select">도착지</InputLabel>}
-      <TextField value={selectedTerminal2} id="grouped-select" label="도착지" onClick={handleModalOpen} variant="outlined"/>
-</FormControl>
+           <FormControl sx={{ m: 1, minWidth: 120 }}>
+             {selectedTerminal2 ? null : <InputLabel htmlFor="grouped-select">도착지</InputLabel>}
+             <TextField value={selectedTerminal2} id="grouped-select" label="도착지" onClick={handleModalOpen} variant="outlined"/>
+           </FormControl>
 
-<FormControl sx={{ m: 1, minWidth: 120, height: '200%'}}>
-       <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <DemoContainer components={['DatePicker']}>
-        <DatePicker
-          label="날짜"
-          value={datevalue}
-          onChange={(newdatevalue) => setdatevalue(newdatevalue)}
-          />
-        </DemoContainer>
-       </LocalizationProvider>
-        </FormControl>
+           <FormControl sx={{ m: 1, minWidth: 120, height: '200%'}}>
+             <LocalizationProvider dateAdapter={AdapterDayjs}>
+               <DemoContainer components={['DatePicker']}>
+                 <DatePicker
+                     label="날짜"
+                     value={datevalue}
+                     onChange={(newdatevalue) => setdatevalue(newdatevalue)}
+                 />
+               </DemoContainer>
+             </LocalizationProvider>
+           </FormControl>
 
-        <FormControl sx={{ m: 1, minWidth: 120 }}>
-        <InputLabel id="demo-simple-select-helper-label">인원</InputLabel>
-        <Select
-          labelId="demo-simple-select-helper-label"
-          id="demo-simple-select-helper"
-          value={party}
-          label="Age"
-          onChange={handleParty}
-          >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          {[...Array(10)].map((_, index) => (
-      <MenuItem key={index + 1} value={index + 1}>
-        {index + 1}
-      </MenuItem>
-    ))}
-        </Select>
-        </FormControl>
-        <Button type="sumbit">검색</Button></form>
-  <Modal
-      open={Modalopen}
-      onClose={handleModalClose}
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
-      style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-            }}
-          >
-        <Grid container spacing={2} style={{ width: 900, height: 500, background : 'white' }}>
-    {/* 왼쪽 영역 */}
-    <Grid item xs={4}>
-          <Tabs
-                orientation="vertical"
-                variant="scrollable"
-                value={selectedTab}
-                onChange={handleTabChange}
-                aria-label="Vertical tabs example"
-             >  
-                {uniqueRegionKey.map((regionKey) => (
-          <Tab label={regionKey} key={regionKey} value={regionKey} />
-          ))} 
-          </Tabs>
-          </Grid>
-    {/* 가운데 영역 */}
-    <Grid item xs={4} style={{ overflowY: 'auto', height: '100%' }}>
-    <Box sx={{ display: 'flex', flexDirection: 'column', overflowY: 'auto', height : "100%", background : 'white' }}>
-              {filteredTerminals.map((terminal) => (
-          <TabPanel key={terminal.id} value={uniqueRegionKey.indexOf(selectedTab)} index={uniqueRegionKey.indexOf(selectedTab)}
-          sx={{
-            cursor: 'pointer', // 포인터 커서로 나타나게 함
-            padding: '16px', // 내용 주위에 약간의 여백 추가
-            backgroundColor: selectedTab === terminal.id ? 'primary.main' : 'white', // 선택된 패널 스타일 변경
-            color: selectedTab === terminal.id ? 'white' : 'black', // 텍스트 색상 변경
-          }}>
+           <FormControl sx={{ m: 1, minWidth: 120 }}>
+             <InputLabel id="demo-simple-select-helper-label">인원</InputLabel>
+             <Select
+                 labelId="demo-simple-select-helper-label"
+                 id="demo-simple-select-helper"
+                 value={party}
+                 label="Age"
+                 onChange={handleParty}
+             >
+               <MenuItem value="">
+                 <em>None</em>
+               </MenuItem>
+               {[...Array(10)].map((_, index) => (
+                   <MenuItem key={index + 1} value={index + 1}>
+                     {index + 1}
+                   </MenuItem>
+               ))}
+             </Select>
+           </FormControl>
+           <Button type="sumbit">검색</Button></form>
+         <Modal
+             open={Modalopen}
+             onClose={handleModalClose}
+             aria-labelledby="modal-modal-title"
+             aria-describedby="modal-modal-description"
+             style={{
+               display: 'flex',
+               alignItems: 'center',
+               justifyContent: 'center',
+             }}
+         >
+           <Grid container spacing={2} style={{ width: 900, height: 500, background : 'white' }}>
+             {/* 왼쪽 영역 */}
+             <Grid item xs={4}>
+               <Tabs
+                   orientation="vertical"
+                   variant="scrollable"
+                   value={selectedTab}
+                   onChange={handleTabChange}
+                   aria-label="Vertical tabs example"
+               >
+                 {uniqueRegionKey.map((regionKey) => (
+                     <Tab label={regionKey} key={regionKey} value={regionKey} />
+                 ))}
+               </Tabs>
+             </Grid>
+             {/* 가운데 영역 */}
+             <Grid item xs={4} style={{ overflowY: 'auto', height: '100%' }}>
+               <Box sx={{ display: 'flex', flexDirection: 'column', overflowY: 'auto', height : "100%", background : 'white' }}>
+                 {filteredTerminals.map((terminal) => (
+                     <TabPanel key={terminal.id} value={uniqueRegionKey.indexOf(selectedTab)} index={uniqueRegionKey.indexOf(selectedTab)}
+                               sx={{
+                                 cursor: 'pointer', // 포인터 커서로 나타나게 함
+                                 padding: '16px', // 내용 주위에 약간의 여백 추가
+                                 backgroundColor: selectedTab === terminal.id ? 'primary.main' : 'white', // 선택된 패널 스타일 변경
+                                 color: selectedTab === terminal.id ? 'white' : 'black', // 텍스트 색상 변경
+                               }}>
             <span style={{ cursor: 'pointer' }} onClick={() => handleTerminalClick(terminal.name, terminal.id)} >
             {terminal.name}
             </span>
-          </TabPanel>
-        ))}
-        </Box>
-        </Grid>
-    {/* 오른쪽 영역 */}
-    <Grid item xs={4} style={{ overflowY: 'auto', height: '100%' }}>
-         <Box sx={{ display: 'flex', flexDirection: 'column', overflowY: 'auto', height : "100%", background : 'white' }}> 
-          {ArrBusTerminals.map((terminal) => (
-          <TabPanel key={terminal.arrid} value={terminal.arrid} index={terminal.arrid}
-          sx={{
-            cursor: 'pointer', // 포인터 커서로 나타나게 함
-            padding: '16px', // 내용 주위에 약간의 여백 추가
-            backgroundColor: selectedTab === terminal.id ? 'primary.main' : 'white', // 선택된 패널 스타일 변경
-            color: selectedTab === terminal.id ? 'white' : 'black', // 텍스트 색상 변경
-          }}>
+                     </TabPanel>
+                 ))}
+               </Box>
+             </Grid>
+             {/* 오른쪽 영역 */}
+             <Grid item xs={4} style={{ overflowY: 'auto', height: '100%' }}>
+               <Box sx={{ display: 'flex', flexDirection: 'column', overflowY: 'auto', height : "100%", background : 'white' }}>
+                 {ArrBusTerminals.length > 0 ? (ArrBusTerminals.map((terminal) => (
+                     <TabPanel key={terminal.arrid} value={terminal.arrid} index={terminal.arrid}
+                               sx={{
+                                 cursor: 'pointer', // 포인터 커서로 나타나게 함
+                                 padding: '16px', // 내용 주위에 약간의 여백 추가
+                                 backgroundColor: selectedTab === terminal.arrid ? 'primary.main' : 'white', // 선택된 패널 스타일 변경
+                                 color: selectedTab === terminal.arrid ? 'white' : 'black', // 텍스트 색상 변경
+                               }}>
             <span style={{ cursor: 'pointer' }} onClick={() => handleTerminalClick2(terminal.arrname, terminal.arrid)} >
               {terminal.arrname}
             </span>
-          </TabPanel>
-        ))}
-        {ArrBusTerminals.length === 0 && <span>도착지 정보가 없습니다.</span>}
-               </Box> 
-              </Grid>
-            </Grid>
-          </Modal>
-        </>
-      )}
+                     </TabPanel>
+                 )) ) : (
+                     <TabPanel value={0} index={0}>
+                       {selectedTerminalId ? <span>도착지 정보가 없습니다.</span> : null}
+                     </TabPanel>
+                 )}
+               </Box>
+             </Grid>
+           </Grid>
+         </Modal>
+       </>
+   )}
 
-{transportType === 'bus' && tripType === 'round-trip' && (
+   {transportType === 'bus' && tripType === 'round-trip' && (
+       <>
+         <form onSubmit = {handleSubmit} className = "form-ticketinfo-form">
+           <FormControl sx={{ m: 1, minWidth: 120 }}>
+             {selectedTerminal ? null : <InputLabel htmlFor="grouped-select">출발지</InputLabel>}
+             <TextField value={selectedTerminal} id="grouped-select" label="출발지" onClick={handleModalOpen} variant="outlined"/>
+           </FormControl>
 
-        <>
-        <form onSubmit = {handleSubmit} className = "form-ticketinfo-form">
-  <FormControl sx={{ m: 1, minWidth: 120 }}>
-        <InputLabel htmlFor="grouped-select">출발지</InputLabel>
-        <Select defaultValue="" id="grouped-select" label="Grouping">
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          {selectLocation.map(city => [
-            <ListSubheader key={city.cityCode}>{city.cityName}</ListSubheader>,
-            ...(ktxStationsByCity[city.cityCode] || []).map(station => (
-              <MenuItem key={station.nodeId} value={station.nodeId}>
-                {station.nodeName}
-              </MenuItem>
-            ))
-          ])}
-      </Select>
-    </FormControl>
+           <FormControl sx={{ m: 1, minWidth: 120 }}>
+             {selectedTerminal2 ? null : <InputLabel htmlFor="grouped-select">도착지</InputLabel>}
+             <TextField value={selectedTerminal2} id="grouped-select" label="도착지" onClick={handleModalOpen} variant="outlined"/>
+           </FormControl>
 
-<FormControl sx={{ m: 1, minWidth: 120 }}>
-        <InputLabel htmlFor="grouped-select">도착지</InputLabel>
-        <Select defaultValue="" id="grouped-select" label="Grouping">
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          {selectLocation.map(city => [
-            <ListSubheader key={city.cityCode}>{city.cityName}</ListSubheader>,
-            ...(ktxStationsByCity[city.cityCode] || []).map(station => (
-              <MenuItem key={station.nodeId} value={station.nodeId}>
-                {station.nodeName}
-              </MenuItem>
-            ))
-          ])}
-        </Select>
-      </FormControl>
+           <FormControl sx={{ m: 1, minWidth: 120, height: '200%'}}>
+             <LocalizationProvider dateAdapter={AdapterDayjs}>
+               <DemoContainer components={['DatePicker']}>
+                 <DatePicker
+                     label="날짜"
+                     value={datevalue}
+                     onChange={(newdatevalue) => setdatevalue(newdatevalue)}
+                 />
+               </DemoContainer>
+             </LocalizationProvider>
+           </FormControl>
 
-<FormControl sx={{ m: 1, minWidth: 120 }}>
-       <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <DemoContainer components={['DatePicker']}>
-        <DatePicker
-          label="날짜"
-          value={datevalue}
-          onChange={(newdatevalue) => setdatevalue(newdatevalue)}
-          />
-        </DemoContainer>
-       </LocalizationProvider>
-        </FormControl>
+           <FormControl sx={{ m: 1, minWidth: 120 }}>
+             <InputLabel id="demo-simple-select-helper-label">인원</InputLabel>
+             <Select
+                 labelId="demo-simple-select-helper-label"
+                 id="demo-simple-select-helper"
+                 value={party}
+                 label="Age"
+                 onChange={handleParty}
+             >
+               <MenuItem value="">
+                 <em>None</em>
+               </MenuItem>
+               {[...Array(10)].map((_, index) => (
+                   <MenuItem key={index + 1} value={index + 1}>
+                     {index + 1}
+                   </MenuItem>
+               ))}
+             </Select>
+           </FormControl></form>
+         {/*왕복 */}<form onSubmit = {handleSubmit} className = "form-ticketinfo-form">
+         <FormControl sx={{ m: 1, minWidth: 120 }}>
+           {selectedTerminal ? null : <InputLabel htmlFor="grouped-select">출발지</InputLabel>}
+           <TextField value={selectedroundTerminal} id="grouped-select" label="출발지" onClick={handleSecondModalOpen} variant="outlined"/>
+         </FormControl>
 
-        <FormControl sx={{ m: 1, minWidth: 120 }}>
-        <InputLabel id="demo-simple-select-helper-label">인원</InputLabel>
-        <Select
-          labelId="demo-simple-select-helper-label"
-          id="demo-simple-select-helper"
-          value={party}
-          label="Age"
-          onChange={handleParty}
-          >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          {[...Array(10)].map((_, index) => (
-      <MenuItem key={index + 1} value={index + 1}>
-        {index + 1}
-      </MenuItem>
-    ))}
-        </Select>
-        </FormControl>
-        <Button type="sumbit">검색</Button>
-          </form>
-    {/* <Button onClick={handleModalOpen}>Open modal</Button> */}
-          <Modal
-            open={Modalopen}
-            onClose={handleModalClose}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
-          >
-            <Box sx={{ flexGrow: 1, bgcolor: 'background.paper', display: 'flex', height: 500 }}>
-              <Tabs
-                orientation="vertical"
-                variant="scrollable"
-                value={selectedTab}
-                onChange={handleTabChange}
-                aria-label="Vertical tabs example"
-              >
-               
-                {uniqueRegionKey.map((regionKey) => (
-          <Tab label={regionKey} key={regionKey} value={regionKey} />
-          ))} 
-              </Tabs>
-              {filteredTerminals.map((terminal) => (
-          <TabPanel key={terminal.id} value={uniqueRegionKey.indexOf(selectedTab)} index={uniqueRegionKey.indexOf(selectedTab)}>
+         <FormControl sx={{ m: 1, minWidth: 120 }}>
+           {selectedTerminal2 ? null : <InputLabel htmlFor="grouped-select">도착지</InputLabel>}
+           <TextField value={selectedroundTerminal2} id="grouped-select" label="도착지" onClick={handleSecondModalOpen} variant="outlined"/>
+         </FormControl>
+
+         <FormControl sx={{ m: 1, minWidth: 120, height: '200%'}}>
+           <LocalizationProvider dateAdapter={AdapterDayjs}>
+             <DemoContainer components={['DatePicker']}>
+               <DatePicker
+                   label="날짜"
+                   value={datevalue}
+                   onChange={(newdatevalue) => setdatevalue(newdatevalue)}
+               />
+             </DemoContainer>
+           </LocalizationProvider>
+         </FormControl>
+
+         <FormControl sx={{ m: 1, minWidth: 120 }}>
+           <InputLabel id="demo-simple-select-helper-label">인원</InputLabel>
+           <Select
+               labelId="demo-simple-select-helper-label"
+               id="demo-simple-select-helper"
+               value={party}
+               label="Age"
+               onChange={handleParty}
+           >
+             <MenuItem value="">
+               <em>None</em>
+             </MenuItem>
+             {[...Array(10)].map((_, index) => (
+                 <MenuItem key={index + 1} value={index + 1}>
+                   {index + 1}
+                 </MenuItem>
+             ))}
+           </Select>
+         </FormControl>
+
+         <Button type="sumbit">검색</Button></form>
+         <Modal
+             open={Modalopen}
+             onClose={handleModalClose}
+             aria-labelledby="modal-modal-title"
+             aria-describedby="modal-modal-description"
+             style={{
+               display: 'flex',
+               alignItems: 'center',
+               justifyContent: 'center',
+             }}
+         >
+           <Grid container spacing={2} style={{ width: 900, height: 500, background : 'white' }}>
+             {/* 왼쪽 영역 */}
+             <Grid item xs={4}>
+               <Tabs
+                   orientation="vertical"
+                   variant="scrollable"
+                   value={selectedTab}
+                   onChange={handleTabChange}
+                   aria-label="Vertical tabs example"
+               >
+                 {uniqueRegionKey.map((regionKey) => (
+                     <Tab label={regionKey} key={regionKey} value={regionKey} />
+                 ))}
+               </Tabs>
+             </Grid>
+             {/* 가운데 영역 */}
+             <Grid item xs={4} style={{ overflowY: 'auto', height: '100%' }}>
+               <Box sx={{ display: 'flex', flexDirection: 'column', overflowY: 'auto', height : "100%", background : 'white' }}>
+                 {filteredTerminals.map((terminal) => (
+                     <TabPanel key={terminal.id} value={uniqueRegionKey.indexOf(selectedTab)} index={uniqueRegionKey.indexOf(selectedTab)}
+                               sx={{
+                                 cursor: 'pointer', // 포인터 커서로 나타나게 함
+                                 padding: '16px', // 내용 주위에 약간의 여백 추가
+                                 backgroundColor: selectedTab === terminal.id ? 'primary.main' : 'white', // 선택된 패널 스타일 변경
+                                 color: selectedTab === terminal.id ? 'white' : 'black', // 텍스트 색상 변경
+                               }}>
+            <span style={{ cursor: 'pointer' }} onClick={() => handleTerminalClick(terminal.name, terminal.id)} >
             {terminal.name}
-          </TabPanel>
-        ))}
-            </Box>
-          </Modal>
-        </>
-      )}
+            </span>
+                     </TabPanel>
+                 ))}
+               </Box>
+             </Grid>
+             {/* 오른쪽 영역 */}
+             <Grid item xs={4} style={{ overflowY: 'auto', height: '100%' }}>
+               <Box sx={{ display: 'flex', flexDirection: 'column', overflowY: 'auto', height : "100%", background : 'white' }}>
+                 {ArrBusTerminals.length > 0 ? (ArrBusTerminals.map((terminal) => (
+                     <TabPanel key={terminal.arrid} value={terminal.arrid} index={terminal.arrid}
+                               sx={{
+                                 cursor: 'pointer', // 포인터 커서로 나타나게 함
+                                 padding: '16px', // 내용 주위에 약간의 여백 추가
+                                 backgroundColor: selectedTab === terminal.arrid ? 'primary.main' : 'white', // 선택된 패널 스타일 변경
+                                 color: selectedTab === terminal.arrid ? 'white' : 'black', // 텍스트 색상 변경
+                               }}>
+            <span style={{ cursor: 'pointer' }} onClick={() => handleTerminalClick2(terminal.arrname, terminal.arrid)} >
+              {terminal.arrname}
+            </span>
+                     </TabPanel>
+                 )) ) : (
+                     <TabPanel value={0} index={0}>
+                       {selectedTerminalId ? <span>도착지 정보가 없습니다.</span> : null}
+                     </TabPanel>
+                 )}
+               </Box>
+             </Grid>
+           </Grid>
+         </Modal>
+
+         <Modal
+             open={SecondModalOpen}
+             onClose={handleSecondModalClose}
+             aria-labelledby="modal-modal-title"
+             aria-describedby="modal-modal-description"
+             style={{
+               display: 'flex',
+               alignItems: 'center',
+               justifyContent: 'center',
+             }}
+         >
+           <Grid container spacing={2} style={{ width: 900, height: 500, background : 'white' }}>
+             {/* 왼쪽 영역 */}
+             <Grid item xs={4}>
+               <Tabs
+                   orientation="vertical"
+                   variant="scrollable"
+                   value={selectedTab}
+                   onChange={handleTabChange}
+                   aria-label="Vertical tabs example"
+               >
+                 {uniqueRegionKey.map((regionKey) => (
+                     <Tab label={regionKey} key={regionKey} value={regionKey} />
+                 ))}
+               </Tabs>
+             </Grid>
+             {/* 가운데 영역 */}
+             <Grid item xs={4} style={{ overflowY: 'auto', height: '100%' }}>
+               <Box sx={{ display: 'flex', flexDirection: 'column', overflowY: 'auto', height : "100%", background : 'white' }}>
+                 {filteredTerminals.map((terminal) => (
+                     <TabPanel key={terminal.id} value={uniqueRegionKey.indexOf(selectedTab)} index={uniqueRegionKey.indexOf(selectedTab)}
+                               sx={{
+                                 cursor: 'pointer', // 포인터 커서로 나타나게 함
+                                 padding: '16px', // 내용 주위에 약간의 여백 추가
+                                 backgroundColor: selectedTab === terminal.id ? 'primary.main' : 'white', // 선택된 패널 스타일 변경
+                                 color: selectedTab === terminal.id ? 'white' : 'black', // 텍스트 색상 변경
+                               }}>
+            <span style={{ cursor: 'pointer' }} onClick={() => handleRoundTerminalClick(terminal.name, terminal.id)} >
+            {terminal.name}
+            </span>
+                     </TabPanel>
+                 ))}
+               </Box>
+             </Grid>
+             {/* 오른쪽 영역 */}
+             <Grid item xs={4} style={{ overflowY: 'auto', height: '100%' }}>
+               <Box sx={{ display: 'flex', flexDirection: 'column', overflowY: 'auto', height : "100%", background : 'white' }}>
+                 {ArrBusTerminals.length > 0 ? (ArrBusTerminals.map((terminal) => (
+                     <TabPanel key={terminal.arrid} value={terminal.arrid} index={terminal.arrid}
+                               sx={{
+                                 cursor: 'pointer', // 포인터 커서로 나타나게 함
+                                 padding: '16px', // 내용 주위에 약간의 여백 추가
+                                 backgroundColor: selectedTab === terminal.arrid ? 'primary.main' : 'white', // 선택된 패널 스타일 변경
+                                 color: selectedTab === terminal.arrid ? 'white' : 'black', // 텍스트 색상 변경
+                               }}>
+            <span style={{ cursor: 'pointer' }} onClick={() => handleroundTerminalClick2(terminal.arrname, terminal.arrid)} >
+              {terminal.arrname}
+            </span>
+                     </TabPanel>
+                 )) ) : (
+                     <TabPanel value={0} index={0}>
+                       {selectedTerminalId ? <span>도착지 정보가 없습니다.</span> : null}
+                     </TabPanel>
+                 )}
+               </Box>
+             </Grid>
+           </Grid>
+         </Modal>
+       </>
+   )}
 
 
 </div>     
