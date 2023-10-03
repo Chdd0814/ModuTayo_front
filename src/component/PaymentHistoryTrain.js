@@ -12,7 +12,7 @@ const PaymentHistoryTrain=(props)=>{
     const TableColor=['#3DFF92','#F0FFF0','#AFFFEE'];
     const [TrainTitle,setBusTitle]= useState(['1','2','3','4','5','6','7']);
     const [TrainContent,setBusContent]=useState([
-        {key:'busticketNumber ',width:80},
+        {key:'trainticketNumber ',width:80},
         {key:'impUid ',width:100},
         {key:'merchantUid ',width:90},
         {key:'paidAmount ',width:90},
