@@ -1,6 +1,6 @@
 import React, {useState,useEffect} from "react";
 import { Button, FormControl, Select, InputLabel, MenuItem,  Grid, Typography, Divider, Paper, Box, RadioGroup, Radio, FormLabel, FormControlLabel } from "@mui/material";
-
+import Kakao from "../images/kakao_medium.png"
 
 
 
@@ -155,13 +155,17 @@ function Payment() {
       결제수단
     </FormLabel>
     <Box display="flex" justifyContent="center">
-      <RadioGroup defaultValue="kakaopay.TC0ONETIME" name="payment-method">
+      <RadioGroup defaultValue="kakaopay.TC0ONETIME" name="payment-method"
+       value={pg} // 현재 선택된 값을 표시하기 위해 value 속성을 사용합니다.
+        onChange={(e) => setpg(e.target.value)}>
         <FormControlLabel
           value="kakaopay.TC0ONETIME"
           control={<Radio />}
-          label="카카오페이"
+        
+          label = {<img src = {Kakao}  alt="kakaopay" style={{width: "60px"}} /> }
           style={{ marginRight: "16px" }}
         />
+        
         <FormControlLabel
           value="kcp.T0000"
           control={<Radio />}
