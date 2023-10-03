@@ -132,6 +132,7 @@ function TrainTicketForm({ isLoggedIn }) {
         // 선택된 데이터(selectedItem)를 예매 페이지로 전달하는 로직을 구현
         // 예: 예매 페이지로 이동하면서 선택된 데이터를 URL 매개변수로 전달
         setTicketPrice(item.Fare * party);
+        setTotalPrice(item.Fare * party);
         setSelectedItem(item);
         setIsModalOpen(true);
       };
@@ -166,6 +167,8 @@ function TrainTicketForm({ isLoggedIn }) {
     
         // 20% 할인율
         const mileagePercentageDiscount = 0.20;
+
+        
       
         if (!isUsingMileage) {
           // 마일리지를 사용하는 경우
