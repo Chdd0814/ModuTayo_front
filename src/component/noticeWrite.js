@@ -3,10 +3,10 @@ import { useNavigate } from 'react-router-dom'; // React Router v6 사용
 import axios from 'axios';
 import {Unstable_Grid2,Button,Table,TableBody,TableCell,TableRow,TextField,TableContainer,Paper,IconButton } from '@mui/material';
 import './noticeEdit.css';
-import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
+import {InsertPhoto,CancelRounded} from '@mui/icons-material';
 const NoticeWrite = (props) => {
     const navigate = useNavigate(); // useNavigate 훅에서 반환된 함수를 사용하여 내비게이션 처리
-    
+    const [isImage,setIsImage]= useState(false);
     const [imageSrc, setImageSrc] = useState("");
     const currentDate = new Date();
     const [formdata,setFormData]= useState({
@@ -42,9 +42,13 @@ const NoticeWrite = (props) => {
           ...prevData,
           file:selectedFile 
         }));
+        setIsImage(true);
    
   };
-
+  const handleCancleImage = e =>{
+    setIsImage(false);
+    setImageSrc("");
+  }
     const handleSubmit = async (event) => {
         event.preventDefault();
         const formData = new FormData();
@@ -95,12 +99,17 @@ const NoticeWrite = (props) => {
               <TableCell style={{textAlign:'right'}}>
                 <input type="file" name="myfile" className="fileButton" id='fileButton' onChange={handleFileChange}  />
                 <IconButton onClick={()=>document.getElementById('fileButton').click()}>
-                   <InsertPhotoIcon/>
+                   <InsertPhoto/>
                 </IconButton>
+                {imageSrc&&<IconButton onClick={handleCancleImage}>
+                   <CancelRounded/>
+                </IconButton>}
               </TableCell>
             </TableRow>
             <TableRow>
               <TableCell className="tableContent">
+              <Unstable_Grid2 container direction='column' spacing={3}>
+                <Unstable_Grid2>
               <TextField className='content'
               label="내용"
               name='content'
@@ -113,7 +122,11 @@ const NoticeWrite = (props) => {
             onChange={handleChange}
             required
           />
-            <img src={imageSrc} width={100} />
+           </Unstable_Grid2>
+            <Unstable_Grid2>
+            {isImage&&<img src={imageSrc} className='image' />}
+            </Unstable_Grid2>
+            </Unstable_Grid2>
               </TableCell>
             </TableRow>
           </TableBody>

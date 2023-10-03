@@ -1,7 +1,6 @@
   import React, { useState } from 'react';
   import axios from 'axios';
   import './Login.css';
-
   import logoExpress from '../logoExpress.png'; // 로고 이미지의 경로 설정
   import { useNavigate } from 'react-router-dom';
   import TextField from '@mui/material/TextField';
@@ -49,6 +48,7 @@
             localStorage.setItem('token', token);
             // 로그인 상태를 설정하거나 필요한 작업을 수행하세요.
             // setLogin(true); // 예시: 로그인 상태를 true로 설정
+            setLogin(data);
             onLogin(true);
             history("/");
           } else {
