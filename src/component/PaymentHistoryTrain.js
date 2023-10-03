@@ -22,7 +22,7 @@ const PaymentHistoryTrain=(props)=>{
     ])
     const handlePaymentHistoryTrain=useCallback(async(e)=>{
         try{
-            const response=await axios.get(`/Payment/${id}`);
+            const response=await axios.get(`/payment/Payment/${id}`);
             setFormData(response.data);
         }catch(e){
             console.error(e);
