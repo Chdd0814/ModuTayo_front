@@ -1,6 +1,9 @@
 import React, {useState,useEffect} from "react";
 import { Button, FormControl, Select, InputLabel, MenuItem,  Grid, Typography, Divider, Paper, Box, RadioGroup, Radio, FormLabel, FormControlLabel } from "@mui/material";
 import Kakao from "../images/kakao_medium.png"
+import dayjs from "dayjs";
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -25,6 +28,12 @@ function Payment() {
     const [usedMileage, setusedMileage] = useState(0);
     const [trainSeatnumber, settrainSeatnumber] = useState('');
     const [trainCarnumber, settrainCarnumber] = useState('');
+    const [callbackData, setcallbackData] = useState({});
+    const [ticketData, settrainticketData] = useState({});
+    const randomNumber = Math.floor(Math.random() * 10000);
+    const randomticketnumber = `train_${dateValue}_${randomNumber}`;
+    const navigate = useNavigate();
+
 
 
     useEffect(() => {
@@ -45,8 +54,7 @@ function Payment() {
           setPhoneNumber(dataToken.phoneNumber);
           setid(dataToken.id);
           setTicketPrice(dataToken.ticketPrice);
-          setTotalPrice(10);
-          // setTotalPrice(dataToken.totalPrice);
+          setTotalPrice(dataToken.totalPrice);
           setMileage(dataToken.Mileage);
           setusedMileage(dataToken.useMileage);
           settrainSeatnumber(dataToken.trainSeatNumber);
@@ -56,12 +64,69 @@ function Payment() {
         }
       }, []);
 
+      // 결제 성공 데이터를 서버로 보내는 함수
+function sendPaymentData(paymentData) {
+  // Axios를 사용하여 결제 데이터를 서버로 전송
+  axios.post('/payment/getPaymentinfo', paymentData, {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+    .then(response => {
+      // 서버 응답 처리
+      console.log(response.data);
+    })
+    .catch(error => {
+      // 오류 처리
+      console.error(error);
+    });
+}
+
+function sendtrainTicketData(ticketData) {
+
+  ticketData = {
+    vehicleTypeName : trainGrade,
+    departureTime : depTime,
+    arrivalTime : arrTime,
+    departureStation : depPlace,
+    arrivalStation : arrPlace,
+    fare : ticketPrice,
+    trainNumber : trainNum,
+    seatNumber : trainSeatnumber,
+    trainCarNumber : trainCarnumber,
+    ticketNumber : randomticketnumber,
+    id : id,
+    name : buyerName,
+    reservationDate : dateValue,
+  }
+
+  settrainticketData(ticketData);
+
+  axios.post('/trainTicket/Success', ticketData, {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+    .then(response => {
+      // 서버 응답 처리
+      console.log(response.data);
+    })
+    .catch(error => {
+      // 오류 처리
+      console.error(error);
+    });
+
+
+}
+
     const requestpay = () => {
 
         if (!window.IMP) return;
         const userCode = process.env.REACT_APP_USERCODE;
         const { IMP } = window;
         IMP.init(userCode);
+
+         
 
         const merchantUid = `ticket_${new Date().getTime()}`;
         const nameConcatenated = `모두타요_${depPlace}_${arrPlace}`;
@@ -79,11 +144,33 @@ function Payment() {
     }
 
     function callback(response) {
-        const { success, error_msg } = response;
+        const { success, error_msg, imp_uid, merchant_uid, paid_amount,buyer_name,buyer_tel,pay_method } = response;
+        const currentDate = dayjs(); // 현재 날짜와 시간 가져오기
+          const paymentDate = currentDate.format("YYYYMMDD"); // "YYYYMMDD" 형식으로 날짜 포맷팅
+       
     
         if (success) {
+
+          const PaycallbackData = {
+            trainticketNumber : randomticketnumber,
+            impUid : imp_uid,
+            mechantUid : merchant_uid,
+            paidAmount : paid_amount,
+            payMethod : pay_method,
+            buyerName : buyer_name,
+            buyerTel : buyer_tel,
+            buyerid : id,
+            paymentDate : paymentDate,
+          }
+          // setcallbackData(PaycallbackData);
+          // sendtrainTicketData(ticketData);
+          sendPaymentData(PaycallbackData);
+       
           alert("결제 성공");
           
+          
+          navigate('/');
+
         } else {
           alert(`결제 실패: ${error_msg}`);
         }
