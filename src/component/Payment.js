@@ -6,7 +6,7 @@ import Kakao from "../images/kakao_medium.png"
 
 
 function Payment() {
-    const [pg,setpg] = useState("kcp.T0000");
+    const [pg,setpg] = useState("kakaopay.TC0ONETIME");
     const [payMethod, setpayMethod] = useState("card");
     const [depPlace, setdepPlace] = useState(""); // 출발지
     const [arrPlace, setarrPlace] = useState(""); // 도착지
@@ -45,7 +45,8 @@ function Payment() {
           setPhoneNumber(dataToken.phoneNumber);
           setid(dataToken.id);
           setTicketPrice(dataToken.ticketPrice);
-          setTotalPrice(dataToken.totalPrice);
+          setTotalPrice(10);
+          // setTotalPrice(dataToken.totalPrice);
           setMileage(dataToken.Mileage);
           setusedMileage(dataToken.useMileage);
           settrainSeatnumber(dataToken.trainSeatNumber);
@@ -82,6 +83,7 @@ function Payment() {
     
         if (success) {
           alert("결제 성공");
+          
         } else {
           alert(`결제 실패: ${error_msg}`);
         }
