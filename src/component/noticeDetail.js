@@ -8,18 +8,31 @@ import vaildAdmin from './vaildAdmin';
  const NoticeDetail = () => {
     const { num } = useParams();
     const [notice, setNotice] = useState({});
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
+    const [imageData,setImageData]=useState('');
+    const [isImage,setIsImage]=useState(false);
     const [isAdmin, setisAdmin] = useState(false);
     const navigate = useNavigate(); 
-    
     const getNoticeDetail = useCallback(async () => {
         try {
             const response = await axios.get(`/notices/${num}`);
-            setNotice(response.data);
-            setLoading(false);
+            const { file, ...restOfData } = response.data;
+            setNotice(restOfData);
+            if(file!=null){
+            const binaryString = window.atob(file);
+        const bytes = new Uint8Array(binaryString.length);
+        for (let i = 0; i < binaryString.length; i++) {
+            bytes[i] = binaryString.charCodeAt(i);
+          }
+        const blob = new Blob([bytes], { type: 'image/jpeg' });
+        setImageData(URL.createObjectURL(blob));
+        setIsImage(true);
+      }else{
+          setIsImage(false);
+      }
         } catch (error) {
             console.error('Error fetching notice detail:', error);
-            setLoading(false);
+            setLoading(true);
         }
     }, [num]);
     
@@ -80,7 +93,7 @@ import vaildAdmin from './vaildAdmin';
               </TableRow>
               <TableRow className='content'>
                 <TableCell align='left' sx={{border:0}}>
-                  <img src={notice.filePath}/>
+                {isImage&& <img src={imageData} className='imgview'/>}
                   <Typography fontFamily='GmarketSansMedium'>{notice.content}</Typography>
                 </TableCell>
               </TableRow>
@@ -97,8 +110,7 @@ import vaildAdmin from './vaildAdmin';
             <Button variant="contained" startIcon={<Delete />}  onClick={handleDelete}>삭제</Button>
             </Unstable_Grid2>
             </Unstable_Grid2>
-            )}
-        </Unstable_Grid2>
+            )}</Unstable_Grid2>
     );
 };
 

@@ -16,26 +16,43 @@ import EditMember from './component/EditMember';
 import DeleteMember from './component/DeleteMember';
 import Payment from './component/Payment';
 import clearLocalStorage from './component/clearLocalStorage';
+import BusBooking from './component/BusBooking';
+import TrainBooking from './component/TrainBooking';
+import AdminMember from './component/AdminMember';
+import PaymentHistoryBus from './component/PaymentHistoryBus';
+import PaymentHistoryTrain from './component/PaymentHistoryTrain';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
       setIsLoggedIn(true);
     }
   }, []);
-
-
+  const [login,setLogin] =useState({
+    username:'',
+    password:''
+  });
+  const [open,setOpen] =useState({
+    ticketingOpen: false,
+    paymentOpen: false,
+    memberOpen: false,
+    adminOpen: false
+  });
+  const handleOpen=(idenTifier)=>{
+    setOpen((prevData)=>({
+        ...prevData,
+        [idenTifier]:!prevData[idenTifier]
+    }));
+}
   const handleLogin = () => {
     // 로그인 처리 로직
     setIsLoggedIn(true);
   };
-
   const handleLogout = () => {
     // 로그아웃 처리 로직
     setIsLoggedIn(false);
@@ -50,7 +67,7 @@ function App() {
       <div className="App-main">
         <Routes>
           <Route exact path="/" element ={<Home/>} />
-          <Route exact path="/login" element ={<Login onLogin={handleLogin} />} />
+          <Route exact path="/login" element={<Login onLogin={handleLogin} setLogin={setLogin} />} />
           <Route path="/notice" element={<Notice />} />
           <Route path="/notice/:num" element={<NoticeDetail />} />
           <Route path="/notice/write" element={<NotcieWrite />} />
@@ -59,9 +76,14 @@ function App() {
           <Route path="/train" element = {<Trainticket isLoggedIn={isLoggedIn}/>} />
           <Route path="/bus"  /> 
           <Route path = "/lineinfo" element= {<LineInfo/> } />
-          <Route path = "/mypage" element = {<MyPage/>} />
-          <Route path = "/EditMember" element = {<EditMember/>} />
-          <Route path = "/DeleteMember" element = {<DeleteMember />} />
+          <Route path="/mypage" element={<MyPage open={open} handleOpen={handleOpen}/>} />
+          <Route path="/EditMember" element={<EditMember id={login.username} open={open} handleOpen={handleOpen}/>} />
+          <Route path="/DeleteMember" element={<DeleteMember onLogout={handleLogout} login={login} open={open} handleOpen={handleOpen}/>} />
+          <Route path="/BusBooking" element={<BusBooking open={open} handleOpen={handleOpen} id={login.username}/>} />
+          <Route path="/TrainBooking" element={<TrainBooking open={open} handleOpen={handleOpen} id={login.username}/>}/>
+          <Route path="/AdminMember" element={<AdminMember open={open} handleOpen={handleOpen}/>}/>
+          <Route path="/PaymentHistoryBus" element={<PaymentHistoryBus open={open} handleOpen={handleOpen} id={login.username}/>}/>
+          <Route path="/PaymentHistoryTrain" element={<PaymentHistoryTrain open={open} handleOpen={handleOpen} id={login.username}/>}/>
           <Route path = "/payment" element = {<Payment />} />
           {/* 여기서 Route 관련 코드들을 복사해서 App-main 영역에 출력될 부분만 추가.*/}
         </Routes>
