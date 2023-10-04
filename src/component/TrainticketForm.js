@@ -370,7 +370,7 @@ function TrainTicketForm({ isLoggedIn }) {
                 <Typography sx={{ textAlign: 'left', fontWeight: 'bold', fontSize: 14 }}>탑승정보</Typography>
                 <TextField id="standard-basic" label="이름" variant="standard" className="fieldStyles" defaultValue= {name} InputProps={{ readOnly: true }}/>
                 <TextField id="standard-basic" label="전화번호" variant="standard" className="fieldStyles" defaultValue = {phoneNumber} InputProps={{ readOnly: true }} />
-                <ChildModal onSelectSeat={handleSeatSelect} />
+                <ChildModal onSelectSeat={handleSeatSelect} selectedItem= {selectedItem} />
                 
                 {/* 좌석 선택 칸 만들기 */}
               </Box>
@@ -530,17 +530,44 @@ function TrainTicketForm({ isLoggedIn }) {
 
   }
 
-  function ChildModal({ onSelectSeat }) {
+  function ChildModal({ onSelectSeat, selectedItem }) {
 
     const [open, setopen] = React.useState(false);
     const [selectedSeat, setSelectedSeat] = useState(null);
     const [seatText, setSeatText] = useState("");
     const [CarText, setCarText] = useState("");
     const [selectedCar, setSelectedCar] = useState(null);
+    const [availableSeats, setAvailableSeats] = useState([]);
+    const {trainType, startTime,endTime,startStaion,endStation,trainNum,startdate} = selectedItem;
 
     const handleOpen = () => {
       setopen(true);
+
+
+
+      axios.get('/trainTicket/findSeat', {
+        params: {
+          vehicleTypeName: trainType, // 선택한 기차 종류
+          departureTime: startTime, // 출발 시간
+          arrivalTime: endTime, // 도착 시간
+          departureStation: startStaion, // 출발지
+          arrivalStation: endStation, // 도착지
+          trainNumber: trainNum, // 기차 번호
+          reservationDate: startdate, // 예약 날짜
+        },
+      })
+        .then((response) => {
+          // 백엔드에서 받아온 좌석 정보를 상태에 저장
+          setAvailableSeats(response.data);
+        })
+        .catch((error) => {
+          // 에러 처리
+          console.log(error);
+        });
+
     }
+
+
     const handleClose = () => {
       setopen(false);
     }
@@ -560,6 +587,7 @@ function TrainTicketForm({ isLoggedIn }) {
     };
 
 
+   
     const seatLayout = [];
     const rows = 5; // 행 수
     const cols = 10; // 열 수
