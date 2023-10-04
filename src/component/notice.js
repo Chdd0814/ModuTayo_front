@@ -27,7 +27,9 @@ import vaildAdmin from './vaildAdmin';
         }, []);
 
         return (
-            <div>
+            <div className = "noticeTbl">
+                <div className = "noticeTbl-main">
+
                 <table>
                     <thead>
                         <tr>
@@ -50,9 +52,12 @@ import vaildAdmin from './vaildAdmin';
                         ))}
                     </tbody>
                 </table>
+                        </div>
+                <div className = "writeBtn">
                 {isAdmin && (
                     <Link to="/notice/write" className="write-button">글작성</Link>
                 )}
+                </div>
             </div>
         );
     };

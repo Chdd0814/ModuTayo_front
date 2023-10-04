@@ -28,10 +28,9 @@ function Payment() {
     const [usedMileage, setusedMileage] = useState(0);
     const [trainSeatnumber, settrainSeatnumber] = useState('');
     const [trainCarnumber, settrainCarnumber] = useState('');
-    const [callbackData, setcallbackData] = useState({});
-    const [ticketData, settrainticketData] = useState({});
-    const randomNumber = Math.floor(Math.random() * 10000);
-    const randomticketnumber = `train_${dateValue}_${randomNumber}`;
+    // const [callbackData, setcallbackData] = useState({});
+    // const [ticketData, settrainticketData] = useState({});
+    const randomticketnumber = `train_${dateValue}_${Math.floor(Math.random() * 10000)}`;
     const navigate = useNavigate();
 
 
@@ -84,23 +83,6 @@ function sendPaymentData(paymentData) {
 
 function sendtrainTicketData(ticketData) {
 
-  ticketData = {
-    vehicleTypeName : trainGrade,
-    departureTime : depTime,
-    arrivalTime : arrTime,
-    departureStation : depPlace,
-    arrivalStation : arrPlace,
-    fare : ticketPrice,
-    trainNumber : trainNum,
-    seatNumber : trainSeatnumber,
-    trainCarNumber : trainCarnumber,
-    ticketNumber : randomticketnumber,
-    id : id,
-    name : buyerName,
-    reservationDate : dateValue,
-  }
-
-  settrainticketData(ticketData);
 
   axios.post('/trainTicket/Success', ticketData, {
     headers: {
@@ -150,11 +132,13 @@ function sendtrainTicketData(ticketData) {
        
     
         if (success) {
+          
+          const crateTicketnumber = randomticketnumber;
 
           const PaycallbackData = {
-            trainticketNumber : randomticketnumber,
+            trainticketNumber : crateTicketnumber,
             impUid : imp_uid,
-            mechantUid : merchant_uid,
+            merchantUid : merchant_uid,
             paidAmount : paid_amount,
             payMethod : pay_method,
             buyerName : buyer_name,
@@ -162,8 +146,24 @@ function sendtrainTicketData(ticketData) {
             buyerid : id,
             paymentDate : paymentDate,
           }
-          // setcallbackData(PaycallbackData);
-          // sendtrainTicketData(ticketData);
+
+          const reservationTicketData = {
+            vehicleTypeName : trainGrade,
+            departureTime : depTime,
+            arrivalTime : arrTime,
+            departureStation : depPlace,
+            arrivalStation : arrPlace,
+            fare : ticketPrice,
+            trainNumber : trainNum,
+            seatNumber : trainSeatnumber,
+            trainCarNumber : trainCarnumber,
+            ticketNumber : crateTicketnumber,
+            id : id,
+            name : buyerName,
+            reservationDate : dateValue,
+          }
+
+          sendtrainTicketData(reservationTicketData);
           sendPaymentData(PaycallbackData);
        
           alert("결제 성공");
