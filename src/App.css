@@ -13,6 +13,7 @@
 }
 
 .App-main {
+  position : relative;
   padding-top: 60px;
   padding : 30px; /* 네비바 높이만큼 상단 패딩 추가 */
 }
@@ -32,3 +33,4 @@
     transform: rotate(360deg);
   }
 }
+
