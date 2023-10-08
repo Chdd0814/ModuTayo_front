@@ -1,12 +1,15 @@
-  import React, { useState } from 'react';
+  import React, { useEffect, useState } from 'react';
   import axios from 'axios';
   import './Login.css';
+
   import logoExpress from '../logoExpress.png'; // 로고 이미지의 경로 설정
+  import kakaoLoginImg from '../images/kakao_login.png';
   import { useNavigate } from 'react-router-dom';
   import TextField from '@mui/material/TextField';
   import PassWordField from '@mui/material/TextField';
   import Grid from '@mui/material/Unstable_Grid2';
   import Button from '@mui/material/Button';
+  import ButtonGroup from "react-bootstrap/ButtonGroup";
 
   const Login = ({ onLogin,setLogin }) => {
     const [idError, setidError] = useState('');
@@ -24,33 +27,27 @@
       setPassword(e.target.value);
     };
 
+
     const handleLogin = () => {
 
-      
       const data = {
         username: username,
         password: password,
       };
-    
-      axios.post('/login', data, {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        })
+      
+      axios.post('/login', data)
         .then((response) => {
           console.log(response.data);
           // 서버에서 반환한 토큰을 사용
           const token = response.data.accessToken;
-          console.log(token);
-    
+          console.log(token)
+      
           if (token) {
             // 토큰이 존재하는 경우 로그인 성공 처리
-            localStorage.setItem('token', token);
-            // 로그인 상태를 설정하거나 필요한 작업을 수행하세요.
-            // setLogin(true); // 예시: 로그인 상태를 true로 설정
+            localStorage.setItem('token', token); 
             setLogin(data);
-            onLogin(true);
-            history("/");
+            onLogin();
+            history('/');
           } else {
             // 토큰이 존재하지 않는 경우 로그인 실패 처리
             setLoginError('로그인에 실패했습니다.');
@@ -61,7 +58,26 @@
           console.error(error);
           setLoginError('로그인 중 오류가 발생했습니다.');
         });
+
+
     };
+
+
+    const goToSignUp = (event) => {
+      event.preventDefault();
+      history("/register");
+    };
+  
+    const goToIdSearch = (event) => {
+      event.preventDefault();
+      history("/idSearch");
+    };
+  
+    const goToPasswordSearch = (event) => {
+      event.preventDefault();
+      history("/passwordSearch");
+    };
+    
 
     return (
       <div className="login-container">
@@ -71,15 +87,50 @@
       </h2>
     <form className="form-container">
       <label className="label">
-          <TextField type="text" value={username} onChange={handleUsernameChange} label="아이디" />
+          <TextField type="text" value={username} onChange={handleUsernameChange} label="아이디" style={{ width: "22em" }}/>
       </label>
       <label className="label">
-          <TextField type="password" label="비밀번호" value={password} onChange={handlePasswordChange} />
+          <TextField type="password" label="비밀번호" value={password} onChange={handlePasswordChange} style={{ width: "22em" }}/>
       </label>
-      <Button variant="contained" type="button" onClick={handleLogin}>
+
+
+      <ButtonGroup className="Button">
+          <Button variant="contained" type="button" onClick={handleLogin} style={{ width: "22em" }}>
+            로그인
+          </Button>
+          {loginError && <Grid color='red' className="error" fontFamily="GmarketSansMedium">{loginError}</Grid>}
+          <ButtonGroup aria-label="Second group" className="Id_pass">
+          <Button
+            aria-label="Third group"
+            className="SignUp"
+            variant="primary"
+            onClick={goToSignUp}
+          >
+            회원가입
+          </Button>
+            <Button variant="primary" onClick={goToIdSearch}>
+              아이디 찾기
+            </Button>
+            <Button
+              className="Pass"
+              variant="primary"
+              onClick={goToPasswordSearch}
+            >
+              비밀번호 찾기
+            </Button>
+          </ButtonGroup>
+        </ButtonGroup>
+      {/* <Button variant="contained" type="button" onClick={handleLogin}>
         로그인
-      </Button>
-      {loginError && <Grid color='red' className="error" fontFamily="GmarketSansMedium">{loginError}</Grid>}
+      </Button> */}
+      {/* <Button>
+      <img
+          onClick={loginWithKakao}
+          src={kakaoLoginImg}
+          alt="Kakao Login"
+        />
+      </Button> */}
+      {/* {loginError && <Grid color='red' className="error" fontFamily="GmarketSansMedium">{loginError}</Grid>} */}
     </form>
   </div>
     );
