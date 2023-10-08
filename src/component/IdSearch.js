@@ -2,10 +2,13 @@ import React, { useState } from "react";
 import { Form, Button, Container } from "react-bootstrap";
 import axios from "axios";
 import './IdSearch.css';
+import { useNavigate } from 'react-router-dom';
 
 const Idsearch = () => {
+    const history = useNavigate();
+
   const [formData, setFormData] = useState({
-    userNm: "",
+    name: "",
     email: "",
   });
 
@@ -21,11 +24,12 @@ const Idsearch = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://13.48.105.95:8080/member/searchId",
+        "/searchId",
         formData
       );
       if (response.data.message && response.data.foundId) {
         alert(`${response.data.message} ${response.data.foundId}`);
+        history("/login");
       } else if (response.data.message) {
         alert(response.data.message);
       }
@@ -37,13 +41,14 @@ const Idsearch = () => {
 
   return (
     <Container className="IdSet">
+        <h1>아이디 찾기</h1>
       <Form className="IdForm" onSubmit={handleSubmit}>
         <Form.Group className="mb-3" controlId="formBasicId">
           <Form.Label>이름</Form.Label>
           <Form.Control
-            style={{ width: "40em" }}
+            style={{ width: "22em" }}
             type="text"
-            name="userNm"
+            name="name"
             placeholder="홍길동"
             required
             onChange={handleChange}
@@ -53,7 +58,7 @@ const Idsearch = () => {
         <Form.Group controlId="formBasicEmail">
           <Form.Label>email</Form.Label>
           <Form.Control
-            style={{ width: "40em" }}
+            style={{ width: "22em" }}
             type="email"
             name="email"
             placeholder="홍길동@naver.com"

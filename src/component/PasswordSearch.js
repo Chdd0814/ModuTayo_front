@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import { Form, Button, Container } from "react-bootstrap";
 import axios from "axios";
-// import './PasswordSearch.css';
+import { useNavigate } from 'react-router-dom';
+import './PasswordSearch.css';
 
 const PasswordSearch = () => {
+    const history = useNavigate();
+
     const [formData, setFormData] = useState({
-        userNm: "",
+        id: "",
         email: "",
     });
 
@@ -21,12 +24,14 @@ const PasswordSearch = () => {
         e.preventDefault();
         try {
             const response = await axios.post(
-                "/searchPw",
+                '/searchPw',
                 formData
             );
             if (response.data) {
                 // alert(`${response.data.message} ${response.data.foundPw}`);
+                alert("임시 비밀번호를 발급해드리겠습니다. 꼭 수정하세요.")
                 alert(response.data);
+                history("/login");
             } else if (response.data.message) {
                 alert("올바른 값을 입력하세요");
             }
@@ -38,13 +43,14 @@ const PasswordSearch = () => {
 
     return (
         <Container className="PassSet">
+            <h1>비밀번호 찾기</h1>
             <Form className="PassForm" onSubmit={handleSubmit}>
                 <Form.Group className="mb-3" controlId="formBasicId">
-                    <Form.Label>Id</Form.Label>
+                    <Form.Label>아이디</Form.Label>
                     <Form.Control
-                        style={{ width: "40em" }}
+                        style={{ width: "22em" }}
                         type="text"
-                        name="userId"
+                        name="id"
                         placeholder="아이디를 입력해주세요"
                         required
                         onChange={handleChange}
@@ -52,9 +58,9 @@ const PasswordSearch = () => {
                 </Form.Group>
 
                 <Form.Group controlId="formBasicEmail">
-                    <Form.Label>email</Form.Label>
+                    <Form.Label>이메일</Form.Label>
                     <Form.Control
-                        style={{ width: "40em" }}
+                        style={{ width: "22em" }}
                         type="email"
                         name="email"
                         placeholder="홍길동@naver.com"

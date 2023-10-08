@@ -77,16 +77,6 @@
       event.preventDefault();
       history("/passwordSearch");
     };
-
-
-
-    const loginWithKakao = () => {
-      const CLIENT_ID = `${process.env.REACT_APP_KAKAO_LOGIN_API_KEY}`;
-      const REDIRECT_URI = `${process.env.REACT_APP_KAKAO_REDIRECT_URI}`;
-
-      const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=f5ac021f1daed630b07a6cddff72728a&redirect_uri=http://localhost:8083&response_type=code`;
-      window.location.href = KAKAO_AUTH_URL;
-    }
     
 
     return (
@@ -97,18 +87,27 @@
       </h2>
     <form className="form-container">
       <label className="label">
-          <TextField type="text" value={username} onChange={handleUsernameChange} label="아이디" />
+          <TextField type="text" value={username} onChange={handleUsernameChange} label="아이디" style={{ width: "22em" }}/>
       </label>
       <label className="label">
-          <TextField type="password" label="비밀번호" value={password} onChange={handlePasswordChange} />
+          <TextField type="password" label="비밀번호" value={password} onChange={handlePasswordChange} style={{ width: "22em" }}/>
       </label>
 
 
-      {/* <ButtonGroup className="Button">
-          <Button variant="contained" type="button" onClick={handleLogin}>
+      <ButtonGroup className="Button">
+          <Button variant="contained" type="button" onClick={handleLogin} style={{ width: "22em" }}>
             로그인
           </Button>
+          {loginError && <Grid color='red' className="error" fontFamily="GmarketSansMedium">{loginError}</Grid>}
           <ButtonGroup aria-label="Second group" className="Id_pass">
+          <Button
+            aria-label="Third group"
+            className="SignUp"
+            variant="primary"
+            onClick={goToSignUp}
+          >
+            회원가입
+          </Button>
             <Button variant="primary" onClick={goToIdSearch}>
               아이디 찾기
             </Button>
@@ -120,26 +119,18 @@
               비밀번호 찾기
             </Button>
           </ButtonGroup>
-          <Button
-            aria-label="Third group"
-            className="SignUp"
-            variant="primary"
-            onClick={goToSignUp}
-          >
-            회원가입
-          </Button>
-        </ButtonGroup> */}
-      <Button variant="contained" type="button" onClick={handleLogin}>
+        </ButtonGroup>
+      {/* <Button variant="contained" type="button" onClick={handleLogin}>
         로그인
-      </Button>
-      <Button>
+      </Button> */}
+      {/* <Button>
       <img
           onClick={loginWithKakao}
           src={kakaoLoginImg}
           alt="Kakao Login"
         />
-      </Button>
-      {loginError && <Grid color='red' className="error" fontFamily="GmarketSansMedium">{loginError}</Grid>}
+      </Button> */}
+      {/* {loginError && <Grid color='red' className="error" fontFamily="GmarketSansMedium">{loginError}</Grid>} */}
     </form>
   </div>
     );
