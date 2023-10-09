@@ -23,6 +23,7 @@ import PaymentHistoryBus from './component/PaymentHistoryBus';
 import PaymentHistoryTrain from './component/PaymentHistoryTrain';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import Busticket from './component/Busticket';
 
 function App() {
 
@@ -74,7 +75,7 @@ function App() {
           <Route path="/notice/:num/edit" element={<NoticeEdit />} />
           <Route path="/register" element = {<Register/>} />
           <Route path="/train" element = {<Trainticket isLoggedIn={isLoggedIn}/>} />
-          <Route path="/bus"  /> 
+          <Route path="/bus" element = {<Busticket isLoggedIn={isLoggedIn}/>} /> 
           <Route path = "/lineinfo" element= {<LineInfo/> } />
           <Route path="/mypage" element={<MyPage open={open} handleOpen={handleOpen}/>} />
           <Route path="/EditMember" element={<EditMember id={login.username} open={open} handleOpen={handleOpen}/>} />
