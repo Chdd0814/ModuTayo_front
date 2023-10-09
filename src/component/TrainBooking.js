@@ -5,7 +5,7 @@ import DataTable from './DataTable';
 import TableSearch from './TableBookingSearch';
 import axios from 'axios';
 const TrainBooking=(props)=>{
-    const {open,handleOpen,id}=props
+    const {open,handleOpen}=props
     const [formData,setFormData]=useState([]);
     const TableColor=['#0078FF','#F4FFFF','#F9FFFF'];
     const [TrainTitle,setBusTitle]= useState(['역번호','기차종류','출발역','도착역','출발시간','도착시간','자리번호']);
@@ -18,17 +18,18 @@ const TrainBooking=(props)=>{
         {key:'arrivalTime',width:200},
         {key:'seatNumber',width:80}
     ])
-    const handlebusbooking=useCallback(async(e)=>{
-        try{
-            const response=await axios.get(`/TrainBooking/${id}`);
+
+    const handlebusbooking = useCallback(async(id) => {
+        try {
+            const response = await axios.get(`/TrainBooking/${id}`);
             setFormData(response.data);
             console.log(response.data);
-        }catch(e){
+        } catch(e) {
             console.error(e);
         }
-    },[])
+    }, []);
     useEffect(()=>{
-        handlebusbooking();
+        handlebusbooking(localStorage.getItem('userId'));
     },[handlebusbooking]);
     return(
         <Grid2 container direction='row'>
