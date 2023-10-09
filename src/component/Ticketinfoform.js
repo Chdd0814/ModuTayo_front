@@ -43,13 +43,14 @@ function Ticketinfoform() {
   const [selectedRoundTerminalId, setSelectedRoundTerminalId] = useState(''); // 선택된 터미널 아이디 상태 추가
   const [selectedRoundTerminalId2, setSelectedRoundTerminalId2] = useState(''); // 선택된 터미널 아이디 상태 추가2
   const navigate = useNavigate(); 
-  
+  const [BusInfo, setBusInfo] = useState({});
 //기차관련 함수
   const handleParty = (event) => {
     setParty(event.target.value);
   };
 
   const handleSubmit = (event) => {
+
     event.preventDefault(); 
     if (transportType === 'bus') {
       // 버스 선택 시 버스 페이지로 리다이렉트
@@ -167,7 +168,6 @@ const handleTabChange = (event, newValue) => {
 
 const handleTerminalClick = (terminalName, terminalId) => {
   setSelectedTerminal(terminalName); // 선택된 터미널 이름을 상태로 설정
- // handleModalClose(); // 모달을 닫음
   setSelectedTerminalId(terminalId);
   const apiUrl = `/publicApi/getArrBusList?tmnCd=${terminalId}`;
 
@@ -209,6 +209,23 @@ const handleTerminalClick2 = (terminalName2, terminalId2) => {
     setSelectedRoundTerminalId2(terminalId2);
     handleSecondModalClose(); // 모달 닫기
   };
+
+const handleSearch = () => {
+  const depTid = "NAEK" + selectedTerminalId;
+  const arrTid = "NAEK" + selectedTerminalId2;
+  const depDate = datevalue;
+  const busInfo = {
+    depTerminalId: depTid,
+    arrTerminalId: arrTid,
+    depPlandTime: depDate,
+    Party: party,
+    depName: selectedTerminal,
+    arrName: selectedTerminal2,
+  };
+  setBusInfo(busInfo);
+  sessionStorage.setItem('key', JSON.stringify(busInfo));
+}
+
 return(
 
  <div className="ticket-info-form">
@@ -499,7 +516,7 @@ return(
                ))}
              </Select>
            </FormControl>
-           <Button type="sumbit">검색</Button></form>
+           <Button type="sumbit" onClick={handleSearch}>검색</Button></form>
          <Modal
              open={Modalopen}
              onClose={handleModalClose}
