@@ -7,12 +7,12 @@ import TableSearch from './TableBookingSearch';
 
 
 const PaymentHistoryTrain=(props)=>{
-    const {open,handleOpen,id}=props
+    const {open,handleOpen}=props
     const [formData,setFormData]=useState([]);
     const TableColor=['#3DFF92','#F0FFF0','#AFFFEE'];
     const [TrainTitle,setBusTitle]= useState(['1','2','3','4','5','6','7']);
     const [TrainContent,setBusContent]=useState([
-        {key:'trainticketNumber ',width:80},
+        {key:'trainticketNumber',width:80},
         {key:'impUid ',width:100},
         {key:'merchantUid ',width:90},
         {key:'paidAmount ',width:90},
@@ -20,16 +20,18 @@ const PaymentHistoryTrain=(props)=>{
         {key:'arrivalTime',width:200},
         {key:'seatNumber',width:80}
     ])
-    const handlePaymentHistoryTrain=useCallback(async(e)=>{
+
+    const handlePaymentHistoryTrain=useCallback(async(id)=>{
         try{
-            const response=await axios.get(`/payment/Payment/${id}`);
+            console.log({id})
+            const response=await axios.get(`/Payment/${id}`);
             setFormData(response.data);
         }catch(e){
             console.error(e);
         }
     },[])
     useEffect(()=>{
-        handlePaymentHistoryTrain();
+        handlePaymentHistoryTrain(localStorage.getItem('userId'));
     },[handlePaymentHistoryTrain]);
     return(
         <Grid2 container direction='row'>
