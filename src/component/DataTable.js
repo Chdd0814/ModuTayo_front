@@ -4,6 +4,7 @@ import {Table,TableCell,TableHead,TableRow,TableBody,TableContainer,Paper,Typogr
 import {FirstPage ,KeyboardArrowLeft ,KeyboardArrowRight ,LastPage } from '@mui/icons-material';
 import './FontCss.css';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom'; // React Router v6 사용
 const HeadTable=(props)=>{
     const {title,TableColor}=props
     return(
@@ -20,7 +21,7 @@ const HeadTable=(props)=>{
     );
 }
 const BodyTable=(props)=>{
-    const {content,page,rowsPerPage,membercontent,TableColor}=props
+    const {content,page,rowsPerPage,membercontent,TableColor,searchitem,handleOpen}=props
     return( 
         <TableBody>    
             {(rowsPerPage > 0
@@ -30,7 +31,7 @@ const BodyTable=(props)=>{
             <TableRow key={index}>
                 {membercontent.map((column) => (
                         <TableCell key={column.key} sx={{backgroundColor: index % 2 === 0 ?TableColor[2]:TableColor[1], width:column.width,minWidth:column.width}}>
-                            <Typography  color='black' textAlign='center'>{item[column.key]}</Typography>
+                            <Typography  color='black' textAlign='center'>{searchitem===column.key?<Link  onClick={handleOpen(item[column.key])}>{item[column.key]}</Link>:item[column.key]}</Typography>
                         </TableCell>
                     ))}
             </TableRow> ))}
@@ -96,7 +97,7 @@ FooterTable.propTypes = {
   };
 
 const DataTable=(props)=>{
-    const {title,member,membercontent,TableColor}=props;
+    const {title,member,membercontent,TableColor,searchitem,handleOpen}=props;
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const emptyRows =   page > 0 ? Math.max(0, (1 + page) * rowsPerPage - membercontent.length) : 0;
@@ -110,7 +111,7 @@ const DataTable=(props)=>{
             <TableContainer component={Paper} elevation={3} >
                 <Table sx={{borderRadius:5}}>
                     <HeadTable title={title} TableColor={TableColor[0]}/>
-                    <BodyTable TableColor={TableColor} emptyRows={emptyRows} content={member} membercontent={membercontent} rowsPerPage={rowsPerPage} page={page}/>
+                    <BodyTable handleOpen={handleOpen} searchitem={searchitem} TableColor={TableColor} emptyRows={emptyRows} content={member} membercontent={membercontent} rowsPerPage={rowsPerPage} page={page}/>
                     <TableFooter> 
                         <TableRow sx={{backgroundColor:TableColor[0]}}>  
                         <TablePagination 

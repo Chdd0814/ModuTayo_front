@@ -7,7 +7,7 @@ import TableSearch from './TableBookingSearch';
 
 
 const PaymentHistoryBus=(props)=>{
-    const {open,handleOpen,id}=props
+    const {open,handleOpen}=props
     const [formData,setFormData]=useState([]);
     const TableColor=['#3DFF92','#F0FFF0','#AFFFEE'];
     const [busTitle,setBusTitle]= useState(['1','2','3','4','5','6','7']);
@@ -20,7 +20,7 @@ const PaymentHistoryBus=(props)=>{
         {key:'arrivalTime',width:200},
         {key:'seatNumber',width:80}
     ])
-    const handlePaymentHistoryBus=useCallback(async(e)=>{
+    const handlePaymentHistoryBus=useCallback(async(id)=>{
         try{
             const response=await axios.get(`/Payment/${id}`);
             setFormData(response.data);
@@ -29,7 +29,7 @@ const PaymentHistoryBus=(props)=>{
         }
     },[])
     useEffect(()=>{
-        handlePaymentHistoryBus();
+        handlePaymentHistoryBus(localStorage.getItem('userId'));
     },[handlePaymentHistoryBus]);
     return(
         <Grid2 container direction='row'>

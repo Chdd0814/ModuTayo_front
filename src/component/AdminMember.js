@@ -4,7 +4,32 @@ import Mypage from './Mypage';
 import TableMemberSearch from './TableMemberSearch';
 import DataTable from './DataTable';
 import axios from 'axios';
+import AdminMember_dialog from './AdminMember_dialog';
+
 const AdminMember=(props)=>{
+    const [open,setOpen]=useState(false);
+    const [id,setId]=useState('');
+    const [isadmin,setIsadmin]=useState();
+
+
+    const handleOpen=(id)=>(e)=>{
+        e.preventDefault();
+        setOpen(true);
+        setId(id);
+        handlegetIsAdmin(id);
+    }
+    const handlegetIsAdmin=useCallback(async(memberID)=>{
+        try{
+                const response=await axios.get(`/AdminMember_dialog/${memberID}`);
+                setIsadmin(response.data);
+                console.log(response.data);
+        }catch(error){
+            console.error(error);
+        }
+},[]);
+    const handleClose=()=>{
+        setOpen(false);
+    }
     const [formData,setFormData]=useState([]);
     const [SearchFilter,setSearchFilter]=useState({
         search:'',
@@ -14,6 +39,7 @@ const AdminMember=(props)=>{
         try{
             const response=await axios.get('/AdminMember');
             setFormData(response.data);
+
         }catch(error){
             console.error(error);
         }
@@ -47,6 +73,7 @@ const AdminMember=(props)=>{
                 [name]:value
         }));
     }
+    
     return(
         <Grid2 container direction='row'>
          <Mypage open={props.open} handleOpen={props.handleOpen}/>
@@ -55,10 +82,12 @@ const AdminMember=(props)=>{
                     <TableMemberSearch SearchFilter={SearchFilter} searchMember={searchMember}  handleChange={handleChange} />
                 </Grid2>
                 <Grid2 item xs={12} marginLeft={15}>
-                   <DataTable TableColor={TableColor}  title={memberTitle} member={formData} membercontent={memberContent} /> 
+                   <DataTable handleOpen={handleOpen} searchitem={memberContent[0].key} TableColor={TableColor}  title={memberTitle} member={formData} membercontent={memberContent} /> 
                 </Grid2>
             </Grid2>
+            <AdminMember_dialog  open={open} id={id} isadmin={isadmin}  handleClose={handleClose} allMember={allMember} />
         </Grid2>
+        
     );
 }
 

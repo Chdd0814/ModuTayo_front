@@ -58,14 +58,27 @@ table {
 .notice-card-body {
   padding : 10px;
 }
+.notice-container {
+  position: relative;
+}
+
 .write-button {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    margin: 20px;
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: #fff;
-    text-decoration: none;
-    border-radius: 5px;
-} 
+  position: absolute;
+  bottom : 2px; /* 원하는 간격으로 조정하세요 */
+  right: 20px;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 5px;
+  z-index: 1; /* 다른 컨텐츠 위로 표시되도록 설정 */
+}
+
+.noticeTbl-main {
+
+  margin : 16px;
+}
+.writeBtn {
+
+  margin : 16px;
+}
