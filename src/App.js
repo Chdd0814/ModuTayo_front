@@ -33,10 +33,6 @@ function App() {
       setIsLoggedIn(true);
     }
   }, []);
-  const [login,setLogin] =useState({
-    username:'',
-    password:''
-  });
   const [open,setOpen] =useState({
     ticketingOpen: false,
     paymentOpen: false,
@@ -67,7 +63,7 @@ function App() {
       <div className="App-main">
         <Routes>
           <Route exact path="/" element ={<Home/>} />
-          <Route exact path="/login" element={<Login onLogin={handleLogin} setLogin={setLogin} />} />
+          <Route exact path="/login" element={<Login onLogin={handleLogin}  />} />
           <Route path="/notice" element={<Notice />} />
           <Route path="/notice/:num" element={<NoticeDetail />} />
           <Route path="/notice/write" element={<NotcieWrite />} />
@@ -75,15 +71,15 @@ function App() {
           <Route path="/register" element = {<Register/>} />
           <Route path="/train" element = {<Trainticket isLoggedIn={isLoggedIn}/>} />
           <Route path="/bus"  /> 
-          <Route path = "/lineinfo" element= {<LineInfo/> } />
+          <Route path = "/lineinfo" element= {<LineInfo/>} />
           <Route path="/mypage" element={<MyPage open={open} handleOpen={handleOpen}/>} />
-          <Route path="/EditMember" element={<EditMember id={login.username} open={open} handleOpen={handleOpen}/>} />
-          <Route path="/DeleteMember" element={<DeleteMember onLogout={handleLogout} login={login} open={open} handleOpen={handleOpen}/>} />
-          <Route path="/BusBooking" element={<BusBooking open={open} handleOpen={handleOpen} id={login.username}/>} />
-          <Route path="/TrainBooking" element={<TrainBooking open={open} handleOpen={handleOpen} id={login.username}/>}/>
+          <Route path="/EditMember" element={<EditMember  open={open} handleOpen={handleOpen}/>} />
+          <Route path="/DeleteMember" element={<DeleteMember onLogout={handleLogout} open={open} handleOpen={handleOpen}/>} />
+          <Route path="/BusBooking" element={<BusBooking open={open} handleOpen={handleOpen} />} />
+          <Route path="/TrainBooking" element={<TrainBooking open={open} handleOpen={handleOpen} />}/>
           <Route path="/AdminMember" element={<AdminMember open={open} handleOpen={handleOpen}/>}/>
-          <Route path="/PaymentHistoryBus" element={<PaymentHistoryBus open={open} handleOpen={handleOpen} id={login.username}/>}/>
-          <Route path="/PaymentHistoryTrain" element={<PaymentHistoryTrain open={open} handleOpen={handleOpen} id={login.username}/>}/>
+          <Route path="/PaymentHistoryBus" element={<PaymentHistoryBus open={open} handleOpen={handleOpen}/>}/>
+          <Route path="/PaymentHistoryTrain" element={<PaymentHistoryTrain open={open} handleOpen={handleOpen} />}/>
           <Route path = "/payment" element = {<Payment />} />
           {/* 여기서 Route 관련 코드들을 복사해서 App-main 영역에 출력될 부분만 추가.*/}
         </Routes>

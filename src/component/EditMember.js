@@ -13,13 +13,17 @@ const AlertSnackBar=(props)=>{
       </Snackbar>
     );
 }
-const EditMember=({id,open,handleOpen})=>{
+const EditMember=({open,handleOpen})=>{
     const [password,setPassword]=useState('')
     const [state,setState]=useState({
         successOpen:false,
         errorOpen:false
     });
-    
+    const [id,setId]=useState('')
+    useEffect(() => {
+        setId(localStorage.getItem('userId'));
+       
+    }, []);
     const handleChange = (e) => {
         const { name, value } = e.target;
         setMember(prevData => ({
@@ -219,7 +223,7 @@ const EditMember=({id,open,handleOpen})=>{
             {textFocus.nameFocus?<NotUpdatatext content='이름은 수정할 수 없습니다.' visibility="visibility" marginTop={3} />:<NotUpdatatext content='이름은 수정할 수 없습니다.' visibility="hidden" />}
                 {textFocus.idFocus?<NotUpdatatext content='아이디는 수정할 수 없습니다.' visibility="visibility" marginTop={9} />:<NotUpdatatext content='아이디는 수정할 수 없습니다.' visibility="hidden" />}
                 {textFocus.passFocus?<PasswordText content='기존의 비밀번호를 입력해 주세요.' visibility="visibility" marginTop={15} />:<PasswordText content='기존의 비밀번호를 입력해 주세요.' visibility="hidden" />}
-                {textFocus.phoneNumberFocus?<Updatatext content='전화번호 형식에 맞게 수정해 주세요.' visibility="visibility" marginTop={21} />:<Updatatext content='전화번호 형식에 맞게 수정해 주세요.' visibility="hidden" />}
+                {textFocus.phonenumberFocus?<Updatatext content='전화번호 형식에 맞게 수정해 주세요.' visibility="visibility" marginTop={21} />:<Updatatext content='전화번호 형식에 맞게 수정해 주세요.' visibility="hidden" />}
                 {textFocus.addressFocus?<Updatatext content='주소 형식에 맞게 수정해 주세요.' visibility="visibility" marginTop={27} />:<Updatatext content='주소 형식에 맞게 수정해 주세요.' visibility="hidden" />}
                 {textFocus.mileageFocus?<NotUpdatatext content='마일리지는 수정할 수 없습니다.' visibility="visibility" marginTop={33} />:<NotUpdatatext content='마일리지는 수정할 수 없습니다.' visibility="hidden" />}
                 {textFocus.emailFocus?<Updatatext content='이메일 형식에 맞게 수정해 주세요.' visibility="visibility" marginTop={40} />:<Updatatext content='이메일 형식에 맞게 수정해 주세요.' visibility="hidden" />}

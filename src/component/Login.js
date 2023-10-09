@@ -1,4 +1,4 @@
-  import React, { useState } from 'react';
+  import React, { useState,useEffect } from 'react';
   import axios from 'axios';
   import './Login.css';
   import logoExpress from '../logoExpress.png'; // 로고 이미지의 경로 설정
@@ -23,15 +23,11 @@
     const handlePasswordChange = (e) => {
       setPassword(e.target.value);
     };
-
     const handleLogin = () => {
-
-      
       const data = {
         username: username,
         password: password,
       };
-    
       axios.post('/login', data, {
           headers: {
             'Content-Type': 'application/json',
@@ -46,9 +42,9 @@
           if (token) {
             // 토큰이 존재하는 경우 로그인 성공 처리
             localStorage.setItem('token', token);
+            localStorage.setItem('userId', data.username);
             // 로그인 상태를 설정하거나 필요한 작업을 수행하세요.
             // setLogin(true); // 예시: 로그인 상태를 true로 설정
-            setLogin(data);
             onLogin(true);
             history("/");
           } else {

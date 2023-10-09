@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useEffect, useState} from 'react';
 import Mypage from './Mypage';
 import axios from 'axios';
 import './FontCss.css';
@@ -7,9 +7,12 @@ import {AlertSnackBar} from './EditMember';
 import { useNavigate } from 'react-router-dom';
 const DeleteMember=(props)=>{
     const navigate = useNavigate();
+    const [id,setId]=useState('');
+    useEffect(() => {
+        setId(localStorage.getItem('userId'));},[]);
     const handleSubmit=async(e)=>{
         e.preventDefault();   
-            await axios.delete(`/DeleteMember/${props.login.username}?password=${checkPass}`)
+            await axios.delete(`/DeleteMember/${id}?password=${checkPass}`)
             .then(response=>{
                 props.onLogout();
                 alert('회원탈퇴가 완료되었습니다.')
