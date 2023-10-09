@@ -277,7 +277,7 @@ return (
       </Grid>}
       </Grid >
       <Grid container direction="column" alignItems="center">
-        <Grid> 
+        <Grid>
       <PassWordField color={valid.isPass?'primary':'error'} value={formData.pass} type="password" name="pass"  label="Password" onChange={handleChange} variant="standard" />
       </Grid>
       {formData.pass.length>0&&<Grid margin={1} className={`error${valid.isPass?'true':'false'}`}>      
