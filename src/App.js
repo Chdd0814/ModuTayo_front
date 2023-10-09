@@ -23,6 +23,8 @@ import PaymentHistoryBus from './component/PaymentHistoryBus';
 import PaymentHistoryTrain from './component/PaymentHistoryTrain';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import Idsearch from './component/IdSearch';
+import PasswordSearch from './component/PasswordSearch';
 
 function App() {
 
@@ -81,6 +83,8 @@ function App() {
           <Route path="/PaymentHistoryBus" element={<PaymentHistoryBus open={open} handleOpen={handleOpen}/>}/>
           <Route path="/PaymentHistoryTrain" element={<PaymentHistoryTrain open={open} handleOpen={handleOpen} />}/>
           <Route path = "/payment" element = {<Payment />} />
+          <Route path = "/idSearch" element = {<Idsearch />} />
+          <Route path = "/passwordSearch" element = {<PasswordSearch />} />
           {/* 여기서 Route 관련 코드들을 복사해서 App-main 영역에 출력될 부분만 추가.*/}
         </Routes>
       </div>
