@@ -474,16 +474,20 @@ return(
 
 {transportType === 'train'&& tripType === 'round-trip' && (
 
-
+<>
 <form onSubmit = {handleSubmit} className = "form-ticketinfo-form">
+
+
   <FormControl sx={{ m: 1, minWidth: 120, marginTop : 2 }}>
         <TextField value={depStationName} id="grouped-select" label="출발지" onClick={handleTrainModalOpen} 
          readOnly />
     </FormControl>
+
 <FormControl sx={{ m: 1, minWidth: 120, marginTop : 2}}>
 <TextField value={arrStationName} id="grouped-select" label="도착지" onClick={handleTrainModalOpen} 
          readOnly />
       </FormControl>
+
     <Modal open = {trainModalopen} onClose = {handleTrainModalClose}  aria-labelledby="modal-modal-title"
              aria-describedby="modal-modal-description"
              style={{
@@ -589,12 +593,14 @@ return(
     ))}
         </Select>
         </FormControl>
+        </form>
 
 
        
       {/* 기차 왕복부분 UI */}    
 
 
+<form onSubmit = {handleSubmit} className = "form-ticketinfo-form">
   <FormControl sx={{ m: 1, minWidth: 120, marginTop : 2 }}>
         <TextField value={rounddepStationName} id="grouped-select" label="출발지" onClick={handleRoundTrainModalOpen} 
          readOnly />
@@ -609,12 +615,12 @@ return(
                display: 'flex',
                alignItems: 'center',
                justifyContent: 'center',
-             }}>
+              }}>
                  <Grid
               container
               
               style={{ width: 900, height: 650, background: 'white' }}
-            >
+              >
               {/* 왼쪽 영역 - 지역 목록 */}
               <Grid item xs={4} sx = {{height : 600}}>
                 <Tabs
@@ -624,14 +630,14 @@ return(
                   onChange={trainTabsSelect}
                   aria-label="Vertical tabs example"
                   style= {{height : 600}}
-                >
+                  >
                   {selectLocation.map((city) => (
                     <Tab
-                      label={city.cityName}
-                      key={city.cityCode}
-                      value={city.cityCode}
+                    label={city.cityName}
+                    key={city.cityCode}
+                    value={city.cityCode}
                     />
-                  ))}
+                    ))}
                 </Tabs>
               </Grid>
 
@@ -664,8 +670,8 @@ return(
 
                   {ktxStationsByCity.map((station, index) => (
                     <Traintabpanel
-      key={station.nodeId}
-      value={station.nodeId}
+                    key={station.nodeId}
+                    value={station.nodeId}
       index={station.nodeId}
       onSelect={() => handleroundStationarrSelect(station.nodeName, station.nodeId)}
       selected = {roundarrStationName === station.nodeName}
@@ -679,6 +685,8 @@ return(
             </Grid>
             </Grid>
           </Modal>
+    
+
 
 <FormControl sx={{ m: 1, minWidth: 120 }}>
        <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -692,6 +700,8 @@ return(
        </LocalizationProvider>
         </FormControl>
 
+      
+
         <FormControl sx={{ m: 1, minWidth: 120, paddingTop:1 }}>
         <InputLabel sx={{paddingTop:1}} id="demo-simple-select-helper-label">인원</InputLabel>
         <Select
@@ -702,16 +712,18 @@ return(
           onChange={handleParty}
           >
           {[...Array(10)].map((_, index) => (
-      <MenuItem key={index + 1} value={index + 1}>
+            <MenuItem key={index + 1} value={index + 1}>
         {index + 1}
       </MenuItem>
     ))}
         </Select>
         </FormControl>
+  
         <div>
         <Button variant="contained" color="secondary" type="sumbit" sx={{marginTop:3}} onClick = {handleSubmit}>검색</Button>
         </div>  
         </form>
+      </>
             )}
 
 {/*  기차 왕복 부분 끝 !!!!!!!!!!!!!*/}
