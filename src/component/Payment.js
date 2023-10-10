@@ -32,11 +32,12 @@ function Payment() {
     // const [ticketData, settrainticketData] = useState({});
     const randomticketnumber = `train_${dateValue}_${Math.floor(Math.random() * 10000)}`;
     const navigate = useNavigate();
+    const [ticketStatus, setticketStatus] = useState(false);
 
 
 
     useEffect(() => {
-        const token = localStorage.getItem('saveTicketinfo');
+        const token = sessionStorage.getItem('saveTicketinfo');
 
         if (token) {
           const dataToken = JSON.parse(token);
@@ -64,7 +65,7 @@ function Payment() {
       }, []);
 
       // 결제 성공 데이터를 서버로 보내는 함수
-function sendPaymentData(paymentData) {
+async function sendPaymentData(paymentData) {
   // Axios를 사용하여 결제 데이터를 서버로 전송
   axios.post('/payment/getPaymentinfo', paymentData, {
     headers: {
@@ -81,23 +82,21 @@ function sendPaymentData(paymentData) {
     });
 }
 
-function sendtrainTicketData(ticketData) {
+async function sendtrainTicketData(ticketData) {
 
 
-  axios.post('/trainTicket/Success', ticketData, {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  })
-    .then(response => {
-      // 서버 응답 처리
-      console.log(response.data);
-    })
-    .catch(error => {
-      // 오류 처리
-      console.error(error);
+  try {
+    const response = await axios.post('/trainTicket/Success', ticketData, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
     });
-
+    console.log(response.data);
+    return true;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
 
 }
 
@@ -125,7 +124,7 @@ function sendtrainTicketData(ticketData) {
     IMP.request_pay(data, callback);
     }
 
-    function callback(response) {
+   async function callback(response) {
         const { success, error_msg, imp_uid, merchant_uid, paid_amount,buyer_name,buyer_tel,pay_method } = response;
         const currentDate = dayjs(); // 현재 날짜와 시간 가져오기
           const paymentDate = currentDate.format("YYYYMMDD"); // "YYYYMMDD" 형식으로 날짜 포맷팅
@@ -163,13 +162,23 @@ function sendtrainTicketData(ticketData) {
             reservationDate : dateValue,
           }
 
-          sendtrainTicketData(reservationTicketData);
-          sendPaymentData(PaycallbackData);
-       
-          alert("결제 성공");
-          
-          
-          navigate('/');
+        // 예매 내역을 먼저 저장
+    
+    try {
+      
+      const ticketSaved = await sendtrainTicketData(reservationTicketData);
+
+      if (ticketSaved) {
+        await sendPaymentData(PaycallbackData);
+        alert("결제 성공");
+        navigate('/');
+      } else {
+        console.log ("예매내역 저장실패");
+      }
+    } catch (error) {
+      console.error(error);
+
+    }
 
         } else {
           alert(`결제 실패: ${error_msg}`);
