@@ -218,8 +218,8 @@ function TrainTicketForm({ isLoggedIn }) {
           trainSeatNumber : selectedSeat, // 선택한 좌석
         };
       
-        // 데이터를 JSON 문자열로 변환하여 `localStorage`에 저장
-        localStorage.setItem('saveTicketinfo', JSON.stringify(dataToSave));
+        // 데이터를 JSON 문자열로 변환하여 `sessionStorage`에 저장
+        sessionStorage.setItem('saveTicketinfo', JSON.stringify(dataToSave));
       };
 
     return (
