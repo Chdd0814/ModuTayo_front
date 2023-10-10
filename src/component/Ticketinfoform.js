@@ -50,13 +50,14 @@ function Ticketinfoform() {
   const [selectedRoundTerminalId, setSelectedRoundTerminalId] = useState(''); // 선택된 터미널 아이디 상태 추가
   const [selectedRoundTerminalId2, setSelectedRoundTerminalId2] = useState(''); // 선택된 터미널 아이디 상태 추가2
   const navigate = useNavigate(); 
-  
+  const [BusInfo, setBusInfo] = useState({});
 //기차관련 함수
   const handleParty = (event) => {
     setParty(event.target.value);
   };
 
   const handleSubmit = (event) => {
+
     event.preventDefault(); 
     if (transportType === 'bus') {
       // 버스 선택 시 버스 페이지로 리다이렉트
@@ -209,7 +210,6 @@ const handleTabChange = (event, newValue) => {
 
 const handleTerminalClick = (terminalName, terminalId) => {
   setSelectedTerminal(terminalName); // 선택된 터미널 이름을 상태로 설정
- // handleModalClose(); // 모달을 닫음
   setSelectedTerminalId(terminalId);
   const apiUrl = `/publicApi/getArrBusList?tmnCd=${terminalId}`;
 
@@ -251,6 +251,23 @@ const handleTerminalClick2 = (terminalName2, terminalId2) => {
     setSelectedRoundTerminalId2(terminalId2);
     handleSecondModalClose(); // 모달 닫기
   };
+
+const handleSearch = () => {
+  const depTid = "NAEK" + selectedTerminalId;
+  const arrTid = "NAEK" + selectedTerminalId2;
+  const depDate = datevalue;
+  const busInfo = {
+    depTerminalId: depTid,
+    arrTerminalId: arrTid,
+    depPlandTime: depDate,
+    Party: party,
+    depName: selectedTerminal,
+    arrName: selectedTerminal2,
+  };
+  setBusInfo(busInfo);
+  sessionStorage.setItem('key', JSON.stringify(busInfo));
+}
+
 return(
 
  <div className="ticket-info-form">
@@ -367,8 +384,8 @@ return(
        </LocalizationProvider>
         </FormControl>
 
-        <FormControl sx={{ m: 1, minWidth: 120 }}>
-        <InputLabel id="demo-simple-select-helper-label">인원</InputLabel>
+        <FormControl sx={{ m: 1, minWidth: 120, paddingTop:1 }}>
+        <InputLabel sx={{paddingTop:1}} id="demo-simple-select-helper-label">인원</InputLabel>
         <Select
           labelId="demo-simple-select-helper-label"
           id="demo-simple-select-helper"
@@ -383,7 +400,9 @@ return(
     ))}
         </Select>
         </FormControl>
-        <Button type="sumbit">검색</Button>
+        <div>
+        <Button variant="contained" color="secondary" type="sumbit" sx={{marginTop:3}}>검색</Button>
+        </div>  
           </form>
             )}
 
@@ -418,8 +437,8 @@ return(
        </LocalizationProvider>
         </FormControl>
 
-        <FormControl sx={{ m: 1, minWidth: 120 }}>
-        <InputLabel id="demo-simple-select-helper-label">인원</InputLabel>
+        <FormControl sx={{ m: 1, minWidth: 120 ,paddingTop:1}}>
+        <InputLabel id="demo-simple-select-helper-label" sx={{paddingTop:1}}>인원</InputLabel>
         <Select
           labelId="demo-simple-select-helper-label"
           id="demo-simple-select-helper"
@@ -463,8 +482,8 @@ return(
        </LocalizationProvider>
         </FormControl>
 
-        <FormControl sx={{ m: 1, minWidth: 120 }}>
-        <InputLabel id="demo-simple-select-helper-label">인원</InputLabel>
+        <FormControl sx={{ m: 1, minWidth: 120,paddingTop:1 }}>
+        <InputLabel id="demo-simple-select-helper-label" sx={{paddingTop:1}}>인원</InputLabel>
         <Select
           labelId="demo-simple-select-helper-label"
           id="demo-simple-select-helper"
@@ -482,22 +501,23 @@ return(
     ))}
         </Select>
         </FormControl>
+        
         </div>
-        <Button type="sumbit">검색</Button>
+        <Button sx={{marginTop:3}} variant="contained" color="secondary"  type="sumbit">검색</Button>
     {/* </div> */}
           </form>
             )}
 
    {transportType === 'bus' && tripType === 'one-way' && (
-       <>
+       <  >
          <form onSubmit = {handleSubmit} className = "form-ticketinfo-form">
-           <FormControl sx={{ m: 1, minWidth: 120 }}>
-             {selectedTerminal ? null : <InputLabel htmlFor="grouped-select">출발지</InputLabel>}
-             <TextField value={selectedTerminal} id="grouped-select" label="출발지" onClick={handleModalOpen} variant="outlined"/>
+           <FormControl sx={{ m: 1, minWidth: 120,width:120,paddingTop:1 }}>
+             {selectedTerminal ? null : <InputLabel sx={{paddingTop:1}} htmlFor="grouped-select">출발지</InputLabel>}
+             <TextField   value={selectedTerminal} id="grouped-select" label="출발지" onClick={handleModalOpen} variant="outlined"/>
            </FormControl>
 
-           <FormControl sx={{ m: 1, minWidth: 120 }}>
-             {selectedTerminal2 ? null : <InputLabel htmlFor="grouped-select">도착지</InputLabel>}
+           <FormControl sx={{ m: 1, minWidth: 120,width:120,paddingTop:1 }}>
+             {selectedTerminal2 ? null : <InputLabel sx={{paddingTop:1}} htmlFor="grouped-select">도착지</InputLabel>}
              <TextField value={selectedTerminal2} id="grouped-select" label="도착지" onClick={handleModalOpen} variant="outlined"/>
            </FormControl>
 
@@ -513,9 +533,9 @@ return(
              </LocalizationProvider>
            </FormControl>
 
-           <FormControl sx={{ m: 1, minWidth: 120 }}>
-             <InputLabel id="demo-simple-select-helper-label">인원</InputLabel>
-             <Select
+           <FormControl sx={{ m: 1, minWidth: 120 ,paddingTop:1 }}>
+             <InputLabel id="demo-simple-select-helper-label"sx={{paddingTop:1}}>인원</InputLabel>
+             <Select 
                  labelId="demo-simple-select-helper-label"
                  id="demo-simple-select-helper"
                  value={party}
@@ -532,7 +552,10 @@ return(
                ))}
              </Select>
            </FormControl>
-           <Button type="sumbit">검색</Button></form>
+           <div>
+           <Button type="sumbit" variant="contained" color="secondary" sx={{marginTop:3}} onClick={handleSearch} >검색</Button>
+           </div>
+           </form>
          <Modal
              open={Modalopen}
              onClose={handleModalClose}
@@ -606,14 +629,18 @@ return(
 
    {transportType === 'bus' && tripType === 'round-trip' && (
        <>
+      
          <form onSubmit = {handleSubmit} className = "form-ticketinfo-form">
-           <FormControl sx={{ m: 1, minWidth: 120 }}>
-             {selectedTerminal ? null : <InputLabel htmlFor="grouped-select">출발지</InputLabel>}
+          
+           <FormControl sx={{ m: 1, minWidth: 120,width:120,paddingTop:1 }}>
+             {selectedTerminal ? null : <InputLabel htmlFor="grouped-select" sx={{paddingTop:1}}
+>출발지</InputLabel>}
              <TextField value={selectedTerminal} id="grouped-select" label="출발지" onClick={handleModalOpen} variant="outlined"/>
            </FormControl>
 
-           <FormControl sx={{ m: 1, minWidth: 120 }}>
-             {selectedTerminal2 ? null : <InputLabel htmlFor="grouped-select">도착지</InputLabel>}
+           <FormControl sx={{ m: 1, minWidth: 120,width:120,paddingTop:1 }}>
+             {selectedTerminal2 ? null : <InputLabel htmlFor="grouped-select" sx={{paddingTop:1}}
+>도착지</InputLabel>}
              <TextField value={selectedTerminal2} id="grouped-select" label="도착지" onClick={handleModalOpen} variant="outlined"/>
            </FormControl>
 
@@ -629,8 +656,9 @@ return(
              </LocalizationProvider>
            </FormControl>
 
-           <FormControl sx={{ m: 1, minWidth: 120 }}>
-             <InputLabel id="demo-simple-select-helper-label">인원</InputLabel>
+           <FormControl sx={{ m: 1, minWidth: 120,paddingTop:1 }}>
+             <InputLabel sx={{paddingTop:1}}
+ id="demo-simple-select-helper-label">인원</InputLabel>
              <Select
                  labelId="demo-simple-select-helper-label"
                  id="demo-simple-select-helper"
@@ -648,18 +676,22 @@ return(
                ))}
              </Select>
            </FormControl></form>
+           
          {/*왕복 */}<form onSubmit = {handleSubmit} className = "form-ticketinfo-form">
-         <FormControl sx={{ m: 1, minWidth: 120 }}>
-           {selectedTerminal ? null : <InputLabel htmlFor="grouped-select">출발지</InputLabel>}
+         
+         <FormControl sx={{ m: 1, minWidth: 120,width:120,paddingTop:3 }}>
+           {selectedTerminal ? null : <InputLabel htmlFor="grouped-select" sx={{paddingTop:3}}
+>출발지</InputLabel>}
            <TextField value={selectedroundTerminal} id="grouped-select" label="출발지" onClick={handleSecondModalOpen} variant="outlined"/>
          </FormControl>
 
-         <FormControl sx={{ m: 1, minWidth: 120 }}>
-           {selectedTerminal2 ? null : <InputLabel htmlFor="grouped-select">도착지</InputLabel>}
+         <FormControl sx={{ m: 1, minWidth: 120 ,width:120,paddingTop:3}}>
+           {selectedTerminal2 ? null : <InputLabel htmlFor="grouped-select" sx={{paddingTop:3}}
+>도착지</InputLabel>}
            <TextField value={selectedroundTerminal2} id="grouped-select" label="도착지" onClick={handleSecondModalOpen} variant="outlined"/>
          </FormControl>
 
-         <FormControl sx={{ m: 1, minWidth: 120, height: '200%'}}>
+         <FormControl sx={{ m: 1, minWidth: 120, height: '200%',paddingTop:2}}>
            <LocalizationProvider dateAdapter={AdapterDayjs}>
              <DemoContainer components={['DatePicker']}>
                <DatePicker
@@ -671,8 +703,9 @@ return(
            </LocalizationProvider>
          </FormControl>
 
-         <FormControl sx={{ m: 1, minWidth: 120 }}>
-           <InputLabel id="demo-simple-select-helper-label">인원</InputLabel>
+         <FormControl sx={{ m: 1, minWidth: 120,paddingTop:3 }}>
+           <InputLabel id="demo-simple-select-helper-label" sx={{paddingTop:3}}
+>인원</InputLabel>
            <Select
                labelId="demo-simple-select-helper-label"
                id="demo-simple-select-helper"
@@ -690,8 +723,9 @@ return(
              ))}
            </Select>
          </FormControl>
-
-         <Button type="sumbit">검색</Button></form>
+          <div>
+         <Button variant="contained" sx={{marginTop:3}} color="secondary" type="sumbit">검색
+        </Button></div></form>
          <Modal
              open={Modalopen}
              onClose={handleModalClose}
@@ -703,6 +737,7 @@ return(
                justifyContent: 'center',
              }}
          >
+          
            <Grid container spacing={2} style={{ width: 900, height: 500, background : 'white' }}>
              {/* 왼쪽 영역 */}
              <Grid item xs={4}>
