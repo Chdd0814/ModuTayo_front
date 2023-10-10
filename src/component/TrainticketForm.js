@@ -236,8 +236,8 @@ function TrainTicketForm({ isLoggedIn }) {
 {tripType === 'one-way' && (
     
     <form onSubmit = {handleSubmit} className = "form-ticketinfo-form">
-  <FormControl sx={{ m: 1, minWidth: 120 }}>
-        <InputLabel htmlFor="grouped-select">출발지</InputLabel>
+  <FormControl sx={{ m: 1, minWidth: 120,paddingTop:1 }}>
+        <InputLabel sx={{paddingTop:1}} htmlFor="grouped-select">출발지</InputLabel>
         <Select defaultValue="" id="depPlace"name="depPlace" label="Grouping">
           <MenuItem value="">
             <em>None</em>
@@ -253,8 +253,8 @@ function TrainTicketForm({ isLoggedIn }) {
       </Select>
     </FormControl>
 
-<FormControl sx={{ m: 1, minWidth: 120 }}>
-        <InputLabel htmlFor="grouped-select">도착지</InputLabel>
+<FormControl sx={{ m: 1, minWidth: 120 ,paddingTop:1}}>
+        <InputLabel sx={{paddingTop:1}} htmlFor="grouped-select">도착지</InputLabel>
         <Select defaultValue="" id="arrPlace" name="arrPlace" label="Grouping">
           <MenuItem value="">
             <em>None</em>
@@ -282,8 +282,8 @@ function TrainTicketForm({ isLoggedIn }) {
        </LocalizationProvider>
         </FormControl>
 
-        <FormControl sx={{ m: 1, minWidth: 120 }}>
-        <InputLabel id="demo-simple-select-helper-label">인원</InputLabel>
+        <FormControl sx={{ m: 1, minWidth: 120,paddingTop:1 }}>
+        <InputLabel id="demo-simple-select-helper-label" sx={{paddingTop:1}}>인원</InputLabel>
         <Select
           labelId="demo-simple-select-helper-label"
           id="demo-simple-select-helper"
@@ -298,8 +298,8 @@ function TrainTicketForm({ isLoggedIn }) {
     ))}
         </Select>
         </FormControl>
-        <IconButton type="sumbit" color = "primary" aria-label = "search submit" size = "large" onClick = {handleLoginCheck}>
-            <SearchOutlinedIcon fontSize="inherit"/>
+        <IconButton sx={{marginTop:2}}  type="sumbit" color = "primary" aria-label = "search submit" size = "large" onClick = {handleLoginCheck}>
+            <SearchOutlinedIcon   fontSize="inherit"/>
         </IconButton>
           </form>
 )}

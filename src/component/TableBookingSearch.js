@@ -2,43 +2,43 @@ import React ,{ useState} from "react";
 import {TextField,Button} from '@mui/material';
 import Grid2 from '@mui/material/Unstable_Grid2';
 import dayjs from "dayjs";
-import { DatePicker} from '@mui/x-date-pickers/DatePicker';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { DemoItem } from '@mui/x-date-pickers/internals/demo';
+import { DemoContainer,DemoItem  } from '@mui/x-date-pickers/internals/demo';
+import { LocalizationProvider } from '@mui/x-date-pickers-pro';
+import { AdapterDayjs } from '@mui/x-date-pickers-pro/AdapterDayjs';
+import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
 const TableSearch=(props)=>{
-    const [datevalue, setdatevalue] = useState(dayjs()); // 날짜 
+    const [datevalue, setdatevalue] = useState([
+        dayjs(),
+        dayjs(),
+      ]);
+      const handleDateChange = (newValue) => {
+        // 내일의 날짜 구하기
+        const tomorrow = dayjs().add(1,'day');
+      
+        // newValue의 시작 및 종료 날짜가 내일 이후인지 확인
+        if (newValue[0].isBefore(tomorrow) && newValue[1].isBefore(tomorrow)) {
+          setdatevalue(newValue);
+        }else{
+            setdatevalue(dayjs());
+        }
+      };
     return(
         <Grid2 container direction='row' justifyContent='center'  columnSpacing={3} marginLeft={5}>
-            <Grid2 item>
-                <TextField sx={{maxWidth:100}} size='small'   variant="outlined" label="출발역" />
+            <Grid2 item paddingTop={1}>
+                <TextField sx={{maxWidth:100}} size='small'   variant="outlined" label="출발" />
             </Grid2>
-            <Grid2 item>
-                <TextField sx={{maxWidth:100}}  size='small'  variant="outlined" label="도착역" />
+            <Grid2 item paddingTop={1}>
+                <TextField sx={{maxWidth:100}}  size='small'  variant="outlined" label="도착" />
             </Grid2>
-            <Grid2 item>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DatePicker  sx={{
-                    '& .MuiInputBase-root': { 
-                      height: 40, 
-                    fontSize: '0.875rem',
-                     paddingTop: '6px',
-                    paddingBottom: '6px'
-                   },
-                    '& .MuiInputLabel-outlined': {
-                     transform: 'translate(14px, 18px) scale(1)', 
-                    },
-                    '& .MuiInputLabel-outlined.MuiInputLabel-shrink': {
-                    transform: 'translate(14px, -6px) scale(0.75)', }
-                    }}
-                    label="날짜"
-                    value={datevalue}
-                    onChange={(newdatevalue) => setdatevalue(newdatevalue)}
-                    color="secondary"/>
-            </LocalizationProvider>
+            <Grid2 item >
+                <LocalizationProvider  dateAdapter={AdapterDayjs}>
+                    <DemoContainer   components={['DateRangePicker']} > 
+                        <DateRangePicker  calendars={1} sx={{maxWidth:300}}  slotProps={{textField:{size:'small'}}}  value={datevalue}  onChange={handleDateChange}/>
+                    </DemoContainer>
+                </LocalizationProvider>
             </Grid2>
-            <Grid2 item>
-                <Button size="large" variant="outlined" sx={{maxHeight:50}}>검색</Button>
+            <Grid2 item paddingTop={1}>
+                <Button size="large" variant="outlined" sx={{maxHeight:50}} >검색</Button>
             </Grid2>
         </Grid2>
     );
