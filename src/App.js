@@ -15,6 +15,7 @@ import MyPage from './component/Mypage';
 import EditMember from './component/EditMember';
 import DeleteMember from './component/DeleteMember';
 import Payment from './component/Payment';
+import BusPayment from './component/BusPayment'
 import clearLocalStorage from './component/clearLocalStorage';
 import BusBooking from './component/BusBooking';
 import TrainBooking from './component/TrainBooking';
@@ -84,6 +85,7 @@ function App() {
           <Route path="/PaymentHistoryBus" element={<PaymentHistoryBus open={open} handleOpen={handleOpen}/>}/>
           <Route path="/PaymentHistoryTrain" element={<PaymentHistoryTrain open={open} handleOpen={handleOpen} />}/>
           <Route path = "/payment" element = {<Payment />} />
+          <Route path = "/Buspayment" element = {<BusPayment />} />
           <Route path = "/idSearch" element = {<Idsearch />} />
           <Route path = "/passwordSearch" element = {<PasswordSearch />} />
           {/* 여기서 Route 관련 코드들을 복사해서 App-main 영역에 출력될 부분만 추가.*/}
