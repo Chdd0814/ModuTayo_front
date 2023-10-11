@@ -309,10 +309,12 @@ const handleTerminalClick2 = (terminalName2, terminalId2) => {
 const handleSearch = () => {
   const depTid = "NAEK" + selectedTerminalId;
   const arrTid = "NAEK" + selectedTerminalId2;
+  const routeId = "NAEK" + selectedTerminalId + selectedTerminalId2;
   const depDate = datevalue;
   const busInfo = {
     depTerminalId: depTid,
     arrTerminalId: arrTid,
+    routeId: routeId,
     depPlandTime: depDate,
     Party: party,
     depName: selectedTerminal,
