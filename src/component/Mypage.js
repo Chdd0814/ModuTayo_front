@@ -2,7 +2,7 @@ import React, { useEffect,useState} from 'react';
 import {List, ListSubheader, ListItemButton, ListItemText, ListItem, ListItemIcon, Typography, Divider,Collapse } from '@mui/material';
 import {useNavigate} from 'react-router-dom';
 import './Mypage.css';
-import {Person,Payment,PersonOff,PersonSearch,ContentPaste,DirectionsBus,DirectionsTransit,ManageAccounts,ManageSearch,ExpandLess ,ExpandMore,ManageAccountsTwoTone } from '@mui/icons-material';
+import {Person,Payment,PersonOff,PersonSearch,ContentPaste,DirectionsBus,DirectionsTransit,ManageAccounts,ManageSearch,ExpandLess ,ExpandMore,ManageAccountsTwoTone, Password} from '@mui/icons-material';
 import vaildAdmin from './vaildAdmin';
 const Subcontent=(props)=>{
   return(
@@ -22,6 +22,7 @@ const Subcontentbar=(props)=>{
                        <List component="div" disablePadding sx={{ pl: 4 }}>
                   {props.firstcontent} 
                   {props.secondcontent}
+                  {props.thirdcontent}
                         </List>
                       </Collapse>
   );
@@ -69,7 +70,7 @@ const Mypage = (props) =>{
                       secondcontent={<Subcontent movelink={handleNavigation} link="/PaymentHistoryTrain" icon={<DirectionsTransit />} content="기차"/>} />
                 <SubTitlebar icon={Person} content="회원정보" isOpen={props.open.memberOpen} open="memberOpen" setOpen={props.handleOpen} />
                 <Subcontentbar open={props.open.memberOpen} 
-                      firstcontent={<Subcontent movelink={handleNavigation} link="/EditMember" icon={<PersonSearch />} content="회원수정"/>}
+                      firstcontent={<Subcontent movelink={handleNavigation} link="/EditMember" icon={<PersonSearch />} content="정보수정"/>}
                       secondcontent={<Subcontent movelink={handleNavigation} link="/DeleteMember" icon={<PersonOff />} content="회원탈퇴"/>} />
 
                 {isAdmin && (<><SubTitlebar icon={ManageAccounts} content="관리자" isOpen={props.open.adminOpen} open="adminOpen"  setOpen={props.handleOpen}/>

@@ -26,6 +26,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Busticket from './component/Busticket';
 import Idsearch from './component/IdSearch';
 import PasswordSearch from './component/PasswordSearch';
+import EditPassword from './component/EditPassword';
 
 function App() {
 
