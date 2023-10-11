@@ -8,15 +8,16 @@ import { useNavigate } from 'react-router-dom';
 
 
 
-function Payment() {
+function BusPayment() {
     const [pg,setpg] = useState("kakaopay.TC0ONETIME");
     const [payMethod, setpayMethod] = useState("card");
+    const [routeId, setrouteId] = useState("");
     const [depPlace, setdepPlace] = useState(""); // 출발지
     const [arrPlace, setarrPlace] = useState(""); // 도착지
     const [depTime, setdepTime] = useState(""); // 출발시간 
     const [arrTime, setarrTime] = useState(""); // 도착시간
-    const [trainGrade, settrainGrade] = useState(""); // 기차 종류
-    const [trainNum, settrainNum] = useState(''); // 기차번호
+    const [busGrade, setbusGrade] = useState(""); // 기차 종류
+    const [busNum, setbusNum] = useState(''); // 기차번호
     const [dateValue, setdateValue] = useState(""); // 
     const [Party, setParty] = useState('');
     const [buyerName, setbuyerName] = useState(''); // 이름 상태
@@ -26,28 +27,27 @@ function Payment() {
     const [ticketPrice, setTicketPrice] = useState(0);
     const [totalPrice, setTotalPrice] = useState(0);
     const [usedMileage, setusedMileage] = useState(0);
-    const [trainSeatnumber, settrainSeatnumber] = useState('');
-    const [trainCarnumber, settrainCarnumber] = useState('');
+    const [busSeatnumber, setbusSeatnumber] = useState('');
     // const [callbackData, setcallbackData] = useState({});
     // const [ticketData, settrainticketData] = useState({});
-    const randomticketnumber = `train_${dateValue}_${Math.floor(Math.random() * 10000)}`;
+    const randomticketnumber = `bus_${dateValue}_${Math.floor(Math.random() * 10000)}`;
     const navigate = useNavigate();
     const [ticketStatus, setticketStatus] = useState(false);
 
 
 
     useEffect(() => {
-        const token = sessionStorage.getItem('saveTicketinfo');
+        const token = sessionStorage.getItem('saveBusTicketinfo');
 
         if (token) {
           const dataToken = JSON.parse(token);
 
+          setrouteId(dataToken.routeId);
           setdepPlace(dataToken.depPlace);
           setarrPlace(dataToken.arrPlace);
           setarrTime(dataToken.arrPlandTime);
           setdepTime(dataToken.depPlandTime);
-          settrainGrade(dataToken.trainGradeName);
-          settrainNum(dataToken.trainNum);
+          setbusGrade(dataToken.BusGradeName);
           setdateValue(dataToken.datevalue);
           setParty(dataToken.party);
           setbuyerName(dataToken.name);
@@ -57,10 +57,7 @@ function Payment() {
           setTotalPrice(dataToken.totalPrice);
           setMileage(dataToken.Mileage);
           setusedMileage(dataToken.useMileage);
-          settrainSeatnumber(dataToken.trainSeatNumber);
-          settrainCarnumber(dataToken.trainCarNumber);
-
-
+          setbusSeatnumber(dataToken.busSeatNumber);
         }
       }, []);
 
@@ -82,11 +79,11 @@ async function sendPaymentData(paymentData) {
     });
 }
 
-async function sendtrainTicketData(ticketData) {
+async function sendbusTicketData(ticketData) {
 
 
   try {
-    const response = await axios.post('/trainTicket/Success', ticketData, {
+    const response = await axios.post('/busTicket/Success', ticketData, {
       headers: {
         'Content-Type': 'application/json',
       },
@@ -135,7 +132,7 @@ async function sendtrainTicketData(ticketData) {
           const crateTicketnumber = randomticketnumber;
 
           const PaycallbackData = {
-            trainticketNumber : crateTicketnumber,
+            busticketNumber : crateTicketnumber,
             impUid : imp_uid,
             merchantUid : merchant_uid,
             paidAmount : paid_amount,
@@ -147,28 +144,26 @@ async function sendtrainTicketData(ticketData) {
           }
 
           const reservationTicketData = {
-            vehicleTypeName : trainGrade,
+            routeId : routeId,
+            busClass : busGrade,
             departureTime : depTime,
             arrivalTime : arrTime,
             departureStation : depPlace,
             arrivalStation : arrPlace,
             fare : ticketPrice,
-            trainNumber : trainNum,
-            seatNumber : trainSeatnumber,
-            trainCarNumber : trainCarnumber,
+            busNumber : busNum,
+            seatNumber : busSeatnumber,
             ticketNumber : crateTicketnumber,
             id : id,
             name : buyerName,
             reservationDate : dateValue,
           }
-         
-
 
         // 예매 내역을 먼저 저장
     
     try {
       
-      const ticketSaved = await sendtrainTicketData(reservationTicketData);
+      const ticketSaved = await sendbusTicketData(reservationTicketData);
 
       if (ticketSaved) {
         await sendPaymentData(PaycallbackData);
@@ -181,7 +176,6 @@ async function sendtrainTicketData(ticketData) {
       console.error(error);
 
     }
-
 
         } else {
           alert(`결제 실패: ${error_msg}`);
@@ -221,7 +215,7 @@ async function sendtrainTicketData(ticketData) {
              <Grid container>
               <Grid item xs = {12}>
               <Typography sx={{ fontSize: 12, fontWeight: 'bold' }}>{dateValue}</Typography>
-              <Typography sx={{ fontSize: 12, fontWeight: 'bold' }}>{trainGrade}-{trainNum} | {trainCarnumber}호차-{trainSeatnumber}</Typography>
+              <Typography sx={{ fontSize: 12, fontWeight: 'bold' }}>{busGrade} | {busSeatnumber}</Typography>
               <Typography sx={{ fontSize: 12, fontWeight: 'bold' }}>{depPlace} - {arrPlace}</Typography>
               <Typography sx={{ fontSize: 12, fontWeight: 'bold' }}>{depTime} - {arrTime}</Typography>
               </Grid>
@@ -240,7 +234,7 @@ async function sendtrainTicketData(ticketData) {
             <Typography variant="subtitle1" sx = {{ textAlign : 'center', fontWeight : 'bold', fontSize : 20}} gutterBottom>
               결제 상세 정보
             </Typography>
-            <Typography>기차표 운임</Typography>
+            <Typography>버스표 운임</Typography>
                 <Typography sx = {{ textAlign: 'center', fontWeight : 'light', fontSize : 12}}>{ticketPrice} 원</Typography>
                 <Typography>마일리지 할인</Typography>
                 <Typography sx = {{ textAlign: 'center', fontWeight : 'light', fontSize : 12}}>{usedMileage} 원</Typography>
@@ -303,4 +297,4 @@ async function sendtrainTicketData(ticketData) {
 
   
 
-export default Payment;
+export default BusPayment;

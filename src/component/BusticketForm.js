@@ -33,6 +33,7 @@ function BusTicketForm({ isLoggedIn }) {
     const [selectedTerminalId, setSelectedTerminalId] = useState(''); // 선택된 터미널 아이디 상태 추가
     const [selectedTerminalId2, setSelectedTerminalId2] = useState(''); // 선택된 터미널 아이디 상태 추가2
     const [party, setParty] = useState('');
+    const [routeId, setrouteId] = useState('');
     const [busTicketinfo, setbusTicketinfo] = useState([]);
     const [terminalData, setTerminalData] = useState([]); // 버스데이터
     const [ticketPrice, setTicketPrice] = useState(0);
@@ -56,8 +57,9 @@ function BusTicketForm({ isLoggedIn }) {
 
         }
       };
-    
+
     const handleBusInfo = () => {
+      setrouteId("NAEK" + selectedTerminalId+selectedTerminalId2)
       const depTid = "NAEK" + selectedTerminalId;
       const arrTid = "NAEK" + selectedTerminalId2;
       const depTime = datevalue;
@@ -85,6 +87,7 @@ function BusTicketForm({ isLoggedIn }) {
     const depTid = BusInfo.depTerminalId;
     const arrTid = BusInfo.arrTerminalId;
     const depTime = BusInfo.depPlandTime;
+    setrouteId(BusInfo.routeId);
     setParty(BusInfo.Party);
     setSelectedTerminal(BusInfo.depName);
     setSelectedTerminal2(BusInfo.arrName);
@@ -100,7 +103,7 @@ function BusTicketForm({ isLoggedIn }) {
           .then(response => {
             console.log('API 호출 성공:', response);
             setbusTicketinfo(response.data);
-            sessionStorage.setItem('key', JSON.stringify(null));
+            sessionStorage.removeItem('key');
           })
           .catch(error => {
             console.error('API 요청 오류:', error);
@@ -244,11 +247,12 @@ function BusTicketForm({ isLoggedIn }) {
       setIsModalOpen(false);
       
       saveDataTobeforePay();
-      navigate("/payment");
+      navigate("/BusPayment");
     };
 
     const saveDataTobeforePay = () => {
-      const dataToSave = {
+      const BusdataToSave = {
+        routeId : routeId,
         depPlace: selectedItem.depPlaceName, // 출발지
         arrPlace: selectedItem.arrPlaceName, // 도착지
         depPlandTime: selectedItem.depPlandTime, // 출발시간
@@ -267,8 +271,8 @@ function BusTicketForm({ isLoggedIn }) {
         //trainSeatNumber : selectedSeat, // 선택한 좌석
       };
     
-      // 데이터를 JSON 문자열로 변환하여 `localStorage`에 저장
-      localStorage.setItem('saveTicketinfo', JSON.stringify(dataToSave));
+      // 데이터를 JSON 문자열로 변환하여 `sessionStorage`에 저장
+      sessionStorage.setItem('saveBusTicketinfo', JSON.stringify(BusdataToSave));
     };
 
   return (
