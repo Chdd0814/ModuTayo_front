@@ -105,7 +105,7 @@ function Ticketinfoform() {
     }
 
     // 세션에 데이터 저장
-    sessionStorage.setItem('trainTicketInfo', JSON.stringify(sessionData));
+    sessionStorage.setItem('trainReservation', JSON.stringify(sessionData));
 
     // 기차 선택 시 기차 페이지로 리다이렉트
     navigate('/train');
