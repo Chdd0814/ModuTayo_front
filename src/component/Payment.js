@@ -161,6 +161,8 @@ async function sendtrainTicketData(ticketData) {
             name : buyerName,
             reservationDate : dateValue,
           }
+         
+
 
         // 예매 내역을 먼저 저장
     
@@ -179,6 +181,7 @@ async function sendtrainTicketData(ticketData) {
       console.error(error);
 
     }
+
 
         } else {
           alert(`결제 실패: ${error_msg}`);
