@@ -218,8 +218,8 @@ function TrainTicketForm({ isLoggedIn }) {
           trainSeatNumber : selectedSeat, // 선택한 좌석
         };
       
-        // 데이터를 JSON 문자열로 변환하여 `localStorage`에 저장
-        localStorage.setItem('saveTicketinfo', JSON.stringify(dataToSave));
+        // 데이터를 JSON 문자열로 변환하여 `sessionStorage`에 저장
+        sessionStorage.setItem('saveTicketinfo', JSON.stringify(dataToSave));
       };
 
     return (
@@ -545,25 +545,25 @@ function TrainTicketForm({ isLoggedIn }) {
 
 
 
-      axios.get('/trainTicket/findSeat', {
-        params: {
-          vehicleTypeName: trainType, // 선택한 기차 종류
-          departureTime: startTime, // 출발 시간
-          arrivalTime: endTime, // 도착 시간
-          departureStation: startStaion, // 출발지
-          arrivalStation: endStation, // 도착지
-          trainNumber: trainNum, // 기차 번호
-          reservationDate: startdate, // 예약 날짜
-        },
-      })
-        .then((response) => {
-          // 백엔드에서 받아온 좌석 정보를 상태에 저장
-          setAvailableSeats(response.data);
-        })
-        .catch((error) => {
-          // 에러 처리
-          console.log(error);
-        });
+      // axios.get('/trainTicket/findSeat', {
+      //   params: {
+      //     vehicleTypeName: trainType, // 선택한 기차 종류
+      //     departureTime: startTime, // 출발 시간
+      //     arrivalTime: endTime, // 도착 시간
+      //     departureStation: startStaion, // 출발지
+      //     arrivalStation: endStation, // 도착지
+      //     trainNumber: trainNum, // 기차 번호
+      //     reservationDate: startdate, // 예약 날짜
+      //   },
+      // })
+      //   .then((response) => {
+      //     // 백엔드에서 받아온 좌석 정보를 상태에 저장
+      //     setAvailableSeats(response.data);
+      //   })
+      //   .catch((error) => {
+      //     // 에러 처리
+      //     console.log(error);
+      //   });
 
     }
 
