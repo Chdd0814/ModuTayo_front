@@ -162,9 +162,8 @@ function sendtrainTicketData(ticketData) {
             name : buyerName,
             reservationDate : dateValue,
           }
+         
 
-          sendtrainTicketData(reservationTicketData);
-          sendPaymentData(PaycallbackData);
        
           alert("결제 성공");
           
