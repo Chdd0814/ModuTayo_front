@@ -286,12 +286,12 @@ function BusTicketForm({ isLoggedIn }) {
         {tripType === 'one-way' && (
           <>
           <form onSubmit={handleSubmit} className="form-ticketinfo-form">
-            <FormControl sx={{ m: 1, minWidth: 120 }}>
-              {selectedTerminal ? null : <InputLabel htmlFor="grouped-select">출발지</InputLabel>}
+            <FormControl sx={{ m: 1, minWidth: 120,marginTop:2 ,width:120}}>
+              {selectedTerminal ? null : <InputLabel htmlFor="grouped-select" >출발지</InputLabel>}
               <TextField value={selectedTerminal} id="grouped-select" label="출발지" onClick={handleModalOpen} variant="outlined" />
             </FormControl>
     
-            <FormControl sx={{ m: 1, minWidth: 120 }}>
+            <FormControl sx={{ m: 1, minWidth: 120 ,marginTop:2 ,width:120}}>
               {selectedTerminal2 ? null : <InputLabel htmlFor="grouped-select">도착지</InputLabel>}
               <TextField value={selectedTerminal2} id="grouped-select" label="도착지" onClick={handleModalOpen} variant="outlined" />
             </FormControl>
@@ -308,7 +308,7 @@ function BusTicketForm({ isLoggedIn }) {
               </LocalizationProvider>
             </FormControl>
     
-            <FormControl sx={{ m: 1, minWidth: 120 }}>
+            <FormControl sx={{ m: 1, minWidth: 120,marginTop:2 ,width:120 }}>
               <InputLabel id="demo-simple-select-helper-label">인원</InputLabel>
               <Select
                 labelId="demo-simple-select-helper-label"
@@ -317,7 +317,7 @@ function BusTicketForm({ isLoggedIn }) {
                 label="Age"
                 onChange={handleParty}
               >
-                <MenuItem value="">
+                <MenuItem  value="">
                   <em>None</em>
                 </MenuItem>
                 {[...Array(10)].map((_, index) => (
@@ -327,7 +327,7 @@ function BusTicketForm({ isLoggedIn }) {
                 ))}
               </Select>
             </FormControl>
-            <IconButton type="sumbit" color = "primary" aria-label = "search submit" size = "large" onClick = {handleLoginCheck}>
+            <IconButton sx={{marginTop:2}} type="sumbit" color = "primary" aria-label = "search submit" size = "large" onClick = {handleLoginCheck}>
             <SearchOutlinedIcon fontSize="inherit"/>
             </IconButton>
           </form>
