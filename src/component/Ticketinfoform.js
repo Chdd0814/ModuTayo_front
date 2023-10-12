@@ -332,7 +332,7 @@ return(
  <div className="ticket-info-form">
 <h2>빠른 검색</h2>
 
-<div className= "form-state-button-groups">
+<div className= "form-state-button-groups" >
 <ButtonGroup variant="outlined" aria-label = "outlined button group">
 <Button onClick={() => handleTripTypeChange('one-way')}>편도</Button>
 <Button onClick={() => handleTripTypeChange('round-trip')}>왕복</Button>
@@ -354,7 +354,7 @@ return(
 
 {transportType === 'train' && tripType === 'one-way' && ( 
 
-<form onSubmit = {handleSubmit} className = "form-ticketinfo-form">
+<form onSubmit = {handleSubmit} className = "form-ticketinfo-form" style = {{marginTop : 15}} >
   <FormControl sx={{ m: 1, minWidth: 120, marginTop : 2 }}>
         <TextField value={depStationName} id="grouped-select" label="출발지" onClick={handleTrainModalOpen} 
          readOnly />
@@ -481,7 +481,7 @@ return(
 {transportType === 'train'&& tripType === 'round-trip' && (
 
 <>
-<form onSubmit = {handleSubmit} className = "form-ticketinfo-form">
+<form onSubmit = {handleSubmit} className = "form-ticketinfo-form" style = {{marginTop : 15}} >
 
 
   <FormControl sx={{ m: 1, minWidth: 120, marginTop : 2 }}>
