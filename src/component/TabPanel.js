@@ -1,10 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Typography from '@mui/material/Typography';
-import { Box } from '@mui/material';
+import Box from '@mui/material/Box';
+import { Button, Grid } from '@mui/material';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
+  const [isClicked, setIsClicked] = useState(false);
+
+  const handleClick = () => {
+    setIsClicked(true);
+  };
+  
+  const handleBlur = () => {
+    setIsClicked(false);
+  };
 
   return (
     <div
@@ -12,10 +22,19 @@ function TabPanel(props) {
       hidden={value !== index}
       id={`vertical-tabpanel-${index}`}
       aria-labelledby={`vertical-tab-${index}`}
+      onClick={handleClick}
+      onBlur={handleBlur}
+      tabIndex={0}
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+      }}
       {...other}
     >
       {value === index && (
-        <Typography>{children}</Typography>
+        <Box p={0.7}>
+        <Button component="div" style={{ backgroundColor: isClicked ? 'blue' : 'white', color: isClicked ? 'white' : 'black'}}>{children}</Button>
+        </Box>
       )}
     </div>
   );

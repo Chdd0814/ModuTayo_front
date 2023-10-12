@@ -31,7 +31,13 @@ const BodyTable=(props)=>{
             <TableRow key={index}>
                 {membercontent.map((column) => (
                         <TableCell key={column.key} sx={{backgroundColor: index % 2 === 0 ?TableColor[2]:TableColor[1], width:column.width,minWidth:column.width}}>
-                            <Typography  color='black' textAlign='center'>{searchitem===column.key?<Link  onClick={handleOpen(item[column.key])}>{item[column.key]}</Link>:item[column.key]}</Typography>
+                            <Typography  color='black' textAlign='center'>
+                                {searchitem===column.key?
+                                handleOpen?
+                                <Link  onClick={handleOpen(item[column.key])}>{item[column.key]}</Link>:
+                                <Link  to={`/notice/${item['num']}`}>{item[column.key]}</Link>
+                                :item[column.key]}
+                            </Typography>
                         </TableCell>
                     ))}
             </TableRow> ))}
@@ -41,7 +47,7 @@ const BodyTable=(props)=>{
 
 const FooterTable=(props)=>{
     
-    const { count, page, rowsPerPage, onPageChange,TableColor } = props;
+    const { count, page, rowsPerPage, onPageChange} = props;
 
     const handleFirstPageButtonClick = (event) => {
         onPageChange(event, 0);
@@ -111,7 +117,7 @@ const DataTable=(props)=>{
             <TableContainer component={Paper} elevation={3} >
                 <Table sx={{borderRadius:5}}>
                     <HeadTable title={title} TableColor={TableColor[0]}/>
-                    <BodyTable handleOpen={handleOpen} searchitem={searchitem} TableColor={TableColor} emptyRows={emptyRows} content={member} membercontent={membercontent} rowsPerPage={rowsPerPage} page={page}/>
+                    <BodyTable  handleOpen={handleOpen} searchitem={searchitem} TableColor={TableColor} emptyRows={emptyRows} content={member} membercontent={membercontent} rowsPerPage={rowsPerPage} page={page}/>
                     <TableFooter> 
                         <TableRow sx={{backgroundColor:TableColor[0]}}>  
                         <TablePagination 

@@ -31,11 +31,13 @@ import PasswordSearch from './component/PasswordSearch';
 function App() {
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
       setIsLoggedIn(true);
-    }
+    } 
   }, []);
   const [open,setOpen] =useState({
     ticketingOpen: false,
