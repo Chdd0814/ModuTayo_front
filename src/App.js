@@ -15,6 +15,7 @@ import MyPage from './component/Mypage';
 import EditMember from './component/EditMember';
 import DeleteMember from './component/DeleteMember';
 import Payment from './component/Payment';
+import BusPayment from './component/BusPayment'
 import clearLocalStorage from './component/clearLocalStorage';
 import BusBooking from './component/BusBooking';
 import TrainBooking from './component/TrainBooking';
@@ -26,7 +27,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Busticket from './component/Busticket';
 import Idsearch from './component/IdSearch';
 import PasswordSearch from './component/PasswordSearch';
-import EditPassword from './component/EditPassword';
 
 function App() {
 
@@ -57,7 +57,7 @@ function App() {
     // 로그아웃 처리 로직
     setIsLoggedIn(false);
     clearLocalStorage()();
-  };
+  };g
   return (
     <Router>
     <div className="App">
@@ -85,6 +85,7 @@ function App() {
           <Route path="/PaymentHistoryBus" element={<PaymentHistoryBus open={open} handleOpen={handleOpen}/>}/>
           <Route path="/PaymentHistoryTrain" element={<PaymentHistoryTrain open={open} handleOpen={handleOpen} />}/>
           <Route path = "/payment" element = {<Payment />} />
+          <Route path = "/Buspayment" element = {<BusPayment />} />
           <Route path = "/idSearch" element = {<Idsearch />} />
           <Route path = "/passwordSearch" element = {<PasswordSearch />} />
           {/* 여기서 Route 관련 코드들을 복사해서 App-main 영역에 출력될 부분만 추가.*/}
