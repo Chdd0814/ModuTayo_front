@@ -363,6 +363,7 @@ function TrainTicketForm({ isLoggedIn }) {
         sessionStorage.setItem('saveTicketinfo', JSON.stringify(dataToSave));
       };
 
+      
     return (
     <div className = "Trainticket-form">
 
