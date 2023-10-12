@@ -273,6 +273,8 @@ const handleTerminalClick = (terminalName, terminalId) => {
       setArrTerminalData(response.data);
     })
     .catch((error) => {
+      setArrTerminalData([]);
+      setSelectedTerminalId(null);
       console.error('API 요청 오류:', error);
     });
 };
@@ -289,6 +291,7 @@ const handleTerminalClick = (terminalName, terminalId) => {
         })
         .catch((error) => {
               setArrTerminalData([]);
+              setSelectedRoundTerminalId(null);
               console.error('API 요청 오류:', error);
             }
         );
@@ -443,6 +446,7 @@ return(
         <DatePicker
           label="날짜"
           value={datevalue}
+          minDate={dayjs()} // 현재 날짜 이전의 날짜를 선택하지 못하게 함
           onChange={(newdatevalue) => setdatevalue(newdatevalue)}
           />
         </DemoContainer>
@@ -573,6 +577,7 @@ return(
         <DatePicker
           label="날짜"
           value={datevalue}
+          minDate={dayjs()} // 현재 날짜 이전의 날짜를 선택하지 못하게 함
           onChange={(newdatevalue) => setdatevalue(newdatevalue)}
           />
         </DemoContainer>
@@ -696,6 +701,7 @@ return(
         <DatePicker
           label="날짜"
           value={datevalue}
+          minDate={dayjs()} // 현재 날짜 이전의 날짜를 선택하지 못하게 함
           onChange={(newdatevalue) => setrounddatevalue(newdatevalue)}
           />
         </DemoContainer>
@@ -748,6 +754,7 @@ return(
                  <DatePicker
                      label="날짜"
                      value={datevalue}
+                     minDate={dayjs()} // 현재 날짜 이전의 날짜를 선택하지 못하게 함
                      onChange={(newdatevalue) => setdatevalue(newdatevalue)}
                  />
                </DemoContainer>
@@ -777,74 +784,71 @@ return(
            <Button type="sumbit" variant="contained" color="secondary" sx={{marginTop:3}} onClick={handleSearch} >검색</Button>
            </div>
            </form>
-         <Modal
-             open={Modalopen}
-             onClose={handleModalClose}
-             aria-labelledby="modal-modal-title"
-             aria-describedby="modal-modal-description"
-             style={{
-               display: 'flex',
-               alignItems: 'center',
-               justifyContent: 'center',
-             }}
-         >
-           <Grid container spacing={2} style={{ width: 900, height: 500, background : 'white' }}>
-             {/* 왼쪽 영역 */}
-             <Grid item xs={4}>
-               <Tabs
-                   orientation="vertical"
-                   variant="scrollable"
-                   value={selectedTab}
-                   onChange={handleTabChange}
-                   aria-label="Vertical tabs example"
-               >
-                 {uniqueRegionKey.map((regionKey) => (
-                     <Tab label={regionKey} key={regionKey} value={regionKey} />
-                 ))}
-               </Tabs>
-             </Grid>
-             {/* 가운데 영역 */}
-             <Grid item xs={4} style={{ overflowY: 'auto', height: '100%' }}>
-               <Box sx={{ display: 'flex', flexDirection: 'column', overflowY: 'auto', height : "100%", background : 'white' }}>
-                 {filteredTerminals.map((terminal) => (
-                     <TabPanel key={terminal.id} value={uniqueRegionKey.indexOf(selectedTab)} index={uniqueRegionKey.indexOf(selectedTab)}
-                               sx={{
-                                 cursor: 'pointer', // 포인터 커서로 나타나게 함
-                                 padding: '16px', // 내용 주위에 약간의 여백 추가
-                                 backgroundColor: selectedTab === terminal.id ? 'primary.main' : 'white', // 선택된 패널 스타일 변경
-                                 color: selectedTab === terminal.id ? 'white' : 'black', // 텍스트 색상 변경
-                               }}>
-            <span style={{ cursor: 'pointer' }} onClick={() => handleTerminalClick(terminal.name, terminal.id)} >
-            {terminal.name}
-            </span>
-                     </TabPanel>
-                 ))}
-               </Box>
-             </Grid>
-             {/* 오른쪽 영역 */}
-             <Grid item xs={4} style={{ overflowY: 'auto', height: '100%' }}>
-               <Box sx={{ display: 'flex', flexDirection: 'column', overflowY: 'auto', height : "100%", background : 'white' }}>
-                 {ArrBusTerminals.length > 0 ? (ArrBusTerminals.map((terminal) => (
-                     <TabPanel key={terminal.arrid} value={terminal.arrid} index={terminal.arrid}
-                               sx={{
-                                 cursor: 'pointer', // 포인터 커서로 나타나게 함
-                                 padding: '16px', // 내용 주위에 약간의 여백 추가
-                                 backgroundColor: selectedTab === terminal.arrid ? 'primary.main' : 'white', // 선택된 패널 스타일 변경
-                                 color: selectedTab === terminal.arrid ? 'white' : 'black', // 텍스트 색상 변경
-                               }}>
-            <span style={{ cursor: 'pointer' }} onClick={() => handleTerminalClick2(terminal.arrname, terminal.arrid)} >
-              {terminal.arrname}
-            </span>
-                     </TabPanel>
-                 )) ) : (
-                     <TabPanel value={0} index={0}>
-                       {selectedTerminalId ? <span>도착지 정보가 없습니다.</span> : null}
-                     </TabPanel>
-                 )}
-               </Box>
-             </Grid>
-           </Grid>
-         </Modal>
+           <Modal
+              open={Modalopen}
+              onClose={handleModalClose}
+              aria-labelledby="modal-modal-title"
+              aria-describedby="modal-modal-description"
+              style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+              }}>
+             <Grid container spacing={2} style={{ width: 900, height: 500, background : 'white' }}>
+                   {/* 왼쪽 영역 */}
+                   <Grid item xs={4}>
+                     <Tabs
+                         orientation="vertical"
+                         variant="scrollable"
+                         value={selectedTab}
+                         onChange={handleTabChange}
+                         aria-label="Vertical tabs example"
+                     >
+                       {uniqueRegionKey.map((regionKey) => (
+                           <Tab label={regionKey} key={regionKey} value={regionKey} />
+                       ))}
+                     </Tabs>
+                   </Grid>
+                   {/* 가운데 영역 */}
+                   <Grid item xs={4} style={{ height: '80%' }}>
+                   <Typography align ="center" style = {{fontWeight : 'bold', fontsize : 15, marginTop : 10, marginBottom : 5, marginRight : 15}}> 출발지 </Typography>
+                     <Box sx={{ display: 'flex', flexDirection: 'column', overflowY: 'auto', height : "100%", background : 'white', marginTop: '10px' }}>
+                       {filteredTerminals.map((terminal) => (
+                           <TabPanel key={terminal.id} value={uniqueRegionKey.indexOf(selectedTab)} index={uniqueRegionKey.indexOf(selectedTab)}
+                                     sx={{
+                                       cursor: 'pointer', // 포인터 커서로 나타나게 함
+                                       padding: '16px', // 내용 주위에 약간의 여백 추가
+                                     }}>
+                  <span style={{ cursor: 'pointer' }} onClick={() => handleTerminalClick(terminal.name, terminal.id)} >
+                  {terminal.name}
+                  </span>
+                           </TabPanel>
+                       ))}
+                     </Box>
+                   </Grid>
+                   {/* 오른쪽 영역 */}
+                   <Grid item xs={4} style={{ height: '80%' }}>
+                   <Typography align ="center" style = {{fontWeight : 'bold', fontsize : 15, marginTop : 10, marginBottom : 5, marginRight : 15}}> 도착지 </Typography>
+                     <Box sx={{ display: 'flex', flexDirection: 'column', overflowY: 'auto', height : "100%", background : 'white', marginTop: '10px' }}>
+                       {ArrBusTerminals.length > 0 ? (ArrBusTerminals.map((terminal) => (
+                           <TabPanel key={terminal.arrid} value={terminal.arrid} index={terminal.arrid}
+                                     sx={{
+                                       cursor: 'pointer', // 포인터 커서로 나타나게 함
+                                       padding: '16px', // 내용 주위에 약간의 여백 추가
+                                     }}>
+                  <span style={{ cursor: 'pointer' }} onClick={() => handleTerminalClick2(terminal.arrname, terminal.arrid)} >
+                    {terminal.arrname}
+                  </span>
+                           </TabPanel>
+                       )) ) : (
+                           <TabPanel value={0} index={0}>
+                             {ArrTerminalData ? <span>도착지 정보가 없습니다.</span> : null}
+                           </TabPanel>
+                       )}
+                     </Box>
+                   </Grid>
+                 </Grid>
+               </Modal>
        </>
    )}
 
@@ -854,14 +858,12 @@ return(
          <form onSubmit = {handleSubmit} className = "form-ticketinfo-form">
           
            <FormControl sx={{ m: 1, minWidth: 120,width:120,paddingTop:1 }}>
-             {selectedTerminal ? null : <InputLabel htmlFor="grouped-select" sx={{paddingTop:1}}
->출발지</InputLabel>}
+             {selectedTerminal ? null : <InputLabel htmlFor="grouped-select" sx={{paddingTop:1}}>출발지</InputLabel>}
              <TextField value={selectedTerminal} id="grouped-select" label="출발지" onClick={handleModalOpen} variant="outlined"/>
            </FormControl>
 
            <FormControl sx={{ m: 1, minWidth: 120,width:120,paddingTop:1 }}>
-             {selectedTerminal2 ? null : <InputLabel htmlFor="grouped-select" sx={{paddingTop:1}}
->도착지</InputLabel>}
+             {selectedTerminal2 ? null : <InputLabel htmlFor="grouped-select" sx={{paddingTop:1}}>도착지</InputLabel>}
              <TextField value={selectedTerminal2} id="grouped-select" label="도착지" onClick={handleModalOpen} variant="outlined"/>
            </FormControl>
 
@@ -871,6 +873,7 @@ return(
                  <DatePicker
                      label="날짜"
                      value={datevalue}
+                     minDate={dayjs()} // 현재 날짜 이전의 날짜를 선택하지 못하게 함
                      onChange={(newdatevalue) => setdatevalue(newdatevalue)}
                  />
                </DemoContainer>
@@ -878,8 +881,7 @@ return(
            </FormControl>
 
            <FormControl sx={{ m: 1, minWidth: 120,paddingTop:1 }}>
-             <InputLabel sx={{paddingTop:1}}
- id="demo-simple-select-helper-label">인원</InputLabel>
+             <InputLabel sx={{paddingTop:1}} id="demo-simple-select-helper-label">인원</InputLabel>
              <Select
                  labelId="demo-simple-select-helper-label"
                  id="demo-simple-select-helper"
@@ -901,14 +903,12 @@ return(
          {/*왕복 */}<form onSubmit = {handleSubmit} className = "form-ticketinfo-form">
          
          <FormControl sx={{ m: 1, minWidth: 120,width:120,paddingTop:3 }}>
-           {selectedTerminal ? null : <InputLabel htmlFor="grouped-select" sx={{paddingTop:3}}
->출발지</InputLabel>}
+           {selectedTerminal ? null : <InputLabel htmlFor="grouped-select" sx={{paddingTop:3}}>출발지</InputLabel>}
            <TextField value={selectedroundTerminal} id="grouped-select" label="출발지" onClick={handleSecondModalOpen} variant="outlined"/>
          </FormControl>
 
          <FormControl sx={{ m: 1, minWidth: 120 ,width:120,paddingTop:3}}>
-           {selectedTerminal2 ? null : <InputLabel htmlFor="grouped-select" sx={{paddingTop:3}}
->도착지</InputLabel>}
+           {selectedTerminal2 ? null : <InputLabel htmlFor="grouped-select" sx={{paddingTop:3}}>도착지</InputLabel>}
            <TextField value={selectedroundTerminal2} id="grouped-select" label="도착지" onClick={handleSecondModalOpen} variant="outlined"/>
          </FormControl>
 
@@ -918,6 +918,7 @@ return(
                <DatePicker
                    label="날짜"
                    value={datevalue}
+                   minDate={dayjs()} // 현재 날짜 이전의 날짜를 선택하지 못하게 함
                    onChange={(newdatevalue) => setdatevalue(newdatevalue)}
                />
              </DemoContainer>
@@ -925,8 +926,7 @@ return(
          </FormControl>
 
          <FormControl sx={{ m: 1, minWidth: 120,paddingTop:3 }}>
-           <InputLabel id="demo-simple-select-helper-label" sx={{paddingTop:3}}
->인원</InputLabel>
+           <InputLabel id="demo-simple-select-helper-label" sx={{paddingTop:3}}>인원</InputLabel>
            <Select
                labelId="demo-simple-select-helper-label"
                id="demo-simple-select-helper"
@@ -975,15 +975,14 @@ return(
                </Tabs>
              </Grid>
              {/* 가운데 영역 */}
-             <Grid item xs={4} style={{ overflowY: 'auto', height: '100%' }}>
-               <Box sx={{ display: 'flex', flexDirection: 'column', overflowY: 'auto', height : "100%", background : 'white' }}>
+             <Grid item xs={4} style={{ height: '80%' }}>
+              <Typography align ="center" style = {{fontWeight : 'bold', fontsize : 15, marginTop : 10, marginBottom : 5, marginRight : 15}}> 출발지 </Typography>
+               <Box sx={{ display: 'flex', flexDirection: 'column', overflowY: 'auto', height : "100%", background : 'white', marginTop: '10px' }}>
                  {filteredTerminals.map((terminal) => (
                      <TabPanel key={terminal.id} value={uniqueRegionKey.indexOf(selectedTab)} index={uniqueRegionKey.indexOf(selectedTab)}
                                sx={{
                                  cursor: 'pointer', // 포인터 커서로 나타나게 함
                                  padding: '16px', // 내용 주위에 약간의 여백 추가
-                                 backgroundColor: selectedTab === terminal.id ? 'primary.main' : 'white', // 선택된 패널 스타일 변경
-                                 color: selectedTab === terminal.id ? 'white' : 'black', // 텍스트 색상 변경
                                }}>
             <span style={{ cursor: 'pointer' }} onClick={() => handleTerminalClick(terminal.name, terminal.id)} >
             {terminal.name}
@@ -993,15 +992,14 @@ return(
                </Box>
              </Grid>
              {/* 오른쪽 영역 */}
-             <Grid item xs={4} style={{ overflowY: 'auto', height: '100%' }}>
-               <Box sx={{ display: 'flex', flexDirection: 'column', overflowY: 'auto', height : "100%", background : 'white' }}>
+             <Grid item xs={4} style={{ height: '80%' }}>
+              <Typography align ="center" style = {{fontWeight : 'bold', fontsize : 15, marginTop : 10, marginBottom : 5, marginRight : 15}}> 도착지 </Typography>
+               <Box sx={{ display: 'flex', flexDirection: 'column', overflowY: 'auto', height : "100%", background : 'white', marginTop: '10px' }}>
                  {ArrBusTerminals.length > 0 ? (ArrBusTerminals.map((terminal) => (
                      <TabPanel key={terminal.arrid} value={terminal.arrid} index={terminal.arrid}
                                sx={{
                                  cursor: 'pointer', // 포인터 커서로 나타나게 함
                                  padding: '16px', // 내용 주위에 약간의 여백 추가
-                                 backgroundColor: selectedTab === terminal.arrid ? 'primary.main' : 'white', // 선택된 패널 스타일 변경
-                                 color: selectedTab === terminal.arrid ? 'white' : 'black', // 텍스트 색상 변경
                                }}>
             <span style={{ cursor: 'pointer' }} onClick={() => handleTerminalClick2(terminal.arrname, terminal.arrid)} >
               {terminal.arrname}
@@ -1009,7 +1007,7 @@ return(
                      </TabPanel>
                  )) ) : (
                      <TabPanel value={0} index={0}>
-                       {selectedTerminalId ? <span>도착지 정보가 없습니다.</span> : null}
+                       {ArrTerminalData ? <span>도착지 정보가 없습니다.</span> : null}
                      </TabPanel>
                  )}
                </Box>
@@ -1044,15 +1042,14 @@ return(
                </Tabs>
              </Grid>
              {/* 가운데 영역 */}
-             <Grid item xs={4} style={{ overflowY: 'auto', height: '100%' }}>
-               <Box sx={{ display: 'flex', flexDirection: 'column', overflowY: 'auto', height : "100%", background : 'white' }}>
+             <Grid item xs={4} style={{ height: '80%' }}>
+              <Typography align ="center" style = {{fontWeight : 'bold', fontsize : 15, marginTop : 10, marginBottom : 5, marginRight : 15}}> 출발지 </Typography>
+               <Box sx={{ display: 'flex', flexDirection: 'column', overflowY: 'auto', height : "100%", background : 'white', marginTop: '10px' }}>
                  {filteredTerminals.map((terminal) => (
                      <TabPanel key={terminal.id} value={uniqueRegionKey.indexOf(selectedTab)} index={uniqueRegionKey.indexOf(selectedTab)}
                                sx={{
                                  cursor: 'pointer', // 포인터 커서로 나타나게 함
                                  padding: '16px', // 내용 주위에 약간의 여백 추가
-                                 backgroundColor: selectedTab === terminal.id ? 'primary.main' : 'white', // 선택된 패널 스타일 변경
-                                 color: selectedTab === terminal.id ? 'white' : 'black', // 텍스트 색상 변경
                                }}>
             <span style={{ cursor: 'pointer' }} onClick={() => handleRoundTerminalClick(terminal.name, terminal.id)} >
             {terminal.name}
@@ -1062,15 +1059,14 @@ return(
                </Box>
              </Grid>
              {/* 오른쪽 영역 */}
-             <Grid item xs={4} style={{ overflowY: 'auto', height: '100%' }}>
-               <Box sx={{ display: 'flex', flexDirection: 'column', overflowY: 'auto', height : "100%", background : 'white' }}>
+             <Grid item xs={4} style={{ height: '80%' }}>
+              <Typography align ="center" style = {{fontWeight : 'bold', fontsize : 15, marginTop : 10, marginBottom : 5, marginRight : 15}}> 도착지 </Typography>
+               <Box sx={{ display: 'flex', flexDirection: 'column', overflowY: 'auto', height : "100%", background : 'white', marginTop: '10px' }}>
                  {ArrBusTerminals.length > 0 ? (ArrBusTerminals.map((terminal) => (
                      <TabPanel key={terminal.arrid} value={terminal.arrid} index={terminal.arrid}
                                sx={{
                                  cursor: 'pointer', // 포인터 커서로 나타나게 함
                                  padding: '16px', // 내용 주위에 약간의 여백 추가
-                                 backgroundColor: selectedTab === terminal.arrid ? 'primary.main' : 'white', // 선택된 패널 스타일 변경
-                                 color: selectedTab === terminal.arrid ? 'white' : 'black', // 텍스트 색상 변경
                                }}>
             <span style={{ cursor: 'pointer' }} onClick={() => handleroundTerminalClick2(terminal.arrname, terminal.arrid)} >
               {terminal.arrname}
@@ -1078,7 +1074,7 @@ return(
                      </TabPanel>
                  )) ) : (
                      <TabPanel value={0} index={0}>
-                       {selectedTerminalId ? <span>도착지 정보가 없습니다.</span> : null}
+                       {ArrTerminalData ? <span>도착지 정보가 없습니다.</span> : null}
                      </TabPanel>
                  )}
                </Box>

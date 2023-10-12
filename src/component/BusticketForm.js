@@ -302,6 +302,7 @@ function BusTicketForm({ isLoggedIn }) {
                   <DatePicker
                     label="날짜"
                     value={datevalue}
+                    minDate={dayjs()} // 현재 날짜 이전의 날짜를 선택하지 못하게 함
                     onChange={(newdatevalue) => setdatevalue(newdatevalue)}
                   />
                 </DemoContainer>
@@ -358,15 +359,14 @@ function BusTicketForm({ isLoggedIn }) {
                      </Tabs>
                    </Grid>
                    {/* 가운데 영역 */}
-                   <Grid item xs={4} style={{ overflowY: 'auto', height: '100%' }}>
-                     <Box sx={{ display: 'flex', flexDirection: 'column', overflowY: 'auto', height : "100%", background : 'white' }}>
+                   <Grid item xs={4} style={{ height: '80%' }}>
+                    <Typography align ="center" style = {{fontWeight : 'bold', fontsize : 15, marginTop : 10, marginBottom : 5, marginRight : 15}}> 출발지 </Typography>
+                     <Box sx={{ display: 'flex', flexDirection: 'column', overflowY: 'auto', height : "100%", background : 'white', marginTop: '10px' }}>
                        {filteredTerminals.map((terminal) => (
                            <TabPanel key={terminal.id} value={uniqueRegionKey.indexOf(selectedTab)} index={uniqueRegionKey.indexOf(selectedTab)}
                                      sx={{
                                        cursor: 'pointer', // 포인터 커서로 나타나게 함
                                        padding: '16px', // 내용 주위에 약간의 여백 추가
-                                       backgroundColor: selectedTab === terminal.id ? 'primary.main' : 'white', // 선택된 패널 스타일 변경
-                                       color: selectedTab === terminal.id ? 'white' : 'black', // 텍스트 색상 변경
                                      }}>
                   <span style={{ cursor: 'pointer' }} onClick={() => handleTerminalClick(terminal.name, terminal.id)} >
                   {terminal.name}
@@ -376,15 +376,14 @@ function BusTicketForm({ isLoggedIn }) {
                      </Box>
                    </Grid>
                    {/* 오른쪽 영역 */}
-                   <Grid item xs={4} style={{ overflowY: 'auto', height: '100%' }}>
-                     <Box sx={{ display: 'flex', flexDirection: 'column', overflowY: 'auto', height : "100%", background : 'white' }}>
+                   <Grid item xs={4} style={{ height: '80%' }}>
+                    <Typography align ="center" style = {{fontWeight : 'bold', fontsize : 15, marginTop : 10, marginBottom : 5, marginRight : 15}}> 도착지 </Typography>
+                     <Box sx={{ display: 'flex', flexDirection: 'column', overflowY: 'auto', height : "100%", background : 'white', marginTop: '10px' }}>
                        {ArrBusTerminals.length > 0 ? (ArrBusTerminals.map((terminal) => (
                            <TabPanel key={terminal.arrid} value={terminal.arrid} index={terminal.arrid}
                                      sx={{
                                        cursor: 'pointer', // 포인터 커서로 나타나게 함
                                        padding: '16px', // 내용 주위에 약간의 여백 추가
-                                       backgroundColor: selectedTab === terminal.arrid ? 'primary.main' : 'white', // 선택된 패널 스타일 변경
-                                       color: selectedTab === terminal.arrid ? 'white' : 'black', // 텍스트 색상 변경
                                      }}>
                   <span style={{ cursor: 'pointer' }} onClick={() => handleTerminalClick2(terminal.arrname, terminal.arrid)} >
                     {terminal.arrname}
@@ -392,7 +391,7 @@ function BusTicketForm({ isLoggedIn }) {
                            </TabPanel>
                        )) ) : (
                            <TabPanel value={0} index={0}>
-                             {selectedTerminalId ? <span>도착지 정보가 없습니다.</span> : null}
+                             {ArrTerminalData ? <span>도착지 정보가 없습니다.</span> : null}
                            </TabPanel>
                        )}
                      </Box>
