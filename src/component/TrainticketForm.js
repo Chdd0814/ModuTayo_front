@@ -1,6 +1,6 @@
 import React, {useState,useEffect} from "react";
 import { Button, ButtonGroup, FormControl,  ListSubheader, Select, InputLabel, MenuItem, 
-  Menu, Modal, Box, Grid, Tabs, Tab, IconButton, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Typography, TextField, Divider } from "@mui/material";
+  Menu, Modal, Box, Grid, Tabs, Tab, IconButton, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Typography, TextField, Divider, CircularProgress } from "@mui/material";
 import axios from "axios";
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -11,6 +11,7 @@ import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import EventSeatIcon from '@mui/icons-material/EventSeat';
 import calluserInfo from "./calluserInfo";
 import { useNavigate } from 'react-router-dom';
+import Traintabpanel from "./Traintabpanel";
 
 
 function TrainTicketForm({ isLoggedIn }) {
@@ -18,12 +19,12 @@ function TrainTicketForm({ isLoggedIn }) {
     const [tripType, setTripType] = useState("one-way"); 
     const [selectedType, setSelectedType] = useState(''); 
     const [selectLocation, setSelectLocation] = useState([]);
-    const [ktxStationsByCity, setKtxStationsByCity] = useState({}); 
+    const [ktxStationsByCity, setKtxStationsByCity] = useState([]); 
     const [datevalue, setdatevalue] = useState(dayjs()); // 날짜 
     const [party, setParty] = useState(1); // 인원
     const [trainTicketinfo, settrainTicketinfo] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [selectedItem, setSelectedItem] = useState(null);
+    const [selectedItems, setSelectedItems] = useState(null);
     const [selectedSeat, setSelectedSeat] = useState(null);
     const [selectedCar, setSelectedCar] = useState(null);
     const [name, setName] = useState(''); // 이름 상태
@@ -36,6 +37,23 @@ function TrainTicketForm({ isLoggedIn }) {
     const [totalPrice, setTotalPrice] = useState(0);
     const navigate = useNavigate(); 
     const [usedMileage, setusedMileage] = useState(0);
+
+
+    const [depStation, setdepStation] = useState(''); // 기차 출발지
+    const [depStationName, setdepStationName] = useState(''); // 기차 출발지 이름
+    const [arrStation, setarrStation] = useState(''); // 기차 도착지
+    const [arrStationName, setarrStationName] = useState(''); // 기차 도착지 이름
+    const [rounddepStation, setrounddepStation] = useState(''); // 기차 출발지 왕복
+    const [rounddepStationName, setrounddepStationName] = useState(''); // 기차 출발지 이름
+    const [roundarrStation, setroundarrStation] = useState(''); // 기차 도착지 왕복
+    const [roundarrStationName, setroundarrStationName] = useState(''); // 기차 도착지 이름 왕복
+    const [rounddepPlaceTime, setrounddepPlaceTime] = useState('');
+    const [trainCityCode, settrainCityCode] = useState(11);
+    const [trainModalopen, settrainModalOpen] = useState(false);
+    const [trainModalopen2, settrainModalOpen2] = useState(false);
+    const [checkData, setcheckData] = useState(false);
+
+    const [roundtrainInfo, setroundtrainInfo] = useState([]);
     
 
     const handleLoginCheck = () => {
@@ -53,8 +71,8 @@ function TrainTicketForm({ isLoggedIn }) {
         event.preventDefault();
     
          // 선택한 출발지와 도착지 값 가져오기
-    const depPlaceId = event.target.elements.depPlace.value;
-    const arrPlaceId = event.target.elements.arrPlace.value;
+    const depPlaceId = depStation;
+    const arrPlaceId = arrStation;
     const formattedDate = datevalue.format("YYYYMMDD");
 
     const handleMileageUsage = () => {
@@ -74,6 +92,7 @@ function TrainTicketForm({ isLoggedIn }) {
       // 응답 데이터 출력
       console.log("응답 데이터:", response.data);
       settrainTicketinfo(response.data);
+      sessionStorage.removeItem("trainReservation");
 
     
    
@@ -101,18 +120,44 @@ function TrainTicketForm({ isLoggedIn }) {
           setid(userinfo.sub);
         }
       }, []);
+
       useEffect(() => {
-        const fetchStationsForCities = async () => {
-          const tempStationsByCity = {};
-          for (const city of selectLocation) {
-            const response = await axios.get(`/publicApi/getCitySttnList?cityCode=${city.cityCode}`);
-            const responseData = response.data;
-            tempStationsByCity[city.cityCode] = responseData; // responseData가 지하철역 정보 배열
-          }
-          setKtxStationsByCity(tempStationsByCity);
-        };
-        fetchStationsForCities();
-      }, [selectLocation]);
+        // 세션 스토리지에서 데이터 읽어오기
+        const trainInfoStr = sessionStorage.getItem("trainReservation");
+        const trainInfo = JSON.parse(trainInfoStr);
+      
+        if (trainInfo !== null) {
+          // 기차 정보가 있는 경우 상태를 업데이트
+          // setTripType(trainInfo.tripType);
+          setdepStation(trainInfo.depStationId);
+          setarrStation(trainInfo.arrStationId);
+          setdepStationName(trainInfo.depStationName);
+          setarrStationName(trainInfo.arrStationName);
+          setdatevalue(dayjs(trainInfo.depDate));
+          setrounddepStation(trainInfo.roundDepStationId);
+          setroundarrStation(trainInfo.roundArrStationId);
+          setrounddepStationName(trainInfo.roundDepStationName);
+          setroundarrStationName(trainInfo.roundArrStationId);
+          setrounddepPlaceTime(trainInfo.roundDepDate);
+        }
+      
+        // 해당 상태가 변경될 때마다 실행하도록 종속성 배열 설정
+      }, [setdepStation, setarrStation, setdepStationName, setarrStationName, setdatevalue, setrounddepStation, setroundarrStation, setrounddepStationName, setroundarrStationName, setrounddepPlaceTime]);
+
+
+
+      // 선택한 지역 코드에 맞는 지하철역 데이터를 가져오는 API 호출
+ const fetchStationsForCity = async (cityCode) => {
+  try {
+    const response = await axios.get(`/publicApi/getCitySttnList?cityCode=${cityCode}`);
+    const responseData = response.data;
+    
+    setKtxStationsByCity(responseData);
+    console.log(responseData); // 여기에서 출력
+  } catch (error) {
+    console.error("API 호출 실패(지하철역)", error);
+  }
+};
       
       
       useEffect(() => {
@@ -128,12 +173,16 @@ function TrainTicketForm({ isLoggedIn }) {
         fetchcityCodeList();
       }, []);
 
+ 
+      
+
+
       const handleSelection = (item) => {
         // 선택된 데이터(selectedItem)를 예매 페이지로 전달하는 로직을 구현
         // 예: 예매 페이지로 이동하면서 선택된 데이터를 URL 매개변수로 전달
         setTicketPrice(item.Fare * party);
         setTotalPrice(item.Fare * party);
-        setSelectedItem(item);
+        setSelectedItems(item);
         setIsModalOpen(true);
       };
 
@@ -149,6 +198,56 @@ function TrainTicketForm({ isLoggedIn }) {
         setIsModalOpen(false);
 
       }
+
+
+      const trainTabsSelect = (event, newValue) => {
+        settrainCityCode(newValue);
+        fetchStationsForCity(newValue);
+      };
+      
+      // 지하철역을 선택했을 때 호출되는 함수
+      const handleStationSelect = (stationName,stationId) => {
+        setdepStationName(stationName); // 선택한 지하철역 이름 업데이트
+        setdepStation(stationId);
+       
+      };
+      
+      const handleStationarrSelect = (stationName,stationId) => {
+        setarrStationName(stationName); 
+        setarrStation(stationId)
+        handleTrainModalClose(); // 모달 닫기
+      }
+      
+      // 지하철역을 선택했을 때 호출되는 함수
+      const handleroundStationSelect = (stationName,stationId) => {
+        setrounddepStationName(stationName); // 선택한 지하철역 이름 업데이트
+        setrounddepStation(stationId);
+       
+      };
+      
+      const handleroundStationarrSelect = (stationName,stationId) => {
+        setroundarrStationName(stationName); 
+        setroundarrStation(stationId)
+        handleRoundTrainModalClose(); // 모달 닫기
+      }
+
+      const handleTrainModalOpen = () => {
+        settrainModalOpen(true);
+      }
+      
+      const handleRoundTrainModalOpen = () => {
+        settrainModalOpen2(true);
+      }
+      
+      
+      const handleTrainModalClose = () => {
+        
+        settrainModalOpen(false);
+      }
+      const handleRoundTrainModalClose = () => {
+        settrainModalOpen2(false);
+      }
+      
 
   
 
@@ -198,14 +297,14 @@ function TrainTicketForm({ isLoggedIn }) {
     
       const saveDataTobeforePay = () => {
         const dataToSave = {
-          depPlace: selectedItem.depPlaceName, // 출발지
-          arrPlace: selectedItem.arrPlaceName, // 도착지
-          depPlandTime: selectedItem.depPlandTime, // 출발시간
-          arrPlandTime: selectedItem.arrPlandTime, // 도착시간
-          trainGradeName: selectedItem.trainGradeName, // 기차종류
-          trainNum: selectedItem.trainNum, // 기차번호
+          depPlace: selectedItems.depPlaceName, // 출발지
+          arrPlace: selectedItems.arrPlaceName, // 도착지
+          depPlandTime: selectedItems.depPlandTime, // 출발시간
+          arrPlandTime: selectedItems.arrPlandTime, // 도착시간
+          trainGradeName: selectedItems.trainGradeName, // 기차종류
+          trainNum: selectedItems.trainNum, // 기차번호
           datevalue: datevalue.format("YYYYMMDD"), // 선택한 날짜
-          selectedItem: selectedItem, // 혹시 몰라서 기차정보 전부다 들고감.
+          selectedItem: selectedItems, // 혹시 몰라서 기차정보 전부다 들고감.
           party: party, // 인원수
           name: name, // 예매자 이름
           id : id, //예매자 아이디
@@ -222,136 +321,202 @@ function TrainTicketForm({ isLoggedIn }) {
         sessionStorage.setItem('saveTicketinfo', JSON.stringify(dataToSave));
       };
 
-    return (
-    <div className = "Trainticket-form">
+      
+      return (
+      <div className = "Trainticket-form" style = {{marginTop : 15}}>
 
-    <div className="trainform-button-status-group">
-    <ButtonGroup variant="outlined" aria-label = "outlined button group">
-    <Button onClick={() => handleTripTypeChange('one-way')}>편도</Button>
-    <Button onClick={() => handleTripTypeChange('round-trip')}>왕복</Button>
-    </ButtonGroup>
-    </div>
+      <div className="trainform-button-status-group">
+      <ButtonGroup variant="outlined" aria-label = "outlined button group">
+      <Button onClick={() => handleTripTypeChange('one-way')}>편도</Button>
+      <Button onClick={() => handleTripTypeChange('round-trip')}>왕복</Button>
+      </ButtonGroup>
+      </div>
 
 
-{tripType === 'one-way' && (
-    
-    <form onSubmit = {handleSubmit} className = "form-ticketinfo-form">
-  <FormControl sx={{ m: 1, minWidth: 120,paddingTop:1 }}>
-        <InputLabel sx={{paddingTop:1}} htmlFor="grouped-select">출발지</InputLabel>
-        <Select defaultValue="" id="depPlace"name="depPlace" label="Grouping">
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          {selectLocation.map(city => [
-              <ListSubheader key={city.cityCode}>{city.cityName}</ListSubheader>,
-              ...(ktxStationsByCity[city.cityCode] || []).map(station => (
-                  <MenuItem key={station.nodeId} value={station.nodeId}>
-                {station.nodeName}
-              </MenuItem>
-            ))
-        ])}
-      </Select>
-    </FormControl>
-
-<FormControl sx={{ m: 1, minWidth: 120 ,paddingTop:1}}>
-        <InputLabel sx={{paddingTop:1}} htmlFor="grouped-select">도착지</InputLabel>
-        <Select defaultValue="" id="arrPlace" name="arrPlace" label="Grouping">
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          {selectLocation.map(city => [
-              <ListSubheader key={city.cityCode}>{city.cityName}</ListSubheader>,
-            ...(ktxStationsByCity[city.cityCode] || []).map(station => (
-              <MenuItem key={station.nodeId} value={station.nodeId}>
-                {station.nodeName}
-              </MenuItem>
-            ))
-        ])}
-        </Select>
+  {tripType === 'one-way' && (
+      
+      <form onSubmit = {handleSubmit} className = "form-ticketinfo-form" style = {{marginTop : 15}}>
+      <FormControl sx={{ m: 1, minWidth: 120, marginTop : 2 }}>
+          <TextField value={depStationName} id="grouped-select" label="출발지" onClick={handleTrainModalOpen} 
+          readOnly />
       </FormControl>
-
-<FormControl sx={{ m: 1, minWidth: 120 }}>
-       <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <DemoContainer components={['DatePicker']}>
-        <DatePicker
-          label="날짜"
-          value={datevalue}
-          minDate={dayjs()} // 현재 날짜 이전의 날짜를 선택하지 못하게 함
-          onChange={(newdatevalue) => setdatevalue(newdatevalue)}
-          />
-        </DemoContainer>
-       </LocalizationProvider>
+  <FormControl sx={{ m: 1, minWidth: 120, marginTop : 2}}>
+  <TextField value={arrStationName} id="grouped-select" label="도착지" onClick={handleTrainModalOpen} 
+          readOnly />
         </FormControl>
 
-        <FormControl sx={{ m: 1, minWidth: 120,paddingTop:1 }}>
-        <InputLabel id="demo-simple-select-helper-label" sx={{paddingTop:1}}>인원</InputLabel>
-        <Select
-          labelId="demo-simple-select-helper-label"
-          id="demo-simple-select-helper"
-          value={party || 1} 
-          label="Age"
-          onChange={handleParty}
-          >
-          {[...Array(10)].map((_, index) => (
-              <MenuItem key={index + 1} value={index + 1}>
-        {index + 1}
-      </MenuItem>
+        <FormControl sx={{ m: 1, minWidth: 120 }}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <DemoContainer components={['DatePicker']}>
+          <DatePicker
+            label="날짜"
+            value={datevalue}
+            minDate={dayjs()} // 현재 날짜 이전의 날짜를 선택하지 못하게 함
+            onChange={(newdatevalue) => setdatevalue(newdatevalue)}
+            />
+          </DemoContainer>
+        </LocalizationProvider>
+          </FormControl>
+
+          <FormControl sx={{ m: 1, minWidth: 120, paddingTop:1 }}>
+          <InputLabel sx={{paddingTop:1}} id="demo-simple-select-helper-label">인원</InputLabel>
+          <Select
+            labelId="demo-simple-select-helper-label"
+            id="demo-simple-select-helper"
+            value={party}
+            label="Age"
+            onChange={handleParty}
+            >
+            {[...Array(10)].map((_, index) => (
+        <MenuItem key={index + 1} value={index + 1}>
+          {index + 1}
+        </MenuItem>
+      ))}
+          </Select>
+          </FormControl>
+
+          <Modal open = {trainModalopen} onClose = {handleTrainModalClose}  aria-labelledby="train-one-way-Modal-title"
+              aria-describedby="train-modal-modal-description"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
+                  <Grid
+                container
+                
+                style={{ width: 900, height: 650, background: 'white' }}
+              >
+                {/* 왼쪽 영역 - 지역 목록 */}
+                <Grid item xs={4} sx = {{height : 600}}>
+                  <Tabs
+                    orientation="vertical"
+                    variant="scrollable"
+                    value={trainCityCode}
+                    onChange={trainTabsSelect}
+                    aria-label="Vertical tabs example"
+                    style= {{height : 600}}
+                  >
+                    {selectLocation.map((city) => (
+                      <Tab
+                        label={city.cityName}
+                        key={city.cityCode}
+                        value={city.cityCode}
+                      />
+                    ))}
+                  </Tabs>
+                </Grid>
+
+                {/* 오른쪽 영역 - 선택한 지역의 지하철역 목록 */}
+                <Grid item xs={8} sx = {{height : 600}}>
+                  <Grid container spacing = {2} sx = {{height : 600}} >
+                  <Grid item xs = {6} alignitem="center" sx={{ height: 600, marginTop : 2}}>
+                    <Typography align ="center" style = {{fontWeight : 'bold', fontsize : 15, marginTop : 20, marginBottom : 5, marginRight : 15}} > 출발지 </Typography>
+                    <Grid item xs = {12} sx={{ height: 550, overflowY: 'auto' }} >
+
+                    
+      {ktxStationsByCity.map((station, index) => (
+        <Traintabpanel
+        key={station.nodeId}
+        value={station.nodeId}
+        index={station.nodeId}
+        onSelect = {() => handleStationSelect(station.nodeName, station.nodeId)}
+        selected = {depStationName === station.nodeName}
+        align ="center"
+        variant="scrollable"
+        >
+      {station.nodeName}
+      </Traintabpanel>
     ))}
-        </Select>
-        </FormControl>
-        <IconButton sx={{marginTop:2}}  type="sumbit" color = "primary" aria-label = "search submit" size = "large" onClick = {handleLoginCheck}>
-            <SearchOutlinedIcon   fontSize="inherit"/>
-        </IconButton>
-          </form>
-)}
+    </Grid>
+                  </Grid>
+                  <Grid item xs = {6} sx =  {{height : 600, marginTop : 2}} >
+                <Typography align ="center" style = {{fontWeight : 'bold', fontsize : 15, marginTop : 20, marginBottom : 5, marginRight : 15}}> 도착지 </Typography>
+                <Grid item xs = {12} sx={{ height: 550, overflowY: 'auto' }} >
 
-{trainTicketinfo.length > 0 && (
-        <TableContainer>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>출발지</TableCell>
-                <TableCell>도착지</TableCell>
-                <TableCell>출발시간</TableCell>
-                <TableCell>도착시간</TableCell>
-                <TableCell>기차종류</TableCell>
-                <TableCell>가격</TableCell>
-                {/* 추가 열 제목들 */}
-                <TableCell>선택</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {trainTicketinfo.map((item) => (
-                <TableRow key={item.trainNum}>
-                  <TableCell>{item.depPlaceName}</TableCell>
-                  <TableCell>{item.arrPlaceName}</TableCell>
-                  <TableCell>{item.depPlandTime}</TableCell>
-                  <TableCell>{item.arrPlandTime}</TableCell>
-                  <TableCell>{item.trainGradeName}-{item.trainNum}</TableCell>
-                  <TableCell>{item.Fare * party}</TableCell>
-                  {/* 추가 열 데이터들 */}
-                  <TableCell>
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={() => handleSelection(item)}
-                    >
-                      선택
-                    </Button>
-                  </TableCell>
+                    {ktxStationsByCity.map((station, index) => (
+                      <Traintabpanel
+        key={station.nodeId}
+        value={station.nodeId}
+        index={station.nodeId}
+        onSelect={() => handleStationarrSelect(station.nodeName, station.nodeId)}
+        selected = {arrStationName === station.nodeName}
+        >
+        {station.nodeName}
+      </Traintabpanel>
+    ))}
+              </Grid>
+                  </Grid>
+                  </Grid>
+              </Grid>
+              </Grid>
+            </Modal>
+
+          <IconButton sx={{marginTop:2}}  type="sumbit" color = "primary" aria-label = "search submit" size = "large" onClick = {handleLoginCheck}>
+              <SearchOutlinedIcon   fontSize="inherit"/>
+          </IconButton>
+            </form>
+  )}
+
+  {trainTicketinfo.length > 0 ? (
+    
+          <TableContainer>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>출발지</TableCell>
+                  <TableCell>도착지</TableCell>
+                  <TableCell>출발시간</TableCell>
+                  <TableCell>도착시간</TableCell>
+                  <TableCell>기차종류</TableCell>
+                  <TableCell>가격</TableCell>
+                  {/* 추가 열 제목들 */}
+                  <TableCell>선택</TableCell>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+              </TableHead>
+              <TableBody>
+                {trainTicketinfo.map((item) => (
+                  <TableRow key={item.trainNum}>
+                    <TableCell>{item.depPlaceName}</TableCell>
+                    <TableCell>{item.arrPlaceName}</TableCell>
+                    <TableCell>{item.depPlandTime}</TableCell>
+                    <TableCell>{item.arrPlandTime}</TableCell>
+                    <TableCell>{item.trainGradeName}-{item.trainNum}</TableCell>
+                    <TableCell>{item.Fare * party}</TableCell>
+                    {/* 추가 열 데이터들 */}
+                    <TableCell>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={() => handleSelection(item)}
+                      >
+                        선택
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+  ) : (
 
-        
-      )}
+    <Grid container>
+      <Grid item xs = {12}container justifyContent="center" alignItems="center" sx = {{ marginTop : 7}} >
+    <Divider />
+    <Box sx={{ display: 'flex' }}>
+    <Typography sx = {{fontWeight : "bold", fontSize : 20}}> 해당 노선은 존재하지 않습니다..</Typography>
+      </Box>
+      </Grid>
+    </Grid>
 
-  <Modal open={isModalOpen} onClose={handleCloseModal} style = {{display : 'flex', alignItems: 'center', justifyContent: 'center'}}>
+  )
+          
+        }
+
+  <Modal open={isModalOpen} onClose={handleCloseModal} style = {{display : 'flex', alignItems: 'center', justifyContent: 'center'}} key = "selectTicket-info">
           <div className="train-modal-content">
             {/* 모달 내용 */}
-            {selectedItem && (
+            {selectedItems && (
             
             <Grid container spacing={2} sx={{ backgroundColor: 'background.paper', borderRadius: '8px', width: '800px', height: '650px' }}>
             <Grid item xs={8}>
@@ -371,7 +536,7 @@ function TrainTicketForm({ isLoggedIn }) {
                 <Typography sx={{ textAlign: 'left', fontWeight: 'bold', fontSize: 14 }}>탑승정보</Typography>
                 <TextField id="standard-basic" label="이름" variant="standard" className="fieldStyles" defaultValue= {name} InputProps={{ readOnly: true }}/>
                 <TextField id="standard-basic" label="전화번호" variant="standard" className="fieldStyles" defaultValue = {phoneNumber} InputProps={{ readOnly: true }} />
-                <ChildModal onSelectSeat={handleSeatSelect} selectedItem= {selectedItem} />
+                <ChildModal onSelectSeat={handleSeatSelect} selectedItems= {selectedItems} />
                 
                 {/* 좌석 선택 칸 만들기 */}
               </Box>
@@ -392,10 +557,10 @@ function TrainTicketForm({ isLoggedIn }) {
                 }}
               >
                 <Typography sx={{ textAlign: 'left', fontWeight: 'bold', fontSize: 14 }}>기차정보</Typography>
-                <Typography>{selectedItem.depPlaceName} - {selectedItem.arrPlaceName} </Typography>
+                <Typography>{selectedItems.depPlaceName} - {selectedItems.arrPlaceName} </Typography>
                 <Typography>{datevalue.format("YYYYMMDD")}</Typography>
-                <Typography>{selectedItem.depPlandTime} ~ {selectedItem.arrPlandTime} </Typography>
-                <Typography>{selectedItem.trainGradeName} - {selectedItem.trainNum}</Typography>
+                <Typography>{selectedItems.depPlandTime} ~ {selectedItems.arrPlandTime} </Typography>
+                <Typography>{selectedItems.trainGradeName} - {selectedItems.trainNum}</Typography>
                 {/* <Typography>가격 : {selectedItem.Fare}</Typography> */}
               </Box>
             </Grid>
@@ -531,7 +696,7 @@ function TrainTicketForm({ isLoggedIn }) {
 
   }
 
-  function ChildModal({ onSelectSeat, selectedItem }) {
+  function ChildModal({ onSelectSeat, selectedItems }) {
 
     const [open, setopen] = React.useState(false);
     const [selectedSeat, setSelectedSeat] = useState(null);
@@ -539,33 +704,10 @@ function TrainTicketForm({ isLoggedIn }) {
     const [CarText, setCarText] = useState("");
     const [selectedCar, setSelectedCar] = useState(null);
     const [availableSeats, setAvailableSeats] = useState([]);
-    const {trainType, startTime,endTime,startStaion,endStation,trainNum,startdate} = selectedItem;
+    const {trainType, startTime,endTime,startStaion,endStation,trainNum,startdate} = selectedItems;
 
     const handleOpen = () => {
       setopen(true);
-
-
-
-      // axios.get('/trainTicket/findSeat', {
-      //   params: {
-      //     vehicleTypeName: trainType, // 선택한 기차 종류
-      //     departureTime: startTime, // 출발 시간
-      //     arrivalTime: endTime, // 도착 시간
-      //     departureStation: startStaion, // 출발지
-      //     arrivalStation: endStation, // 도착지
-      //     trainNumber: trainNum, // 기차 번호
-      //     reservationDate: startdate, // 예약 날짜
-      //   },
-      // })
-      //   .then((response) => {
-      //     // 백엔드에서 받아온 좌석 정보를 상태에 저장
-      //     setAvailableSeats(response.data);
-      //   })
-      //   .catch((error) => {
-      //     // 에러 처리
-      //     console.log(error);
-      //   });
-
     }
 
 
@@ -616,7 +758,8 @@ function TrainTicketForm({ isLoggedIn }) {
     return ( 
   <React.Fragment>
     <TextField
-      id="standard-basic"
+      key = "childModal-seat-select"
+      id="standard-basics"
       label="좌석선택"
       variant="standard"
       className="fieldStyles"
@@ -626,10 +769,11 @@ function TrainTicketForm({ isLoggedIn }) {
     />
 
   <Modal
+    key = "ChildModal-seat"
     open={open}
     onClose={handleClose}
-    aria-labelledby="child-modal-title"
-    aria-describedby="child-modal-description"
+    aria-labelledby="child-modal-titles"
+    aria-describedby="child-modal-descriptions"
   >
     <Box
       sx={{
@@ -671,6 +815,7 @@ function TrainTicketForm({ isLoggedIn }) {
                   <Grid key={seat} item>
                     {seat ? (
                       <Button
+                        key = {seat}
                         variant="contained"
                         color={selectedSeat === seat ? "error" : "primary"}
                         style={{ width: '40px', height: '40px', fontSize: '12px' }}
