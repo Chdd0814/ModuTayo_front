@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
 import { Button, Grid } from '@mui/material';
 
 function Traintabpanel(props) {
@@ -36,6 +35,7 @@ function Traintabpanel(props) {
         style={{
           backgroundColor: selected ? 'blue' : 'white', // 배경색 변경
           color: selected ? 'white' : 'black', // 글자색 변경
+          margin: '0 5px',
         }}>{children}</Button>
         </Box>
       )}
