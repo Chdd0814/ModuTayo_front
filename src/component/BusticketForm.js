@@ -59,6 +59,7 @@ function BusTicketForm({ isLoggedIn }) {
       };
 
     const handleBusInfo = () => {
+      
       setrouteId("NAEK" + selectedTerminalId+selectedTerminalId2)
       const depTid = "NAEK" + selectedTerminalId;
       const arrTid = "NAEK" + selectedTerminalId2;

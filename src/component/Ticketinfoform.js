@@ -23,6 +23,7 @@ function Ticketinfoform() {
   const [datevalue, setdatevalue] = useState(dayjs()); // 날짜 
   const [rounddatevalue, setrounddatevalue] = useState(dayjs()); // 날짜 
   const [party, setParty] = useState(1); // 인원
+  const [roundparty,setroundParty] = useState(1);
   const [anchorEL, setanchorEL] = useState(null); // 폼 상태 변수
   const [Province, setProvince] = useState(null); // 폼에서 지역 선택 했을때 기차 or 버스 예약 페이지로 보내는 변수.
   const [selectLocation, setSelectLocation] = useState([]);
@@ -61,7 +62,12 @@ function Ticketinfoform() {
 //기차관련 함수
   const handleParty = (event) => {
     setParty(event.target.value);
+    
   };
+
+  const handleroundParty = (event) => {
+    setroundParty(event.target.value);
+  }
 
   const handleSubmit = (event) => {
 
@@ -73,6 +79,7 @@ function Ticketinfoform() {
     } else if (transportType === 'train') {
 
     const trainParty = party;
+    const trainroundParty = roundparty;
     let sessionData = {};
 
     if (tripType === 'one-way') {
@@ -101,6 +108,7 @@ function Ticketinfoform() {
         depDate: datevalue.format("YYYYMMDD"),
         roundDepDate: rounddatevalue.format("YYYYMMDD"),
         party: trainParty,
+        roundparty: trainroundParty,
       };
     }
 
@@ -700,7 +708,7 @@ return(
         <DemoContainer components={['DatePicker']}>
         <DatePicker
           label="날짜"
-          value={datevalue}
+          value={rounddatevalue}
           minDate={dayjs()} // 현재 날짜 이전의 날짜를 선택하지 못하게 함
           onChange={(newdatevalue) => setrounddatevalue(newdatevalue)}
           />
@@ -715,9 +723,9 @@ return(
         <Select
           labelId="demo-simple-select-helper-label"
           id="demo-simple-select-helper"
-          value={party}
+          value={roundparty}
           label="Age"
-          onChange={handleParty}
+          onChange={handleroundParty}
           >
           {[...Array(10)].map((_, index) => (
             <MenuItem key={index + 1} value={index + 1}>
