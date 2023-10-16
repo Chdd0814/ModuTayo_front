@@ -34,7 +34,7 @@ const BodyTable=(props)=>{
                             <Typography  color='black' textAlign='center'>
                                 {searchitem===column.key?
                                 handleOpen?
-                                <Link  onClick={handleOpen(item[column.key])}>{item[column.key]}</Link>:
+                                <Link  onClick={handleOpen(item)}>{item[column.key]}</Link>:
                                 <Link  to={`/notice/${item['num']}`}>{item[column.key]}</Link>
                                 :item[column.key]}
                             </Typography>

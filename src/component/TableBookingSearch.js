@@ -21,7 +21,7 @@ const TableSearch=(props)=>{
         }
           handleChangeSearch({ target: { name: 'startDay', value: startDateStr } });
           
-          console.log(SearchFilter)
+          console.log(dayjs().format('YYYY-MM-DD HH:mm'))
         };
           const disableFutureDates = (date) => {
             const tomorrow = dayjs();

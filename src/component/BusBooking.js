@@ -8,6 +8,7 @@ import dayjs from "dayjs";
 /*moment */
 const BusBooking=(props)=>{
     const {open,handleOpen}=props
+    const [booking,setBooking]=useState({});
     const [formData,setFormData]=useState([]);
     const TableColor=['#0078FF','#F4FFFF','#F9FFFF'];
     const [busTitle,setBusTitle]= useState(['출발날짜','버스클래스','출발터미널','도착터미널','출발시간','도착시간','자리번호']);
@@ -33,6 +34,12 @@ const BusBooking=(props)=>{
             ...prevdata,
             [name]:value
         }));
+    }
+    const handleDialogOpen=(item)=>(e)=>{
+        e.preventDefault();
+        setBooking(item);
+        console.log(item);
+
     }
     const handlebusbooking=useCallback(async(id)=>{
         try{
@@ -92,7 +99,7 @@ const BusBooking=(props)=>{
                     <TableSearch handleChangeSearch={handleChangeSearch} SearchFilter={SearchFilter} searchBooking={searchBooking} />
                 </Grid2>
                 <Grid2 item xs={12} marginLeft={15}>
-                    <DataTable title={busTitle} TableColor={TableColor} membercontent={busContent} member={formData}/>
+                    <DataTable handleOpen={handleDialogOpen} searchitem={busContent[0].key} title={busTitle} TableColor={TableColor} membercontent={busContent} member={formData}/>
                 </Grid2>
             </Grid2>
         </Grid2>);

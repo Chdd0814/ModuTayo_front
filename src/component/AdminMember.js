@@ -12,11 +12,12 @@ const AdminMember=(props)=>{
     const [isadmin,setIsadmin]=useState();
 
 
-    const handleOpen=(id)=>(e)=>{
+    const handleOpen=(item)=>(e)=>{
         e.preventDefault();
         setOpen(true);
-        setId(id);
-        handlegetIsAdmin(id);
+        console.log(item.id);
+        setId(item.id);
+        handlegetIsAdmin(item.id);
     }
     const handlegetIsAdmin=useCallback(async(memberID)=>{
         try{

@@ -64,7 +64,7 @@ export default function Home() {
     }
 
     callNotices();
-    
+    console.log(imageData[0]);
   }, []);
 
  
