@@ -2,7 +2,7 @@
   import axios from 'axios';
   import './Login.css';
 
-  import logoExpress from '../logoExpress.png'; // 로고 이미지의 경로 설정
+  import mainLogo from '../ModuTayo.png'; // 로고 이미지의 경로 설정
   import kakaoLoginImg from '../images/kakao_login.png';
   import { useNavigate } from 'react-router-dom';
   import TextField from '@mui/material/TextField';
@@ -85,7 +85,7 @@
       <div className="login-container">
 
       <h2>
-        <img src={logoExpress} alt="로고" /> {/* 이미지 태그로 로고 이미지 삽입 */}
+        <img src={mainLogo} alt="로고" /> {/* 이미지 태그로 로고 이미지 삽입 */}
       </h2>
     <form className="form-container">
       <label className="label">

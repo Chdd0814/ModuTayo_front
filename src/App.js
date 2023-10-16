@@ -59,7 +59,7 @@ function App() {
     // 로그아웃 처리 로직
     setIsLoggedIn(false);
     clearLocalStorage()();
-  };g
+  };
   return (
     <Router>
     <div className="App">

@@ -9,7 +9,7 @@ import dayjs from "dayjs";
 const BusBooking=(props)=>{
     const {open,handleOpen}=props
     const [formData,setFormData]=useState([]);
-    const TableColor=['#0078FF','#F4FFFF','#F9FFFF'];
+    const TableColor=['aliceblue','#F4FFFF','#F9FFFF'];
     const [busTitle,setBusTitle]= useState(['출발날짜','버스클래스','출발터미널','도착터미널','출발시간','도착시간','자리번호']);
     const [busContent,setBusContent]=useState([
         {key:'reservationDate',width:80},

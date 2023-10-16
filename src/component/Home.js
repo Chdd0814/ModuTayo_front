@@ -13,7 +13,9 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import { CardGroup } from 'reactstrap';
 import Card from 'react-bootstrap/Card';
-import logoExpress from '../logoExpress.png';
+import mainLogo from '../ModuTayo.png';
+import mainLogoBG from '../ModuTayoBG.png';
+import mainLogoBGTitle from '../ModuTayoBGTitle.png';
 import Ticketinfoform from './Ticketinfoform';
 
 
@@ -42,24 +44,25 @@ export default function Home() {
     
     return (
        <div className = "main">
+        <h1 className = "mainSentence">기차와 버스, 여행지 정보까지! 모두타요</h1>
         <div className = "slide-banner">
          <Carousel data-bs-theme = "dark">
-      <Carousel.Item interval={1000}>
-       <img className = "d-block w-100" src = {logoExpress}  alt = "First Slide" /> 
+      <Carousel.Item interval={5000}>
+       <img className = "d-block w-100" src = {mainLogo}  alt = "First Slide" width={1300} height={600}/> 
         <Carousel.Caption>
           <h3>첫번째 임시 이미지</h3>
           <p>첫번째 임시 이미지입니다.</p>
         </Carousel.Caption>
       </Carousel.Item>
-      <Carousel.Item interval={1000}>
-      <img className = "d-block w-100" src = {logoExpress}  alt = "Seconde Slide" /> 
+      <Carousel.Item interval={5000}>
+      <img className = "d-block w-100" src = {mainLogoBG}  alt = "Seconde Slide" width={1300} height={600} /> 
         <Carousel.Caption>
           <h3>두번째 임시 이미지</h3>
           <p>두번째 임시 이미지입니다.</p>
         </Carousel.Caption>
       </Carousel.Item>
-      <Carousel.Item>
-      <img className = "d-block w-100" src = {logoExpress}  alt = "Third Slide" /> 
+      <Carousel.Item interval={5000}>
+      <img className = "d-block w-100" src = {mainLogoBGTitle}  alt = "Third Slide" width={1300} height={600} /> 
         <Carousel.Caption>
           <h3>세번째 임시 이미지</h3>
           <p>
