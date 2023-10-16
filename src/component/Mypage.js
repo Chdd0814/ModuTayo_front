@@ -2,7 +2,7 @@ import React, { useEffect,useState} from 'react';
 import {List, ListSubheader, ListItemButton, ListItemText, ListItem, ListItemIcon, Typography, Divider,Collapse } from '@mui/material';
 import {useNavigate} from 'react-router-dom';
 import './Mypage.css';
-import {Person,Payment,PersonOff,PersonSearch,ContentPaste,DirectionsBus,DirectionsTransit,ManageAccounts,ManageSearch,ExpandLess ,ExpandMore,ManageAccountsTwoTone } from '@mui/icons-material';
+import {Person,Payment,PersonOff,PersonSearch,ContentPaste,DirectionsBus,DirectionsTransit,ManageAccounts,EditNote,ManageSearch,ExpandLess ,ExpandMore,ManageAccountsTwoTone } from '@mui/icons-material';
 import vaildAdmin from './vaildAdmin';
 const Subcontent=(props)=>{
   return(
@@ -74,7 +74,9 @@ const Mypage = (props) =>{
 
                 {isAdmin && (<><SubTitlebar icon={ManageAccounts} content="관리자" isOpen={props.open.adminOpen} open="adminOpen"  setOpen={props.handleOpen}/>
                 <Subcontentbar open={props.open.adminOpen} 
-                      firstcontent={<Subcontent movelink={handleNavigation} link="/AdminMember" icon={<ManageAccountsTwoTone />} content="회원관리"/>}/>
+                      firstcontent={<Subcontent movelink={handleNavigation} link="/AdminMember" icon={<ManageAccountsTwoTone />} content="회원관리"/>}
+                      secondcontent={<Subcontent movelink={handleNavigation} link="/BannerEdit" icon={<EditNote />} content="배너관리"/>}/>
+                      
                       </> )}
             </List>
     );
