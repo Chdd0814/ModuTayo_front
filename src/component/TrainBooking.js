@@ -8,7 +8,7 @@ import dayjs from "dayjs";
 const TrainBooking=(props)=>{
     const {open,handleOpen}=props
     const [formData,setFormData]=useState([]);
-    const TableColor=['#0078FF','#F4FFFF','#F9FFFF'];
+    const TableColor=['aliceblue','#F4FFFF','#F9FFFF'];
     const [TrainTitle,setBusTitle]= useState(['출발날짜','기차종류','출발역','도착역','출발시간','도착시간','자리번호']);
     const [TrainContent,setTrainContent]=useState([
         {key:'reservationDate',width:80},

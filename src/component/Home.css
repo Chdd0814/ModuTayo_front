@@ -20,3 +20,73 @@
     background-color: seashell;
   }
   
+  
+
+
+/* 공통 스타일 */
+.main {
+  padding: 20px;
+}
+
+.mainSentence{
+  margin-bottom: 50px;
+  color: #ffb01e;
+}
+
+.slide-banner {
+  margin-bottom: 20px;
+  width: 1300px;
+  margin: 0 auto;
+}
+
+.notice-list {
+  margin-top: 20px;
+}
+
+/* 슬라이드 쇼 스타일 */
+.carousel {
+  background-color: #f0f0f0;
+  border-radius: 10px;
+}
+
+.carousel-caption {
+  border-radius: 5px;
+  color: #fff;
+}
+
+.notice-list{
+  background-color: #e9e9e9;
+  width: 1300px;
+  margin: 0 auto;
+}
+
+/* 공지사항 카드 스타일 */
+.notice-card-link {
+  cursor: pointer;
+  margin: 10px;
+  transition: transform 0.2s;
+}
+
+.notice-card-link:hover {
+  transform: scale(1.02);
+}
+
+.notice-card-body {
+  padding: 10px;
+}
+
+.notice-card-body h5 {
+  font-size: 1.25rem;
+}
+
+.notice-card-body p {
+  font-size: 1rem;
+}
+
+@media (max-width: 768px) {
+  /* 모바일 화면에 적용될 스타일 */
+  .slide-banner img {
+    height: 200px; /* 모바일 화면에 맞게 높이 조정 */
+  }
+  /* 기타 모바일 스타일 변경 사항 추가 */
+}

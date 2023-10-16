@@ -1,4 +1,22 @@
+/* Footer.css */
+
 #main-footer {
-    background: #343a40;
-    color : #fff;
-}
+    background-color: #3e3bfd;
+    color: #fff;
+    padding: 10px;
+    text-align: center;
+  }
+  
+  #main-footer p {
+    margin: 0;
+  }
+  
+  #main-footer span {
+    font-weight: bold;
+  }
+  
+  /* 여백 추가 */
+  #main-footer .col {
+    margin: 10px;
+  }
+  

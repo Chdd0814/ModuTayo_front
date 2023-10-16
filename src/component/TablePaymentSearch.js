@@ -6,6 +6,8 @@ import { DemoContainer,DemoItem  } from '@mui/x-date-pickers/internals/demo';
 import { LocalizationProvider } from '@mui/x-date-pickers-pro';
 import { AdapterDayjs } from '@mui/x-date-pickers-pro/AdapterDayjs';
 import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
+import './TablePaymentSearch.css';
+
 const TableSearch=(props)=>{
     const {handleChangeSearch,searchPayment,SearchFilter}=props
     const [payType]=useState([
@@ -75,9 +77,9 @@ const TableSearch=(props)=>{
     return(
         
         <Grid2 container direction='column'> 
-        <Grid2 container direction='row'  justifyContent='center' columnSpacing={3} marginBottom={2} marginLeft={25}>
+        <Grid2 container direction='row'  justifyContent='center' columnSpacing={3} marginBottom={2}>
                 <Grid2>
-                    <ButtonGroup variant="contained">
+                    <ButtonGroup variant="contained" className="btnGroup2">
                     <Button onClick={handleOneDay}>1일</Button>
                     <Button onClick={handleOneWeek}>1주일</Button>
                     <Button onClick={handleOneMonth}>1달</Button>
