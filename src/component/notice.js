@@ -14,7 +14,7 @@
         navigate(path); // 내비게이션 함수 호출
       };
         useEffect(() => {
-            axios.get('/notices')
+            axios.get('/notices/view')
                 .then((response) => {
                     if(Array.isArray(response.data)){
                         var i=1

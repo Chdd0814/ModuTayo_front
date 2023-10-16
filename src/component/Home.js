@@ -17,52 +17,81 @@ import mainLogo from '../ModuTayo.png';
 import mainLogoBG from '../ModuTayoBG.png';
 import mainLogoBGTitle from '../ModuTayoBGTitle.png';
 import Ticketinfoform from './Ticketinfoform';
-
-
+import {Skeleton} from '@mui/material';
 export default function Home() {
   const [notices, setNotices] = useState([]);
+  const [banner,setBanner]=useState([]);
+  const [imageData,setImageData]=useState([]);
+  const [noticeData,setNoticeData]=useState([]);
   const navigate = useNavigate(); 
 
   useEffect(() => {
     async function callNotices() {
       try {
-        const response = await axios.get('/notices'); // 수정해야 할 경로
-        setNotices(response.data);
+        const [responseNotices, responseBanner] = await Promise.all([
+          axios.get('/notices'),
+          axios.get('/banner/getbannerList')
+        ]);
+        setNotices(responseNotices.data);
+        setBanner(responseBanner.data);  
+        console.log(responseNotices.data);
+        // bannerPhoto를 Blob URL로 변환
+        const imageUrls = responseBanner.data.map(banner => {
+          const binaryString = window.atob(banner.bannerPhoto);
+          const bytes = new Uint8Array(binaryString.length);
+          for (let j = 0; j < binaryString.length; j++) {
+              bytes[j] = binaryString.charCodeAt(j);
+          }
+          const blob = new Blob([bytes], { type: 'image/jpeg' });
+          return URL.createObjectURL(blob);
+        });
+
+        setImageData(imageUrls); // 변환된 Blob URL을 상태에 저장
+
+        const imageNoticeUrls = responseNotices.data.map(banner => {
+          const binaryString = window.atob(banner.file);
+          const bytes = new Uint8Array(binaryString.length);
+          for (let j = 0; j < binaryString.length; j++) {
+              bytes[j] = binaryString.charCodeAt(j);
+          }
+          const blob = new Blob([bytes], { type: 'image/jpeg' });
+          return URL.createObjectURL(blob);
+        });
+
+        setNoticeData(imageNoticeUrls); // 변환된 Blob URL을 상태에 저장
+        
       } catch (error) {
         console.error('Error fetching notices:', error);
       }
     }
 
     callNotices();
+    
   }, []);
 
-  const topNotices = notices
-    .slice()
-    .sort((a, b) => b.num - a.num)
-    .slice(0, 3);
-  
+ 
     
     return (
        <div className = "main">
         <h1 className = "mainSentence">기차와 버스, 여행지 정보까지! 모두타요</h1>
         <div className = "slide-banner">
          <Carousel data-bs-theme = "dark">
-      <Carousel.Item interval={5000}>
-       <img className = "d-block w-100" src = {mainLogo}  alt = "First Slide" width={1300} height={600}/> 
+      <Carousel.Item interval={1000}>
+       <img className = "d-block w-100" src = {logoExpress}  alt = "First Slide" /> 
         <Carousel.Caption>
-          <h3>첫번째 임시 이미지</h3>
-          <p>첫번째 임시 이미지입니다.</p>
+          <h3>{item.title}</h3>
+          <p>{item.content}</p>
         </Carousel.Caption>
       </Carousel.Item>
-      <Carousel.Item interval={5000}>
-      <img className = "d-block w-100" src = {mainLogoBG}  alt = "Seconde Slide" width={1300} height={600} /> 
+      <Carousel.Item interval={1000}>
+      <img className = "d-block w-100" src = {logoExpress}  alt = "Seconde Slide" /> 
         <Carousel.Caption>
           <h3>두번째 임시 이미지</h3>
           <p>두번째 임시 이미지입니다.</p>
         </Carousel.Caption>
       </Carousel.Item>
-      <Carousel.Item interval={5000}>
-      <img className = "d-block w-100" src = {mainLogoBGTitle}  alt = "Third Slide" width={1300} height={600} /> 
+      <Carousel.Item>
+      <img className = "d-block w-100" src = {logoExpress}  alt = "Third Slide" /> 
         <Carousel.Caption>
           <h3>세번째 임시 이미지</h3>
           <p>
@@ -78,22 +107,22 @@ export default function Home() {
         <br></br>
         <div className = "notice-list">
             <h2> 공지사항 </h2>
-
-            <CardGroup>
-          {topNotices.map((notice) => (
-            <Card key={notice.num} border="dark" style={{ width: '18rem' }} onClick={() => {
+            <Row xs={1} md={3} className="g-4">
+          {notices.map((notice,idx) => (
+            <Col key={idx}>
+            <Card key={notice.num} border="dark"  onClick={() => {
               // 해당 게시글 상세보기 페이지로 프로그래밍 방식으로 이동
               navigate(`/notice/${notice.num}`);
-            }}
-             className = "notice-card-link" 
-             >
-              <Card.Body className = "notice-card-body">
+            }} className = "notice-card-link" >  
+            {noticeData[idx]?
+            <Card.Img height={359} src={noticeData[idx]} />:<Skeleton variant="rectangular"  className = "d-block w-100" Height={359}/>}   
+            <Card.Body className = "notice-card-body">
                 <Card.Title>{notice.title}</Card.Title>
-                <Card.Text>{notice.content}</Card.Text>
               </Card.Body>
             </Card>
+            </Col>
           ))}
-        </CardGroup>
+        </Row>
         </div>
        </div>
     );

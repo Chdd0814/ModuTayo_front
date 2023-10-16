@@ -24,6 +24,7 @@ function Ticketinfoform() {
   const [datevalue, setdatevalue] = useState(dayjs()); // 날짜 
   const [rounddatevalue, setrounddatevalue] = useState(dayjs()); // 날짜 
   const [party, setParty] = useState(1); // 인원
+  const [roundparty,setroundParty] = useState(1);
   const [anchorEL, setanchorEL] = useState(null); // 폼 상태 변수
   const [Province, setProvince] = useState(null); // 폼에서 지역 선택 했을때 기차 or 버스 예약 페이지로 보내는 변수.
   const [selectLocation, setSelectLocation] = useState([]);
@@ -62,7 +63,12 @@ function Ticketinfoform() {
   //기차관련 함수
   const handleParty = (event) => {
     setParty(event.target.value);
+    
   };
+
+  const handleroundParty = (event) => {
+    setroundParty(event.target.value);
+  }
 
   const handleSubmit = (event) => {
 
@@ -73,37 +79,37 @@ function Ticketinfoform() {
       navigate('/bus');
     } else if (transportType === 'train') {
 
-      const trainParty = party;
-      let sessionData = {};
+    const trainParty = party;
+    let sessionData = {};
 
-      if (tripType === 'one-way') {
-        // 편도 여행
-        sessionData = {
-          tripType: 'one-way',
-          depStationId: depStation,
-          depStationName: depStationName,
-          arrStationId: arrStation,
-          arrStationName: arrStationName,
-          depDate: datevalue.format("YYYYMMDD"),
-          party: trainParty,
-        };
-      } else if (tripType === 'round-trip') {
-        // 왕복 여행
-        sessionData = {
-          tripType: 'round-trip',
-          depStationId: depStation,
-          depStationName: depStationName,
-          arrStationId: arrStation,
-          arrStationName: arrStationName,
-          roundDepStationId: rounddepStation,
-          roundDepStationName: rounddepStationName,
-          roundArrStationId: roundarrStation,
-          roundArrStationName: roundarrStationName,
-          depDate: datevalue.format("YYYYMMDD"),
-          roundDepDate: rounddatevalue.format("YYYYMMDD"),
-          party: trainParty,
-        };
-      }
+    if (tripType === 'one-way') {
+      // 편도 여행
+      sessionData = {
+        tripType: 'one-way',
+        depStationId: depStation,
+        depStationName: depStationName,
+        arrStationId: arrStation,
+        arrStationName: arrStationName,
+        depDate: datevalue.format("YYYYMMDD"),
+        party: trainParty,
+      };
+    } else if (tripType === 'round-trip') {
+      // 왕복 여행
+      sessionData = {
+        tripType: 'round-trip',
+        depStationId: depStation,
+        depStationName: depStationName,
+        arrStationId: arrStation,
+        arrStationName: arrStationName,
+        roundDepStationId: rounddepStation,
+        roundDepStationName: rounddepStationName,
+        roundArrStationId: roundarrStation,
+        roundArrStationName: roundarrStationName,
+        depDate: datevalue.format("YYYYMMDD"),
+        roundDepDate: rounddatevalue.format("YYYYMMDD"),
+        party: trainParty,
+      };
+    }
 
       // 세션에 데이터 저장
       sessionStorage.setItem('trainReservation', JSON.stringify(sessionData));
@@ -696,44 +702,44 @@ function Ticketinfoform() {
 
 
 
-            <FormControl sx={{ m: 1, minWidth: 120 }}>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DemoContainer components={['DatePicker']}>
-                  <DatePicker
-                    label="날짜"
-                    value={datevalue}
-                    minDate={dayjs()} // 현재 날짜 이전의 날짜를 선택하지 못하게 함
-                    onChange={(newdatevalue) => setrounddatevalue(newdatevalue)}
-                  />
-                </DemoContainer>
-              </LocalizationProvider>
-            </FormControl>
+<FormControl sx={{ m: 1, minWidth: 120 }}>
+       <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <DemoContainer components={['DatePicker']}>
+        <DatePicker
+          label="날짜"
+          value={datevalue}
+          minDate={dayjs()} // 현재 날짜 이전의 날짜를 선택하지 못하게 함
+          onChange={(newdatevalue) => setrounddatevalue(newdatevalue)}
+          />
+        </DemoContainer>
+       </LocalizationProvider>
+        </FormControl>
 
 
 
-            <FormControl sx={{ m: 1, minWidth: 120, paddingTop: 1 }}>
-              <InputLabel sx={{ paddingTop: 1 }} id="demo-simple-select-helper-label">인원</InputLabel>
-              <Select
-                labelId="demo-simple-select-helper-label"
-                id="demo-simple-select-helper"
-                value={party}
-                label="Age"
-                onChange={handleParty}
-              >
-                {[...Array(10)].map((_, index) => (
-                  <MenuItem key={index + 1} value={index + 1}>
-                    {index + 1}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-
-            <div>
-            <Button variant="contained" color="secondary" type="submit" sx={{ marginTop: 3, backgroundColor: '#e6eeff', color: '#3b3b3b' }} onClick={handleSubmit}>검색</Button>
-            </div>
-          </form>
-        </>
-      )}
+        <FormControl sx={{ m: 1, minWidth: 120, paddingTop:1 }}>
+        <InputLabel sx={{paddingTop:1}} id="demo-simple-select-helper-label">인원</InputLabel>
+        <Select
+          labelId="demo-simple-select-helper-label"
+          id="demo-simple-select-helper"
+          value={party}
+          label="Age"
+          onChange={handleParty}
+          >
+          {[...Array(10)].map((_, index) => (
+            <MenuItem key={index + 1} value={index + 1}>
+        {index + 1}
+      </MenuItem>
+    ))}
+        </Select>
+        </FormControl>
+  
+        <div>
+        <Button variant="contained" color="secondary" type="sumbit" sx={{marginTop:3}} onClick = {handleSubmit}>검색</Button>
+        </div>  
+        </form>
+      </>
+            )}
 
       {/*  기차 왕복 부분 끝 !!!!!!!!!!!!!*/}
       {transportType === 'bus' && tripType === 'one-way' && (

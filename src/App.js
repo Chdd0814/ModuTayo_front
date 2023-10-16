@@ -27,17 +27,16 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Busticket from './component/Busticket';
 import Idsearch from './component/IdSearch';
 import PasswordSearch from './component/PasswordSearch';
+import BannerEdit from './component/Admin_BannerEdit';
 
 function App() {
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
       setIsLoggedIn(true);
-    } 
+    }
   }, []);
   const [open,setOpen] =useState({
     ticketingOpen: false,
@@ -90,6 +89,7 @@ function App() {
           <Route path = "/Buspayment" element = {<BusPayment />} />
           <Route path = "/idSearch" element = {<Idsearch />} />
           <Route path = "/passwordSearch" element = {<PasswordSearch />} />
+          <Route path = "/BannerEdit" element = {<BannerEdit open={open} handleOpen={handleOpen} />} />
           {/* 여기서 Route 관련 코드들을 복사해서 App-main 영역에 출력될 부분만 추가.*/}
         </Routes>
       </div>
