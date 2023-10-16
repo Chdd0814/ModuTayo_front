@@ -23,6 +23,7 @@ function Ticketinfoform() {
   const [datevalue, setdatevalue] = useState(dayjs()); // 날짜 
   const [rounddatevalue, setrounddatevalue] = useState(dayjs()); // 날짜 
   const [party, setParty] = useState(1); // 인원
+  const [roundparty,setroundParty] = useState(1);
   const [anchorEL, setanchorEL] = useState(null); // 폼 상태 변수
   const [Province, setProvince] = useState(null); // 폼에서 지역 선택 했을때 기차 or 버스 예약 페이지로 보내는 변수.
   const [selectLocation, setSelectLocation] = useState([]);
@@ -61,7 +62,12 @@ function Ticketinfoform() {
 //기차관련 함수
   const handleParty = (event) => {
     setParty(event.target.value);
+    
   };
+
+  const handleroundParty = (event) => {
+    setroundParty(event.target.value);
+  }
 
   const handleSubmit = (event) => {
 
@@ -73,6 +79,7 @@ function Ticketinfoform() {
     } else if (transportType === 'train') {
 
     const trainParty = party;
+    const trainroundParty = roundparty;
     let sessionData = {};
 
     if (tripType === 'one-way') {
@@ -101,11 +108,12 @@ function Ticketinfoform() {
         depDate: datevalue.format("YYYYMMDD"),
         roundDepDate: rounddatevalue.format("YYYYMMDD"),
         party: trainParty,
+        roundparty: trainroundParty,
       };
     }
 
     // 세션에 데이터 저장
-    sessionStorage.setItem('trainTicketInfo', JSON.stringify(sessionData));
+    sessionStorage.setItem('trainReservation', JSON.stringify(sessionData));
 
     // 기차 선택 시 기차 페이지로 리다이렉트
     navigate('/train');
@@ -332,7 +340,7 @@ return(
  <div className="ticket-info-form">
 <h2>빠른 검색</h2>
 
-<div className= "form-state-button-groups">
+<div className= "form-state-button-groups" >
 <ButtonGroup variant="outlined" aria-label = "outlined button group">
 <Button onClick={() => handleTripTypeChange('one-way')}>편도</Button>
 <Button onClick={() => handleTripTypeChange('round-trip')}>왕복</Button>
@@ -354,7 +362,7 @@ return(
 
 {transportType === 'train' && tripType === 'one-way' && ( 
 
-<form onSubmit = {handleSubmit} className = "form-ticketinfo-form">
+<form onSubmit = {handleSubmit} className = "form-ticketinfo-form" style = {{marginTop : 15}} >
   <FormControl sx={{ m: 1, minWidth: 120, marginTop : 2 }}>
         <TextField value={depStationName} id="grouped-select" label="출발지" onClick={handleTrainModalOpen} 
          readOnly />
@@ -481,7 +489,7 @@ return(
 {transportType === 'train'&& tripType === 'round-trip' && (
 
 <>
-<form onSubmit = {handleSubmit} className = "form-ticketinfo-form">
+<form onSubmit = {handleSubmit} className = "form-ticketinfo-form" style = {{marginTop : 15}} >
 
 
   <FormControl sx={{ m: 1, minWidth: 120, marginTop : 2 }}>
@@ -700,7 +708,7 @@ return(
         <DemoContainer components={['DatePicker']}>
         <DatePicker
           label="날짜"
-          value={datevalue}
+          value={rounddatevalue}
           minDate={dayjs()} // 현재 날짜 이전의 날짜를 선택하지 못하게 함
           onChange={(newdatevalue) => setrounddatevalue(newdatevalue)}
           />
@@ -715,9 +723,9 @@ return(
         <Select
           labelId="demo-simple-select-helper-label"
           id="demo-simple-select-helper"
-          value={party}
+          value={roundparty}
           label="Age"
-          onChange={handleParty}
+          onChange={handleroundParty}
           >
           {[...Array(10)].map((_, index) => (
             <MenuItem key={index + 1} value={index + 1}>
