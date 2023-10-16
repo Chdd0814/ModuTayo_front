@@ -18,6 +18,7 @@ import mainLogoBG from '../ModuTayoBG.png';
 import mainLogoBGTitle from '../ModuTayoBGTitle.png';
 import Ticketinfoform from './Ticketinfoform';
 import {Skeleton} from '@mui/material';
+
 export default function Home() {
   const [notices, setNotices] = useState([]);
   const [banner,setBanner]=useState([]);
@@ -76,29 +77,17 @@ export default function Home() {
         <h1 className = "mainSentence">기차와 버스, 여행지 정보까지! 모두타요</h1>
         <div className = "slide-banner">
          <Carousel data-bs-theme = "dark">
-      <Carousel.Item interval={1000}>
-       <img className = "d-block w-100" src = {logoExpress}  alt = "First Slide" /> 
+          {banner.map((item,index)=>(
+      <Carousel.Item interval={5000}>
+         {imageData[index]?
+        <img className = "d-block w-100" src = {imageData[index]}  alt = "First Slide" height={359}/>:
+        <Skeleton variant="rectangular"  className = "d-block w-100" height={359}/>}  
         <Carousel.Caption>
           <h3>{item.title}</h3>
           <p>{item.content}</p>
         </Carousel.Caption>
-      </Carousel.Item>
-      <Carousel.Item interval={1000}>
-      <img className = "d-block w-100" src = {logoExpress}  alt = "Seconde Slide" /> 
-        <Carousel.Caption>
-          <h3>두번째 임시 이미지</h3>
-          <p>두번째 임시 이미지입니다.</p>
-        </Carousel.Caption>
-      </Carousel.Item>
-      <Carousel.Item>
-      <img className = "d-block w-100" src = {logoExpress}  alt = "Third Slide" /> 
-        <Carousel.Caption>
-          <h3>세번째 임시 이미지</h3>
-          <p>
-           세번째 임시 이미지입니다.
-          </p>
-        </Carousel.Caption>
-      </Carousel.Item>
+      </Carousel.Item>))
+      }
     </Carousel>
         </div>
         <br>
