@@ -15,7 +15,7 @@ const AdminMember=(props)=>{
     const handleOpen=(item)=>(e)=>{
         e.preventDefault();
         setOpen(true);
-        console.log(item.id);
+        console.log(item.role);
         setId(item.id);
         handlegetIsAdmin(item.id);
     }

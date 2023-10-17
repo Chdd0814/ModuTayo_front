@@ -6,6 +6,8 @@ import { DemoContainer,DemoItem  } from '@mui/x-date-pickers/internals/demo';
 import { LocalizationProvider } from '@mui/x-date-pickers-pro';
 import { AdapterDayjs } from '@mui/x-date-pickers-pro/AdapterDayjs';
 import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
+import './TableBookingSearch.css';
+
 const TableSearch=(props)=>{
     const {handleChangeSearch,searchBooking,SearchFilter}=props
     const [datevalue, setdatevalue] = useState([
@@ -23,10 +25,7 @@ const TableSearch=(props)=>{
           
           console.log(dayjs().format('YYYY-MM-DD HH:mm'))
         };
-          const disableFutureDates = (date) => {
-            const tomorrow = dayjs();
-            return date.isAfter(tomorrow);
-        };
+          
      const handleOneDay=()=>{
         setdatevalue([dayjs().add(-1,'day'),dayjs()])
         handleChangeSearch({ target: { name: 'startDay', value: dayjs().add(-1,'day').format('YYYY-MM-DD') } });
@@ -54,9 +53,9 @@ const TableSearch=(props)=>{
     return(
         
         <Grid2 container direction='column'> 
-        <Grid2 container direction='row'  justifyContent='center' columnSpacing={3} marginBottom={2} marginLeft={25}>
+        <Grid2 container direction='row'  justifyContent='center' columnSpacing={3} marginBottom={2}>
                 <Grid2>
-                    <ButtonGroup variant="contained">
+                    <ButtonGroup variant="contained" className="btnGroup">
                     <Button onClick={handleOneDay}>1일</Button>
                     <Button onClick={handleOneWeek}>1주일</Button>
                     <Button onClick={handleOneMonth}>1달</Button>
@@ -73,9 +72,9 @@ const TableSearch=(props)=>{
                 <TextField value={SearchFilter.end} onChange={handleChangeSearch} name='end' sx={{maxWidth:100}}  size='small'  variant="outlined" label="도착" />
             </Grid2>
             <Grid2 item >
-                <LocalizationProvider  dateAdapter={AdapterDayjs}>
-                    <DemoContainer   components={['DateRangePicker']} > 
-                        <DateRangePicker  shouldDisableDate={disableFutureDates}  calendars={1} sx={{maxWidth:300}}  slotProps={{textField:{size:'small'}}}  value={datevalue}  onChange={handleDateChange}/>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DemoContainer components={['DateRangePicker']} > 
+                        <DateRangePicker   calendars={1} sx={{maxWidth:300}}  slotProps={{textField:{size:'small'}}}  value={datevalue}  onChange={handleDateChange}/>
                     </DemoContainer>
                 </LocalizationProvider>
             </Grid2>

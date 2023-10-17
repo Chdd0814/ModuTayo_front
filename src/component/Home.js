@@ -13,9 +13,12 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import { CardGroup } from 'reactstrap';
 import Card from 'react-bootstrap/Card';
-import logoExpress from '../logoExpress.png';
+import mainLogo from '../ModuTayo.png';
+import mainLogoBG from '../ModuTayoBG.png';
+import mainLogoBGTitle from '../ModuTayoBGTitle.png';
 import Ticketinfoform from './Ticketinfoform';
 import {Skeleton} from '@mui/material';
+
 export default function Home() {
   const [notices, setNotices] = useState([]);
   const [banner,setBanner]=useState([]);
@@ -32,9 +35,10 @@ export default function Home() {
         ]);
         setNotices(responseNotices.data);
         setBanner(responseBanner.data);  
-        console.log(responseNotices.data);
+       
         // bannerPhoto를 Blob URL로 변환
         const imageUrls = responseBanner.data.map(banner => {
+          if(banner.bannerPhoto!==null){
           const binaryString = window.atob(banner.bannerPhoto);
           const bytes = new Uint8Array(binaryString.length);
           for (let j = 0; j < binaryString.length; j++) {
@@ -42,11 +46,12 @@ export default function Home() {
           }
           const blob = new Blob([bytes], { type: 'image/jpeg' });
           return URL.createObjectURL(blob);
-        });
+        } });
 
         setImageData(imageUrls); // 변환된 Blob URL을 상태에 저장
 
         const imageNoticeUrls = responseNotices.data.map(banner => {
+          if(banner.file!==null){
           const binaryString = window.atob(banner.file);
           const bytes = new Uint8Array(binaryString.length);
           for (let j = 0; j < binaryString.length; j++) {
@@ -54,7 +59,7 @@ export default function Home() {
           }
           const blob = new Blob([bytes], { type: 'image/jpeg' });
           return URL.createObjectURL(blob);
-        });
+      }});
 
         setNoticeData(imageNoticeUrls); // 변환된 Blob URL을 상태에 저장
         
@@ -64,17 +69,18 @@ export default function Home() {
     }
 
     callNotices();
-    console.log(imageData[0]);
+    
   }, []);
 
  
     
     return (
        <div className = "main">
+        <h1 className = "mainSentence">기차와 버스, 여행지 정보까지! 모두타요</h1>
         <div className = "slide-banner">
          <Carousel data-bs-theme = "dark">
           {banner.map((item,index)=>(
-      <Carousel.Item interval={1000}>
+      <Carousel.Item interval={5000}>
          {imageData[index]?
         <img className = "d-block w-100" src = {imageData[index]}  alt = "First Slide" height={359}/>:
         <Skeleton variant="rectangular"  className = "d-block w-100" height={359}/>}  
@@ -100,7 +106,7 @@ export default function Home() {
               navigate(`/notice/${notice.num}`);
             }} className = "notice-card-link" >  
             {noticeData[idx]?
-            <Card.Img height={359} src={noticeData[idx]} />:<Skeleton variant="rectangular"  className = "d-block w-100" Height={359}/>}   
+            <Card.Img height={359} src={noticeData[idx]} />:<Skeleton variant="rectangular"  className = "d-block w-100" height={359}/>}   
             <Card.Body className = "notice-card-body">
                 <Card.Title>{notice.title}</Card.Title>
               </Card.Body>

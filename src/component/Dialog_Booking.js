@@ -1,39 +1,51 @@
 import React,{useEffect,useState,useCallback} from 'react';
 import axios from 'axios';
-import {Button,Dialog,DialogActions,DialogContent,Box,DialogTitle} from '@mui/material';
+import {Button,Dialog,DialogActions,DialogContent,Box,DialogTitle,Typography} from '@mui/material';
 import SnackbarCompnents from './SnackbarComponent';
-const AdminMember_dialog=(props)=>{
-    const {item,open,handleClose,isadmin,allBooking}=props;    
+import dayjs from "dayjs";
+import './FontCss.css';
+const Dialog_Booking=(props)=>{
+    const {item,open,handleClose,allBooking}=props;    
     const [openprops,setOpenprops]=useState(false);
     const handleDelete=useCallback(async()=>{
-        try{
-        await axios.delete(`/AdminMember/delete/${id}`)
-        setOpenprops(true);
-        allMember();
-        }catch(error){
-            console.error(error);
-        }
+         try{
+         await Promise.all([
+            axios.delete(`/busTicket/delete/${item.ticketNumber}`),
+            axios.delete(`/payment/delete/${item.ticketNumber}`)
+          ]);
+         setOpenprops(true);
+         allBooking();
+         }catch(error){
+             console.error(error);
+         }
     })
     const handleclose_alert=(event, reason)=>{
         if(reason==='clickway'){
             return;
         }
         setOpenprops(false);
+
     }
     
+    const isAfter=dayjs(`${item.reservationDate} ${item.departureTime}`,'YYYY-MM-DD HH:mm').add(30,'minute').isAfter(dayjs())
     return(
         <Box>
         <Dialog open={open} onClose={handleClose}>
             <DialogTitle>
-                {item.ticketNumber}    
+            <Typography fontFamily='GmarketSansMedium'>{item.ticketNumber}</Typography>
             </DialogTitle>
             <DialogContent>
-                    환불은 출발 후 30분까지 하실 수 있으며 남은 시간에 따라 환불 금액이 상이합니다.
-                    출발전 24~12시간 : 80%환불
-                    출발전 12시~ 출발후 30분 : 50%환불 
+                <Typography variant="h6" fontFamily='GmarketSansMedium' gutterBottom>
+                환불은 출발 후 30분까지 하실 수 있으며 남은 시간에 따라 환불 금액이 상이합니다.
+                </Typography>
+                <Typography fontFamily='GmarketSansMedium'>
+                    출발전 24~12시간 : 80%
+                    </Typography> <Typography fontFamily='GmarketSansMedium'>
+                    출발전 12시~ 출발후 30분 : 50% </Typography>
+                    
             </DialogContent>
             <DialogActions>
-                <Button variant='contained' onClick={handleUpdate}>환불</Button>
+                <Button  disabled={!isAfter}  variant='contained' onClick={handleDelete}>환불</Button>
                 <Button variant='outlined' onClick={handleClose}>cancle</Button>
             </DialogActions>
         </Dialog>
@@ -43,5 +55,5 @@ const AdminMember_dialog=(props)=>{
         
     );
 }
-export default AdminMember_dialog;
+export default Dialog_Booking;
 

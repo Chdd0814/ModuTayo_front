@@ -1,0 +1,33 @@
+/* Header.css */
+
+.custom-navbar {
+    background-color: #3e3bfd; /* 네비게이션 바 배경색 */
+    color: #fff; /* 텍스트 색상 */
+    font-weight: bold;
+    height: 70px;
+  }
+  .me-auto{
+    margin: 0 auto;
+  }
+  
+  .custom-navbar .navbar-brand {
+    color: #fff; /* 로고 텍스트 색상 */
+  }
+  
+  .custom-navbar .navbar-nav .nav-link {
+    color: #fff; /* 네비게이션 링크 텍스트 색상 */
+  }
+  
+  .custom-navbar .navbar-nav .nav-link:hover {
+    background-color: #2980b9; /* 링크에 마우스 호버 시 배경색 */
+  }
+  
+  .custom-navbar .me-2 .nav-link,
+  .custom-navbar .me-2 .btn-secondary {
+    color: #fff; /* 로그인/로그아웃 텍스트 색상 */
+  }
+  
+  .custom-navbar .me-2 .nav-link:hover {
+    text-decoration: underline; /* 링크에 마우스 호버 시 밑줄 표시 */
+  }
+  

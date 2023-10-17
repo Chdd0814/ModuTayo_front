@@ -39,7 +39,7 @@
                 setisAdmin(false);
              }
         }, []);
-        const TableColor=['#AE905E','#FAEBCD','#FDF5D2']
+        const TableColor=['#e9e9e9','#FAEBCD','#FAFAFA']
         const noticeTitle=['번호','제목','조회수','작성일']
         const noticeContent=[
             {key:'number',width:60},
@@ -81,6 +81,7 @@
             ])
         return (
             <div className = "noticeTbl">
+                <h1>공지사항</h1>
                 <MemberSearch classification_content={classification_content} SearchFilter={SearchFilter} searchMember={searchNotice}  handleChange={handleChange} />
                 <div className = "noticeTbl-main">
                 <DataTable  searchitem={noticeContent[1].key}  TableColor={TableColor}  title={noticeTitle} member={notices} membercontent={noticeContent} /> 

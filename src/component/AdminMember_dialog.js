@@ -2,6 +2,7 @@ import React,{useEffect,useState,useCallback} from 'react';
 import axios from 'axios';
 import {Button,Dialog,DialogActions,DialogContent,Box,DialogTitle} from '@mui/material';
 import SnackbarCompnents from './SnackbarComponent';
+
 const AdminMember_dialog=(props)=>{
     const {id,open,handleClose,isadmin,allMember}=props;    
     const [openprops,setOpenprops]=useState(false);
