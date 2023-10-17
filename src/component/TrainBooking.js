@@ -5,8 +5,12 @@ import DataTable from './DataTable';
 import TableSearch from './TableBookingSearch';
 import axios from 'axios';
 import dayjs from "dayjs";
+import Dialog_Booking from './Dialog_Booking';
 const TrainBooking=(props)=>{
     const {open,handleOpen}=props
+    const [dialog_open,setDialog_open]=useState(false);
+    const [alert_open,setAlert_open]=useState(false);
+    const [booking,setBooking]=useState({});
     const [formData,setFormData]=useState([]);
     const TableColor=['aliceblue','#F4FFFF','#F9FFFF'];
     const [TrainTitle,setBusTitle]= useState(['출발날짜','기차종류','출발역','도착역','출발시간','도착시간','자리번호']);
@@ -33,6 +37,15 @@ const TrainBooking=(props)=>{
             [name]:value
         }));
         
+    }
+    const handleClose=()=>{
+        setDialog_open(false);
+    }
+    const handleDialogOpen=(item)=>(e)=>{
+        e.preventDefault();
+        setBooking(item);
+        console.log(dayjs(`${item.reservationDate} ${item.departureTime}`,'YYYY-MM-DD HH:mm').add(30,'minute').isAfter(dayjs()));
+        setDialog_open(true);
     }
     const formatDate=(input)=> {
         const year = input.substring(0, 4);
@@ -91,17 +104,28 @@ const TrainBooking=(props)=>{
             console.error(error);
         }
     }})
+    const handleDelete=useCallback(async()=>{
+        try{
+        await axios.delete(`/trainTicket/delete/${booking.ticketNumber}`)
+        setAlert_open(true);
+        handlebusbooking(localStorage.getItem('userId'));
+        setDialog_open(false);
+        }catch(error){
+            console.error(error);
+        }
+   })
     return(
         <Grid2 container direction='row'>
         <Mypage open={open} handleOpen={handleOpen}/>
             <Grid2 container direction='column' xs={9} alignContent="center"  rowSpacing={5} >
                 <Grid2 item marginTop={5} marginLeft={15}>
-                    <TableSearch  handleChangeSearch={handleChangeSearch} SearchFilter={SearchFilter} searchBooking={searchBooking}/>
+                    <TableSearch   handleChangeSearch={handleChangeSearch} SearchFilter={SearchFilter} searchBooking={searchBooking}/>
                 </Grid2>
                 <Grid2 item xs={12} marginLeft={15}>
-                    <DataTable title={TrainTitle} TableColor={TableColor} membercontent={TrainContent} member={formData}/>
+                    <DataTable handleOpen={handleDialogOpen} searchitem={TrainContent[0].key} title={TrainTitle} TableColor={TableColor} membercontent={TrainContent} member={formData}/>
                 </Grid2>
             </Grid2>
+            <Dialog_Booking handleDelete={handleDelete} openprops={alert_open} setOpenprops={setAlert_open}  item={booking} open={dialog_open} handleClose={handleClose}/>
         </Grid2>);
 }
 export default TrainBooking;

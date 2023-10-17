@@ -2,7 +2,7 @@ import React, { useEffect,useState} from 'react';
 import {List, ListSubheader, ListItemButton, ListItemText, ListItem, ListItemIcon, Typography, Divider,Collapse } from '@mui/material';
 import {useNavigate} from 'react-router-dom';
 import './Mypage.css';
-import {Person,Payment,PersonOff,PersonSearch,ContentPaste,DirectionsBus,DirectionsTransit,ManageAccounts,EditNote,ManageSearch,ExpandLess ,ExpandMore,ManageAccountsTwoTone } from '@mui/icons-material';
+import {Person,Payment,PersonOff,PersonSearch,ContentPaste,DirectionsBus,DirectionsTransit,ManageAccounts,EditNote,ManageSearch,ExpandLess ,ExpandMore,ManageAccountsTwoTone,Key } from '@mui/icons-material';
 import vaildAdmin from './vaildAdmin';
 const Subcontent=(props)=>{
   return(
@@ -10,7 +10,7 @@ const Subcontent=(props)=>{
                     <ListItemButton onClick={()=> props.movelink(props.link)}>
                     <ListItemIcon>{props.icon}</ListItemIcon>
                       <ListItemText>
-                      <Typography fontFamily="GmarketSansMedium">{props.content}</Typography>
+                      <Typography fontSize={props.content.length>6?14:null} fontFamily="GmarketSansMedium">{props.content}</Typography>
                         </ListItemText>
                     </ListItemButton>
                 </ListItem>
@@ -22,6 +22,7 @@ const Subcontentbar=(props)=>{
                        <List component="div" disablePadding sx={{ pl: 4 }}>
                   {props.firstcontent} 
                   {props.secondcontent}
+                  {props.thirdcontent}
                         </List>
                       </Collapse>
   );
@@ -70,7 +71,8 @@ const Mypage = (props) =>{
                 <SubTitlebar icon={Person} content="회원정보" isOpen={props.open.memberOpen} open="memberOpen" setOpen={props.handleOpen} />
                 <Subcontentbar open={props.open.memberOpen} 
                       firstcontent={<Subcontent movelink={handleNavigation} link="/EditMember" icon={<PersonSearch />} content="회원수정"/>}
-                      secondcontent={<Subcontent movelink={handleNavigation} link="/DeleteMember" icon={<PersonOff />} content="회원탈퇴"/>} />
+                      secondcontent={<Subcontent movelink={handleNavigation} link="/DeleteMember" icon={<PersonOff />} content="회원탈퇴"/>}
+                      thirdcontent={<Subcontent movelink={handleNavigation} link="/EditPass" icon={<Key/>} content="비밀번호재설정"/>} />
 
                 {isAdmin && (<><SubTitlebar icon={ManageAccounts} content="관리자" isOpen={props.open.adminOpen} open="adminOpen"  setOpen={props.handleOpen}/>
                 <Subcontentbar open={props.open.adminOpen} 

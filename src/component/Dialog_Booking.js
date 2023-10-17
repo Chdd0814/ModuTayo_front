@@ -5,28 +5,13 @@ import SnackbarCompnents from './SnackbarComponent';
 import dayjs from "dayjs";
 import './FontCss.css';
 const Dialog_Booking=(props)=>{
-    const {item,open,handleClose,allBooking}=props;    
-    const [openprops,setOpenprops]=useState(false);
-    const handleDelete=useCallback(async()=>{
-         try{
-         await Promise.all([
-            axios.delete(`/busTicket/delete/${item.ticketNumber}`),
-            axios.delete(`/payment/delete/${item.ticketNumber}`)
-          ]);
-         setOpenprops(true);
-         allBooking();
-         }catch(error){
-             console.error(error);
-         }
-    })
+    const {item,open,handleClose,handleDelete,openprops,setOpenprops}=props;    
     const handleclose_alert=(event, reason)=>{
         if(reason==='clickway'){
             return;
         }
         setOpenprops(false);
-
     }
-    
     const isAfter=dayjs(`${item.reservationDate} ${item.departureTime}`,'YYYY-MM-DD HH:mm').add(30,'minute').isAfter(dayjs())
     return(
         <Box>

@@ -89,7 +89,7 @@ import vaildAdmin from './vaildAdmin';
               <TableBody>
               <TableRow> 
                 <TableCell align='right' sx={{border:0}}>
-                  <Typography fontFamily='GmarketSansMedium' fontSize={1}>조회수: {notice.visitcount} 등록날짜: {notice.postdate}</Typography>
+                  <Typography fontFamily='GmarketSansMedium' fontSize={10}>조회수: {notice.visitcount} 등록날짜: {notice.postdate}</Typography>
                 </TableCell>
               </TableRow>
               <TableRow className='content'>

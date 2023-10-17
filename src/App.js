@@ -28,6 +28,7 @@ import Busticket from './component/Busticket';
 import Idsearch from './component/IdSearch';
 import PasswordSearch from './component/PasswordSearch';
 import BannerEdit from './component/Admin_BannerEdit';
+import Edit_Password from './component/Edit_Password';
 
 function App() {
 
@@ -79,6 +80,7 @@ function App() {
           <Route path = "/lineinfo" element= {<LineInfo/> } />
           <Route path="/mypage" element={<MyPage open={open} handleOpen={handleOpen}/>} />
           <Route path="/EditMember" element={<EditMember  open={open} handleOpen={handleOpen}/>} />
+          <Route path="/EditPass" element={<Edit_Password  open={open} handleOpen={handleOpen}/>} />
           <Route path="/DeleteMember" element={<DeleteMember onLogout={handleLogout} open={open} handleOpen={handleOpen}/>} />
           <Route path="/BusBooking" element={<BusBooking open={open} handleOpen={handleOpen} />} />
           <Route path="/TrainBooking" element={<TrainBooking open={open} handleOpen={handleOpen} />}/>
