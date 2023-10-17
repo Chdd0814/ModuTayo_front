@@ -35,9 +35,10 @@ export default function Home() {
         ]);
         setNotices(responseNotices.data);
         setBanner(responseBanner.data);  
-        console.log(responseNotices.data);
+       
         // bannerPhoto를 Blob URL로 변환
         const imageUrls = responseBanner.data.map(banner => {
+          if(banner.bannerPhoto!==null){
           const binaryString = window.atob(banner.bannerPhoto);
           const bytes = new Uint8Array(binaryString.length);
           for (let j = 0; j < binaryString.length; j++) {
@@ -45,11 +46,12 @@ export default function Home() {
           }
           const blob = new Blob([bytes], { type: 'image/jpeg' });
           return URL.createObjectURL(blob);
-        });
+        } });
 
         setImageData(imageUrls); // 변환된 Blob URL을 상태에 저장
 
         const imageNoticeUrls = responseNotices.data.map(banner => {
+          if(banner.file!==null){
           const binaryString = window.atob(banner.file);
           const bytes = new Uint8Array(binaryString.length);
           for (let j = 0; j < binaryString.length; j++) {
@@ -57,7 +59,7 @@ export default function Home() {
           }
           const blob = new Blob([bytes], { type: 'image/jpeg' });
           return URL.createObjectURL(blob);
-        });
+      }});
 
         setNoticeData(imageNoticeUrls); // 변환된 Blob URL을 상태에 저장
         
@@ -104,7 +106,7 @@ export default function Home() {
               navigate(`/notice/${notice.num}`);
             }} className = "notice-card-link" >  
             {noticeData[idx]?
-            <Card.Img height={359} src={noticeData[idx]} />:<Skeleton variant="rectangular"  className = "d-block w-100" Height={359}/>}   
+            <Card.Img height={359} src={noticeData[idx]} />:<Skeleton variant="rectangular"  className = "d-block w-100" height={359}/>}   
             <Card.Body className = "notice-card-body">
                 <Card.Title>{notice.title}</Card.Title>
               </Card.Body>

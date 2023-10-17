@@ -23,12 +23,9 @@ const TableSearch=(props)=>{
         }
           handleChangeSearch({ target: { name: 'startDay', value: startDateStr } });
           
-          console.log(SearchFilter)
+          console.log(dayjs().format('YYYY-MM-DD HH:mm'))
         };
-          const disableFutureDates = (date) => {
-            const tomorrow = dayjs();
-            return date.isAfter(tomorrow);
-        };
+          
      const handleOneDay=()=>{
         setdatevalue([dayjs().add(-1,'day'),dayjs()])
         handleChangeSearch({ target: { name: 'startDay', value: dayjs().add(-1,'day').format('YYYY-MM-DD') } });
@@ -77,7 +74,7 @@ const TableSearch=(props)=>{
             <Grid2 item >
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DemoContainer components={['DateRangePicker']} > 
-                        <DateRangePicker shouldDisableDate={disableFutureDates}  calendars={1} sx={{maxWidth:300}}  slotProps={{textField:{size:'small'}}}  value={datevalue}  onChange={handleDateChange}/>
+                        <DateRangePicker   calendars={1} sx={{maxWidth:300}}  slotProps={{textField:{size:'small'}}}  value={datevalue}  onChange={handleDateChange}/>
                     </DemoContainer>
                 </LocalizationProvider>
             </Grid2>

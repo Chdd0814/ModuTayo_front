@@ -5,9 +5,12 @@ import DataTable from './DataTable';
 import TableSearch from './TableBookingSearch';
 import axios from 'axios';
 import dayjs from "dayjs";
+import Dialog_Booking from './Dialog_Booking';
 /*moment */
 const BusBooking=(props)=>{
     const {open,handleOpen}=props
+    const [dialog_open,setDialog_open]=useState(false);
+    const [booking,setBooking]=useState({});
     const [formData,setFormData]=useState([]);
     const TableColor=['aliceblue','#F4FFFF','#F9FFFF'];
     const [busTitle,setBusTitle]= useState(['출발날짜','버스클래스','출발터미널','도착터미널','출발시간','도착시간','자리번호']);
@@ -33,6 +36,12 @@ const BusBooking=(props)=>{
             ...prevdata,
             [name]:value
         }));
+    }
+    const handleDialogOpen=(item)=>(e)=>{
+        e.preventDefault();
+        setBooking(item);
+        console.log(dayjs(`${item.reservationDate} ${item.departureTime}`,'YYYY-MM-DD HH:mm').add(30,'minute').isAfter(dayjs()));
+        setDialog_open(true);
     }
     const handlebusbooking=useCallback(async(id)=>{
         try{
@@ -83,7 +92,11 @@ const BusBooking=(props)=>{
         }catch(error){
             console.error(error);
         }
+       
     }})
+    const handleClose=()=>{
+        setDialog_open(false);
+    }
     return(
         <Grid2 container direction='row'>
         <Mypage open={open} handleOpen={handleOpen}/>
@@ -92,9 +105,10 @@ const BusBooking=(props)=>{
                     <TableSearch handleChangeSearch={handleChangeSearch} SearchFilter={SearchFilter} searchBooking={searchBooking} />
                 </Grid2>
                 <Grid2 item xs={12} marginLeft={15}>
-                    <DataTable title={busTitle} TableColor={TableColor} membercontent={busContent} member={formData}/>
+                    <DataTable handleOpen={handleDialogOpen} searchitem={busContent[0].key} title={busTitle} TableColor={TableColor} membercontent={busContent} member={formData}/>
                 </Grid2>
             </Grid2>
+            <Dialog_Booking  item={booking} open={dialog_open} handleClose={handleClose} allBooking={() => handlebusbooking(localStorage.getItem('userId'))} />
         </Grid2>);
 }
 
