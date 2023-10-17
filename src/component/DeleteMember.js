@@ -3,7 +3,7 @@ import Mypage from './Mypage';
 import axios from 'axios';
 import './FontCss.css';
 import {Unstable_Grid2,Button,TableContainer,Table,TableBody,TableRow,TableCell,Paper,TextField,Typography} from '@mui/material';
-import {AlertSnackBar} from './EditMember';
+import SnackbarCompnents from './SnackbarComponent';
 import { useNavigate } from 'react-router-dom';
 const DeleteMember=(props)=>{
     const navigate = useNavigate();
@@ -66,7 +66,7 @@ const DeleteMember=(props)=>{
                 </Unstable_Grid2>     
             </Unstable_Grid2>     
         </Unstable_Grid2>
-        <AlertSnackBar openState={alertOpen.errorOpen} close={handleClose} severityState="error" str="회원탈퇴에 실패했습니다." />
+        <SnackbarCompnents handleclose={handleClose} openProps={alertOpen.errorOpen} alert_state='error' alert_content="회원 탈퇴에 실패했습니다." alert_title="회원탈퇴 실패"/>
         </form>
         );
 }

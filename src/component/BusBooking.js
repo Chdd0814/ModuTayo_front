@@ -10,6 +10,7 @@ import Dialog_Booking from './Dialog_Booking';
 const BusBooking=(props)=>{
     const {open,handleOpen}=props
     const [dialog_open,setDialog_open]=useState(false);
+    const [alert_open,setAlert_open]=useState(false);
     const [booking,setBooking]=useState({});
     const [formData,setFormData]=useState([]);
     const TableColor=['aliceblue','#F4FFFF','#F9FFFF'];
@@ -97,6 +98,16 @@ const BusBooking=(props)=>{
     const handleClose=()=>{
         setDialog_open(false);
     }
+    const handleDelete=useCallback(async()=>{
+        try{
+        await axios.delete(`/busTicket/delete/${booking.ticketNumber}`)
+        setAlert_open(true);
+        handlebusbooking(localStorage.getItem('userId'));
+        setDialog_open(false);
+        }catch(error){
+            console.error(error);
+        }
+   })
     return(
         <Grid2 container direction='row'>
         <Mypage open={open} handleOpen={handleOpen}/>
@@ -108,7 +119,7 @@ const BusBooking=(props)=>{
                     <DataTable handleOpen={handleDialogOpen} searchitem={busContent[0].key} title={busTitle} TableColor={TableColor} membercontent={busContent} member={formData}/>
                 </Grid2>
             </Grid2>
-            <Dialog_Booking  item={booking} open={dialog_open} handleClose={handleClose} allBooking={() => handlebusbooking(localStorage.getItem('userId'))} />
+            <Dialog_Booking handleDelete={handleDelete} openprops={alert_open} setOpenprops={setAlert_open}   item={booking} open={dialog_open} handleClose={handleClose}  />
         </Grid2>);
 }
 

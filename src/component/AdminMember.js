@@ -89,7 +89,7 @@ const AdminMember=(props)=>{
                    <DataTable handleOpen={handleOpen} searchitem={memberContent[0].key} TableColor={TableColor}  title={memberTitle} member={formData} membercontent={memberContent} /> 
                 </Grid2>
             </Grid2>
-            <AdminMember_dialog  open={open} id={id} isadmin={isadmin}  handleClose={handleClose} allMember={allMember} />
+            <AdminMember_dialog  setOpen={setOpen} open={open} id={id} isadmin={isadmin}  handleClose={handleClose} allMember={allMember} />
         </Grid2>
         
     );
