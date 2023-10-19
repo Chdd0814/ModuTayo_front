@@ -21,7 +21,7 @@ const EditMember=({open,handleOpen})=>{
     });
     const [id,setId]=useState('')
     useEffect(() => {
-        setId(localStorage.getItem('userId'));
+        setId(sessionStorage.getItem('userId'));
        
     }, []);
     const handleChange = (e) => {
