@@ -17,7 +17,7 @@ import mainLogo from '../ModuTayo.png';
 import mainLogoBG from '../ModuTayoBG.png';
 import mainLogoBGTitle from '../ModuTayoBGTitle.png';
 import Ticketinfoform from './Ticketinfoform';
-import {Skeleton} from '@mui/material';
+import {Skeleton,Typography} from '@mui/material';
 
 export default function Home() {
   const [notices, setNotices] = useState([]);

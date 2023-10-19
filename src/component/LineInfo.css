@@ -1,14 +1,17 @@
 h1{
     margin-top: 30px;
+    font-family:'GmarketSansMedium'
 }
 .lineTab{
     width: 700px;
     margin: 30px auto 0 auto;
+    font-family:'GmarketSansMedium'
 }
 
   .image-table {
     width: 100%; /* 표 전체 너비 설정 */
     margin-top: 30px;
+    
   }
   
   .image-table td {
@@ -29,6 +32,8 @@ h1{
     border-collapse: collapse; /* 표 경계 스타일 설정 */
     margin-left: auto;
     margin-right: auto;
+    font-family:'GmarketSansMedium'
+    
   }
   
   .info-table th,
@@ -36,11 +41,13 @@ h1{
     padding: 8px; /* 셀 내 여백 설정 */
     border: 1px solid #ddd; /* 셀 경계선 스타일 설정 */
     text-align: left; /* 텍스트 왼쪽 정렬 */
+   
   }
   
   .info-table th {
     width: 30%; /* 헤더 셀 너비 설정 */
     background-color: #f2f2f2; /* 헤더 배경색 설정 */
+    
   }
   
   
@@ -50,12 +57,14 @@ h1{
 
 .tab-title{
     margin-top: 200px;
+    
 }
 
 .travel-info-table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
+    font-family:'GmarketSansMedium'
   }
   
   .travel-info-table th, .travel-info-table td {
@@ -75,3 +84,9 @@ h1{
     height: 250px;
   }
   
+  @font-face {
+    font-family: 'GmarketSansMedium';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
