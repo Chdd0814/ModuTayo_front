@@ -1,10 +1,11 @@
 /* Header.css */
 
 .custom-navbar {
-    background-color: #3e3bfd; /* 네비게이션 바 배경색 */
+    background-color: #1E90FF; /* 네비게이션 바 배경색 */
     color: #fff; /* 텍스트 색상 */
     font-weight: bold;
     height: 70px;
+    font-family: 'GmarketSansMedium';
   }
   .me-auto{
     margin: 0 auto;
@@ -31,3 +32,9 @@
     text-decoration: underline; /* 링크에 마우스 호버 시 밑줄 표시 */
   }
   
+  @font-face {
+    font-family: 'GmarketSansMedium';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
