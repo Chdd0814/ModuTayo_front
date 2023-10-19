@@ -23,6 +23,7 @@ function Ticketinfoform() {
   const [datevalue, setdatevalue] = useState(dayjs()); // 날짜 
   const [rounddatevalue, setrounddatevalue] = useState(dayjs()); // 날짜 
   const [party, setParty] = useState(1); // 인원
+  const [roundparty, setRoundParty] = useState(1); // 인원
   const [anchorEL, setanchorEL] = useState(null); // 폼 상태 변수
   const [Province, setProvince] = useState(null); // 폼에서 지역 선택 했을때 기차 or 버스 예약 페이지로 보내는 변수.
   const [selectLocation, setSelectLocation] = useState([]);
@@ -61,6 +62,10 @@ function Ticketinfoform() {
 //기차관련 함수
   const handleParty = (event) => {
     setParty(event.target.value);
+  };
+
+  const handleRoundParty = (event) => {
+    setRoundParty(event.target.value);
   };
 
   const handleSubmit = (event) => {
@@ -325,6 +330,35 @@ const handleSearch = () => {
   };
   setBusInfo(busInfo);
   sessionStorage.setItem('key', JSON.stringify(busInfo));
+}
+
+const handleRoundSearch = () => {
+  const depTid = "NAEK" + selectedTerminalId;
+  const arrTid = "NAEK" + selectedTerminalId2;
+  const depRTid = "NAEK" + selectedRoundTerminalId;
+  const arrRTid = "NAEK" + selectedRoundTerminalId2;
+  const routeId = "NAEK" + selectedTerminalId + selectedTerminalId2;
+  const RrouteId = "NAEK" + selectedRoundTerminalId + selectedRoundTerminalId2;
+  const depDate = datevalue;
+  const depRDate = rounddatevalue;
+  const busInfo = {
+    depTerminalId: depTid,
+    arrTerminalId: arrTid,
+    depRTerminalId: depRTid,
+    arrRTerminalId: arrRTid,
+    routeId: routeId,
+    RrouteId: RrouteId,
+    depPlandTime: depDate,
+    depRPlandTime: depRDate,
+    Party: party,
+    RParty: roundparty,
+    depName: selectedTerminal,
+    arrName: selectedTerminal2,
+    depRName: selectedroundTerminal,
+    arrRName: selectedroundTerminal2,
+  };
+  setBusInfo(busInfo);
+  sessionStorage.setItem('key2', JSON.stringify(busInfo));
 }
 
 return(
@@ -917,9 +951,9 @@ return(
              <DemoContainer components={['DatePicker']}>
                <DatePicker
                    label="날짜"
-                   value={datevalue}
+                   value={rounddatevalue}
                    minDate={dayjs()} // 현재 날짜 이전의 날짜를 선택하지 못하게 함
-                   onChange={(newdatevalue) => setdatevalue(newdatevalue)}
+                   onChange={(newdatevalue) => setrounddatevalue(newdatevalue)}
                />
              </DemoContainer>
            </LocalizationProvider>
@@ -930,9 +964,9 @@ return(
            <Select
                labelId="demo-simple-select-helper-label"
                id="demo-simple-select-helper"
-               value={party}
+               value={roundparty}
                label="Age"
-               onChange={handleParty}
+               onChange={handleRoundParty}
            >
              <MenuItem value="">
                <em>None</em>
@@ -944,9 +978,9 @@ return(
              ))}
            </Select>
          </FormControl>
-          <div>
-         <Button variant="contained" sx={{marginTop:3}} color="secondary" type="sumbit">검색
-        </Button></div></form>
+         <div>
+           <Button type="sumbit" variant="contained" color="secondary" sx={{marginTop:3}} onClick={handleRoundSearch} >검색</Button>
+           </div></form>
          <Modal
              open={Modalopen}
              onClose={handleModalClose}
