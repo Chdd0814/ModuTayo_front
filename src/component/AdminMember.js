@@ -12,11 +12,12 @@ const AdminMember=(props)=>{
     const [isadmin,setIsadmin]=useState();
 
 
-    const handleOpen=(id)=>(e)=>{
+    const handleOpen=(item)=>(e)=>{
         e.preventDefault();
         setOpen(true);
-        setId(id);
-        handlegetIsAdmin(id);
+        console.log(item.role);
+        setId(item.id);
+        handlegetIsAdmin(item.id);
     }
     const handlegetIsAdmin=useCallback(async(memberID)=>{
         try{
@@ -73,19 +74,22 @@ const AdminMember=(props)=>{
                 [name]:value
         }));
     }
-    
+    const [classification_content,setClassification_content]=useState([
+        {type:'id',display:'ID'},
+        {type:'name',display:'이름'},
+    ])
     return(
         <Grid2 container direction='row'>
          <Mypage open={props.open} handleOpen={props.handleOpen}/>
             <Grid2 container direction='column' xs={9} alignContent="center" rowSpacing={5}>
                 <Grid2 item marginTop={5} marginLeft={15}>
-                    <TableMemberSearch SearchFilter={SearchFilter} searchMember={searchMember}  handleChange={handleChange} />
+                    <TableMemberSearch classification_content={classification_content} SearchFilter={SearchFilter} searchMember={searchMember}  handleChange={handleChange} />
                 </Grid2>
                 <Grid2 item xs={12} marginLeft={15}>
                    <DataTable handleOpen={handleOpen} searchitem={memberContent[0].key} TableColor={TableColor}  title={memberTitle} member={formData} membercontent={memberContent} /> 
                 </Grid2>
             </Grid2>
-            <AdminMember_dialog  open={open} id={id} isadmin={isadmin}  handleClose={handleClose} allMember={allMember} />
+            <AdminMember_dialog  setOpen={setOpen} open={open} id={id} isadmin={isadmin}  handleClose={handleClose} allMember={allMember} />
         </Grid2>
         
     );

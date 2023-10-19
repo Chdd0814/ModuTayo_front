@@ -15,6 +15,7 @@ import vaildAdmin from './vaildAdmin';
     const navigate = useNavigate(); 
     const getNoticeDetail = useCallback(async () => {
         try {
+            console.log("조회수 증가");
             const response = await axios.get(`/notices/${num}`);
             const { file, ...restOfData } = response.data;
             setNotice(restOfData);
@@ -43,7 +44,7 @@ import vaildAdmin from './vaildAdmin';
         } else {
           setisAdmin(false)
         }
-    }, [getNoticeDetail]);
+    }, []);
 
     const handleEdit = () => {
         navigate(`/notice/${num}/edit`);
@@ -88,7 +89,7 @@ import vaildAdmin from './vaildAdmin';
               <TableBody>
               <TableRow> 
                 <TableCell align='right' sx={{border:0}}>
-                  <Typography fontFamily='GmarketSansMedium' fontSize={1}>조회수: {notice.visitcount} 등록날짜: {notice.postdate}</Typography>
+                  <Typography fontFamily='GmarketSansMedium' fontSize={10}>조회수: {notice.visitcount} 등록날짜: {notice.postdate}</Typography>
                 </TableCell>
               </TableRow>
               <TableRow className='content'>

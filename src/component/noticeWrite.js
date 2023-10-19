@@ -52,7 +52,7 @@ const NoticeWrite = (props) => {
     const handleSubmit = async (event) => {
         event.preventDefault();
         const formData = new FormData();
-
+        console.log("뭐함?")
           formData.append('title', formdata.title);
           formData.append('content', formdata.content);
           formData.append('postdate', formdata.postdate);

@@ -33,34 +33,82 @@ function Payment() {
     const randomticketnumber = `train_${dateValue}_${Math.floor(Math.random() * 10000)}`;
     const navigate = useNavigate();
     const [ticketStatus, setticketStatus] = useState(false);
+    const [rounddepPlace, setrounddepPlace] = useState("");
+    const [roundarrPlace, setroundarrPlace] = useState("");
+    const [rounddepTime, setrounddepTime] = useState("");
+    const [roundarrTime, setroundarrTime] = useState("");
+    const [roundtrainGrade, setroundtrainGrade] = useState("");
+    const [roundtrainNum, setroundtrainNum] = useState("");
+    const [rounddateValue, setrounddateValue] = useState("");
+    const [roundParty, setroundParty] = useState("");
+    const [roundticketPrice, setroundticketPrice] = useState("");
+    const [tripType, settripType] = useState("one-way");
+    const roundrandomticketnumber = `train_${rounddateValue}_${Math.floor(Math.random() * 10000)}`;
+
 
 
 
     useEffect(() => {
         const token = sessionStorage.getItem('saveTicketinfo');
-
+        
         if (token) {
+
           const dataToken = JSON.parse(token);
+          const checktripType = dataToken.tripType;
 
-          setdepPlace(dataToken.depPlace);
-          setarrPlace(dataToken.arrPlace);
-          setarrTime(dataToken.arrPlandTime);
-          setdepTime(dataToken.depPlandTime);
-          settrainGrade(dataToken.trainGradeName);
-          settrainNum(dataToken.trainNum);
-          setdateValue(dataToken.datevalue);
-          setParty(dataToken.party);
-          setbuyerName(dataToken.name);
-          setPhoneNumber(dataToken.phoneNumber);
-          setid(dataToken.id);
-          setTicketPrice(dataToken.ticketPrice);
-          setTotalPrice(dataToken.totalPrice);
-          setMileage(dataToken.Mileage);
-          setusedMileage(dataToken.useMileage);
-          settrainSeatnumber(dataToken.trainSeatNumber);
-          settrainCarnumber(dataToken.trainCarNumber);
+          if (checktripType === 'one-way') {
 
+            
+            setdepPlace(dataToken.depPlace);
+            setarrPlace(dataToken.arrPlace);
+            setarrTime(dataToken.arrPlandTime);
+            setdepTime(dataToken.depPlandTime);
+            settrainGrade(dataToken.trainGradeName);
+            settrainNum(dataToken.trainNum);
+            setdateValue(dataToken.datevalue);
+            setParty(dataToken.party);
+            setbuyerName(dataToken.name);
+            setPhoneNumber(dataToken.phoneNumber);
+            setid(dataToken.id);
+            setTicketPrice(dataToken.ticketPrice);
+            setTotalPrice(dataToken.totalPrice);
+            setMileage(dataToken.Mileage);
+            setusedMileage(dataToken.useMileage);
+            settrainSeatnumber(dataToken.trainSeatNumber);
+            settrainCarnumber(dataToken.trainCarNumber);
+            settripType(dataToken.tripType);
+          } else if (checktripType === 'round-trip') {
 
+            setdepPlace(dataToken.depPlace);
+            setarrPlace(dataToken.arrPlace);
+            setrounddepPlace(dataToken.rounddepPlace);
+            setroundarrPlace(dataToken.roundarrPlace);
+            setarrTime(dataToken.arrPlandTime);
+            setdepTime(dataToken.depPlandTime);
+            setroundarrTime(dataToken.roundarrPlandTime);
+            setrounddepTime(dataToken.rounddepPlandTime);
+            settrainGrade(dataToken.trainGradeName);
+            settrainNum(dataToken.trainNum);
+            setdateValue(dataToken.datevalue);
+            setParty(dataToken.party);
+            setroundtrainGrade(dataToken.roundtrainGradeName);
+            setroundtrainNum(dataToken.roundtrainNum);
+            setrounddateValue(dataToken.rounddatevalue);
+            setroundParty(dataToken.roundparty);
+            setbuyerName(dataToken.name);
+            setPhoneNumber(dataToken.phoneNumber);
+            setid(dataToken.id);
+            setTicketPrice(dataToken.ticketPrice);
+            setroundticketPrice(dataToken.roundticketPrice);
+            setTotalPrice(dataToken.totalPrice);
+            setMileage(dataToken.Mileage);
+            setusedMileage(dataToken.useMileage);
+            settrainSeatnumber(dataToken.trainSeatNumber);
+            settrainCarnumber(dataToken.trainCarNumber);
+            settripType(dataToken.tripType);
+          }
+            
+            
         }
       }, []);
 
@@ -100,6 +148,27 @@ async function sendtrainTicketData(ticketData) {
 
 }
 
+async function MileageUpdate(id,mileage,paidAmount) {
+
+  try {
+    const response = await axios.put('/Mileage/UpdateMileage', null, {
+      params: {
+        id: id,
+        mileage: mileage,
+        paidAmount: paidAmount
+      },
+      headers : {
+        'Content-Type' : 'application/json',
+      },
+    });
+    return true;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+}
+
+
     const requestpay = () => {
 
         if (!window.IMP) return;
@@ -133,9 +202,21 @@ async function sendtrainTicketData(ticketData) {
         if (success) {
           
           const crateTicketnumber = randomticketnumber;
+          const roundcrateTicketnumber = roundrandomticketnumber;
 
           const PaycallbackData = {
             trainticketNumber : crateTicketnumber,
+            impUid : imp_uid,
+            merchantUid : merchant_uid,
+            paidAmount : paid_amount,
+            payMethod : pay_method,
+            buyerName : buyer_name,
+            buyerTel : buyer_tel,
+            buyerid : id,
+            paymentDate : paymentDate,
+          }
+          const roundPaycallbackData = {
+            trainticketNumber : roundcrateTicketnumber,
             impUid : imp_uid,
             merchantUid : merchant_uid,
             paidAmount : paid_amount,
@@ -161,32 +242,66 @@ async function sendtrainTicketData(ticketData) {
             name : buyerName,
             reservationDate : dateValue,
           }
+
+          const roundreservationTicketData = {
+
+            vehicleTypeName : roundtrainGrade,
+            departureTime : rounddepTime,
+            arrivalTime : roundarrTime,
+            departureStation : rounddepPlace,
+            arrivalStation : roundarrPlace,
+            fare : roundticketPrice,
+            trainNumber : roundtrainNum,
+            seatNumber : trainSeatnumber, // 좌석시스템 수정 후, 재수정바랍니다. (왕복처리 해야함)
+            trainCarNumber : trainCarnumber, // 좌석시스템 수정 후, 재수정바랍니다. (왕복처리 해야함)
+            ticketNumber : roundcrateTicketnumber,
+            id : id,
+            name : buyerName,
+            reservationDate : rounddateValue,
+          }
          
 
 
         // 예매 내역을 먼저 저장
     
     try {
-      
-      const ticketSaved = await sendtrainTicketData(reservationTicketData);
 
-      if (ticketSaved) {
-        await sendPaymentData(PaycallbackData);
-        alert("결제 성공");
-        navigate('/');
-      } else {
-        console.log ("예매내역 저장실패");
-      }
-    } catch (error) {
-      console.error(error);
+      if (tripType === 'one-way') {
 
-    }
+        const ticketSaved = await sendtrainTicketData(reservationTicketData);
 
-
+        if (ticketSaved) {
+          await sendPaymentData(PaycallbackData);
+          await MileageUpdate(id,mileage,paid_amount);
+          sessionStorage.removeItem("saveTicketinfo");
+          alert("결제 성공");
+          navigate('/');
         } else {
-          alert(`결제 실패: ${error_msg}`);
+          console.log ("예매내역 저장실패");
+        }
+
+      } else if (tripType === 'round-trip') {
+
+        const ticketSaved = await sendtrainTicketData(reservationTicketData); // 왕복일 때, 가는편 예매내역 
+        const roundticketSaved = await sendtrainTicketData(roundreservationTicketData); // 왕복일 때, 오는편 예매내역
+
+        if (ticketSaved && roundticketSaved) {
+          await sendPaymentData(PaycallbackData); // 왕복 일 때, 가는편 결제내역 // 이 둘은 똑같음
+          await sendPaymentData(roundPaycallbackData); // 왕복일 때, 오는편 결제내역 // 이 둘은 똑같음. 실제로 사용자는 총금액 한번만 결제
+          await MileageUpdate(id,mileage,paid_amount); // 마일리지 관련
+          sessionStorage.removeItem("saveTicketinfo");
+          alert("결제 성공");
+          navigate('/');
+        } else {
+          console.log("예매내역 저장 실패");
+        }
+
+      }
+        } catch (error) {
+          console.error(error);
         }
       }
+    }
 
   return (
 <Grid container justifyContent="center" alignItems="center" style={{ minHeight: "100vh" }}>
@@ -220,10 +335,29 @@ async function sendtrainTicketData(ticketData) {
             </Grid>
              <Grid container>
               <Grid item xs = {12}>
-              <Typography sx={{ fontSize: 12, fontWeight: 'bold' }}>{dateValue}</Typography>
-              <Typography sx={{ fontSize: 12, fontWeight: 'bold' }}>{trainGrade}-{trainNum} | {trainCarnumber}호차-{trainSeatnumber}</Typography>
-              <Typography sx={{ fontSize: 12, fontWeight: 'bold' }}>{depPlace} - {arrPlace}</Typography>
-              <Typography sx={{ fontSize: 12, fontWeight: 'bold' }}>{depTime} - {arrTime}</Typography>
+                {tripType === 'one-way' ? (
+                  <>
+                  <Divider sx={{ fontSize: 15, fontWeight: 'bold' }}>기차</Divider>
+                  <Typography sx={{ fontSize: 12, fontWeight: 'bold' }}>{dateValue}</Typography>
+                  <Typography sx={{ fontSize: 12, fontWeight: 'bold' }}>{trainGrade}-{trainNum} | {trainCarnumber}호차-{trainSeatnumber}</Typography>
+                  <Typography sx={{ fontSize: 12, fontWeight: 'bold' }}>{depPlace} - {arrPlace}</Typography>
+                  <Typography sx={{ fontSize: 12, fontWeight: 'bold' }}>{depTime} - {arrTime}</Typography>
+                  </>
+                ) : tripType === 'round-trip' ? (
+                  <>
+                  <Divider sx={{ fontSize: 15, fontWeight: 'bold', marginTop : 5}}>기차(가는편)</Divider>
+                  <Typography sx={{ fontSize: 12, fontWeight: 'bold' }}>{dateValue}</Typography>
+                  <Typography sx={{ fontSize: 12, fontWeight: 'bold' }}>{trainGrade}-{trainNum} | {trainCarnumber}호차-{trainSeatnumber}</Typography>
+                  <Typography sx={{ fontSize: 12, fontWeight: 'bold' }}>{depPlace} - {arrPlace}</Typography>
+                  <Typography sx={{ fontSize: 12, fontWeight: 'bold' }}>{depTime} - {arrTime}</Typography>
+                  <Divider sx={{ fontSize: 15, fontWeight: 'bold', marginTop : 2 }}>기차(오는편)</Divider>
+                  <Typography sx={{ fontSize: 12, fontWeight: 'bold' }}>{rounddateValue}</Typography>
+                  <Typography sx={{ fontSize: 12, fontWeight: 'bold' }}>{roundtrainGrade}-{roundtrainNum} | {trainCarnumber}호차-{trainSeatnumber}</Typography>
+                  <Typography sx={{ fontSize: 12, fontWeight: 'bold' }}>{rounddepPlace} - {roundarrPlace}</Typography>
+                  <Typography sx={{ fontSize: 12, fontWeight: 'bold' }}>{rounddepTime} - {roundarrTime}</Typography>
+                  </>
+                ) : null}
+
               </Grid>
               
              
@@ -232,7 +366,7 @@ async function sendtrainTicketData(ticketData) {
             </Grid>
           </Grid>
     
-          <Divider style={{ marginBottom: "16px" }} />
+          <Divider style={{ marginTop : "16px", marginBottom: "16px" }} />
 
           {/* Paper 추가 */}
           <Paper elevation={3} style={{ padding: "16px", margin : "16px"}}>
@@ -240,8 +374,19 @@ async function sendtrainTicketData(ticketData) {
             <Typography variant="subtitle1" sx = {{ textAlign : 'center', fontWeight : 'bold', fontSize : 20}} gutterBottom>
               결제 상세 정보
             </Typography>
+            {tripType === 'one-way' ? (
+              <>
             <Typography>기차표 운임</Typography>
+            <Typography sx = {{ textAlign: 'center', fontWeight : 'light', fontSize : 12}}>{ticketPrice} 원</Typography>
+              </>
+             ) : tripType === 'round-trip' ? (
+                <>
+                <Typography>기차표 운임(가는편)</Typography>
                 <Typography sx = {{ textAlign: 'center', fontWeight : 'light', fontSize : 12}}>{ticketPrice} 원</Typography>
+                <Typography>기차표 운임(오는편)</Typography>
+                <Typography sx = {{ textAlign: 'center', fontWeight : 'light', fontSize : 12}}>{ticketPrice} 원</Typography>  
+                </>
+             ) : null}
                 <Typography>마일리지 할인</Typography>
                 <Typography sx = {{ textAlign: 'center', fontWeight : 'light', fontSize : 12}}>{usedMileage} 원</Typography>
                 <Typography>총금액</Typography>
@@ -299,8 +444,6 @@ async function sendtrainTicketData(ticketData) {
 
   );
     }
-    
-
   
 
 export default Payment;
