@@ -10,12 +10,14 @@
 .App-Header {
   position: relative; /* 네비바와 다른 컨텐츠 간 겹침 방지 */
   z-index: 1; /* 네비바의 레이어 우선순위 조절 */
+  
 }
 
 .App-main {
   position : relative;
   padding-top: 60px;
   padding : 30px; /* 네비바 높이만큼 상단 패딩 추가 */
+  
 }
 .App-footer {
   
@@ -34,3 +36,9 @@
   }
 }
 
+@font-face {
+  font-family: 'GmarketSansMedium';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
