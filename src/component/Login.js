@@ -44,8 +44,8 @@
       
           if (token) {
             // 토큰이 존재하는 경우 로그인 성공 처리
-            localStorage.setItem('token', token);
-            localStorage.setItem('userId', data.username);
+            sessionStorage.setItem('token', token);
+            sessionStorage.setItem('userId', data.username);
             // 로그인 상태를 설정하거나 필요한 작업을 수행하세요.
             // setLogin(true); // 예시: 로그인 상태를 true로 설정
             onLogin(true);
@@ -63,6 +63,61 @@
 
 
     };
+
+    const kakaoLoginAPIKey = process.env.REACT_APP_KAKAO_LOGIN_API_KEY
+
+
+
+    /**
+   * 카카오 로그인
+   * 카카오에 로그인 후 토큰을 받아, 그 토큰을 서버로 보내 accessToken을 발행
+   * @param {*} event
+   */
+  const kakaoLogin = (event) => {
+    event.preventDefault();
+
+    console.log(kakaoLoginAPIKey);
+
+    // Kakao SDK 초기화
+    if (!window.Kakao.isInitialized()) {
+      window.Kakao.init(kakaoLoginAPIKey);
+    }
+
+    // 카카오 로그인 요청
+    window.Kakao.Auth.login({
+      scope: "profile_nickname,account_email",
+      success: async (response) => {
+        try {
+          const kakaoLoginRes = await axios.post(
+            "/kakaoLogin",
+            {
+              accessToken: response.access_token,
+            }
+          );
+          if (kakaoLoginRes.status === 200) {
+            // accessToken을 쿠키에 저장
+           
+            const saveData = (
+              kakaoLoginRes.data.accessToken,
+              kakaoLoginRes.data.tokenExpiresIn
+            );
+            const token = kakaoLoginRes.data.accessToken;
+            sessionStorage.setItem("token", saveData);
+            history("/");
+          } else {
+            alert("로그인 실패. 다시 로그인 해주세요.");
+            history("/login");
+          }
+        } catch (error) {
+          console.error("로그인 오류:", error);
+          alert("아이디와 비밀번호를 확인해주세요");
+        }
+      },
+      fail: (error) => {
+        console.log("카카오 로그인 실패", error);
+      },
+    });
+  };
 
 
     const goToSignUp = (event) => {
@@ -122,17 +177,15 @@
             </Button>
           </ButtonGroup>
         </ButtonGroup>
-      {/* <Button variant="contained" type="button" onClick={handleLogin}>
-        로그인
-      </Button> */}
-      {/* <Button>
+      <Button>
       <img
-          onClick={loginWithKakao}
+          onClick={kakaoLogin}
           src={kakaoLoginImg}
           alt="Kakao Login"
+          width={250}
+          height={50}
         />
-      </Button> */}
-      {/* {loginError && <Grid color='red' className="error" fontFamily="GmarketSansMedium">{loginError}</Grid>} */}
+      </Button>
     </form>
   </div>
     );
