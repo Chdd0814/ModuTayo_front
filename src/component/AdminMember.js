@@ -63,7 +63,7 @@ const AdminMember=(props)=>{
         {key:'id',width:120},
         {key:'pass',width:120},
         {key:'name',width:90},
-        {key:'phonenumber',width:150},
+        {key:'phonenumber',width:200},
         {key:'mileage',width:100},
         {key:'email',width:200},
         {key:'address',width:200}]

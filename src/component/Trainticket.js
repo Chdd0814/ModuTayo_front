@@ -2,6 +2,7 @@ import React, {useState,useEffect} from "react";
 import Ticketinfoform from "./Ticketinfoform";
 import { Typography } from "@mui/material";
 import TrainTicketForm from "./TrainticketForm";
+import './FontCss.css';
 // 0910 pm 10 : 11 
 
 function Trainticket({ isLoggedIn }) {
@@ -23,7 +24,7 @@ function Trainticket({ isLoggedIn }) {
     return (
 
         <div className = "TrainTicketForm">
-            <Typography variant="h5">기차표</Typography>
+            <Typography variant="h5" fontFamily='GmarketSansMedium'>기차표</Typography>
             <TrainTicketForm isLoggedIn = {isLoggedIn}/>
         </div>
 

@@ -6,6 +6,7 @@
     import DataTable from './DataTable';
     import {useNavigate} from 'react-router-dom';
     import MemberSearch from './TableMemberSearch';
+    import './FontCss.css';
     const Notice = () => {
         const [notices, setNotices] = useState([]);
         const [isAdmin, setisAdmin] = useState(false);
@@ -39,7 +40,7 @@
                 setisAdmin(false);
              }
         }, []);
-        const TableColor=['#e9e9e9','#FAEBCD','#FAFAFA']
+        const TableColor=['#e9e9e9','#EBFBFF','#FAFAFA']
         const noticeTitle=['번호','제목','조회수','작성일']
         const noticeContent=[
             {key:'number',width:60},

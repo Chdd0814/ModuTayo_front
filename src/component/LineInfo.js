@@ -9,7 +9,7 @@ import 전라선 from "../images/전라선.png";
 import 강릉선 from "../images/강릉선.png";
 import 중앙선 from "../images/중앙선.png";
 import 중부내륙선 from "../images/중부내륙선.png";
-
+import './FontCss.css';
 const trainLines = [
   {
       name: "경부선",

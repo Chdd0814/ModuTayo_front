@@ -31,7 +31,7 @@ const BodyTable=(props)=>{
             <TableRow key={index}>
                 {membercontent.map((column) => (
                         <TableCell key={column.key} sx={{backgroundColor: index % 2 === 0 ?TableColor[2]:TableColor[1], width:column.width,minWidth:column.width}}>
-                            <Typography  color='black' textAlign='center'>
+                            <Typography fontFamily='GmarketSansMedium'  color='black' textAlign='center'>
                                 {searchitem===column.key?
                                 handleOpen?
                                 <Link  onClick={handleOpen(item)}>{item[column.key]}</Link>:
