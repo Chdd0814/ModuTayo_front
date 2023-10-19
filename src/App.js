@@ -16,7 +16,7 @@ import EditMember from './component/EditMember';
 import DeleteMember from './component/DeleteMember';
 import Payment from './component/Payment';
 import BusPayment from './component/BusPayment'
-import clearLocalStorage from './component/clearLocalStorage';
+import clearSessionStorage from './component/clearLocalStorage';
 import BusBooking from './component/BusBooking';
 import TrainBooking from './component/TrainBooking';
 import AdminMember from './component/AdminMember';
@@ -34,7 +34,7 @@ function App() {
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
     if (token) {
       setIsLoggedIn(true);
     }
@@ -58,7 +58,7 @@ function App() {
   const handleLogout = () => {
     // 로그아웃 처리 로직
     setIsLoggedIn(false);
-    clearLocalStorage()();
+    clearSessionStorage()();
   };
   return (
     <Router>
