@@ -5,11 +5,25 @@ import './FontCss.css';
 import {Unstable_Grid2,Button,TableContainer,Table,TableBody,TableRow,TableCell,Paper,TextField,Typography} from '@mui/material';
 import SnackbarCompnents from './SnackbarComponent';
 import { useNavigate } from 'react-router-dom';
+import calluserInfo from './calluserInfo';
 const Edit_Password=(props)=>{
     const navigate = useNavigate();
     const [id,setId]=useState('');
+    const [LoginType, setLoginType] = useState('Normal');
     useEffect(() => {
-        setId(localStorage.getItem('userId'));},[]);
+        const userInfo = calluserInfo();
+        console.log(userInfo);
+        if(userInfo) {
+            setLoginType(userInfo.sns);
+            console.log(LoginType);
+        }
+
+        if(LoginType === 'Normal') {
+            setId(sessionStorage.getItem('userId'));
+
+        } else {
+            setId(userInfo.sub);
+        }},[]);
     const handleSubmit=async(e)=>{
         e.preventDefault();   
             
@@ -90,6 +104,9 @@ const Edit_Password=(props)=>{
                     </TableBody>
                 </Table> 
              </TableContainer> 
+             {LoginType === 'Kakao' && ( 
+                 <Typography sx = {{fontWeight : 'bold', fontSize : 18, color : 'red', margin : 1  }}>비밀번호 대신, 소셜 로그인으로 가입한 계정의 이메일 주소를 입력하시면 변경이 가능합니다.</Typography> 
+             )}
                 </Unstable_Grid2 >
                 <Unstable_Grid2>
                 <Button type="submit" variant="contained" size='large'>수정</Button>
