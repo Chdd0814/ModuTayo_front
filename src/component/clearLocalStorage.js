@@ -3,6 +3,9 @@
 function clearSessionStorage () {
 
     const clearDataFromSessionStorage = () => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('saveTicketinfo');
+        localStorage.removeItem('userId');  
         sessionStorage.removeItem('token');
         sessionStorage.removeItem('saveTicketinfo');
         sessionStorage.removeItem('userId');

@@ -36,6 +36,7 @@ function Ticketinfoform() {
   const [rounddepStationName, setrounddepStationName] = useState(''); // 기차 출발지 이름
   const [roundarrStation, setroundarrStation] = useState(''); // 기차 도착지 왕복
   const [roundarrStationName, setroundarrStationName] = useState(''); // 기차 도착지 이름 왕복
+  const [roundparty,setRoundParty] = useState(1);
   const [trainCityCode, settrainCityCode] = useState(11);
   const [trainModalopen, settrainModalOpen] = useState(false);
   const [trainModalopen2, settrainModalOpen2] = useState(false);
@@ -79,6 +80,7 @@ function Ticketinfoform() {
     } else if (transportType === 'train') {
 
     const trainParty = party;
+    const roundtrainParty = roundparty;
     let sessionData = {};
 
     if (tripType === 'one-way') {
@@ -107,6 +109,7 @@ function Ticketinfoform() {
         depDate: datevalue.format("YYYYMMDD"),
         roundDepDate: rounddatevalue.format("YYYYMMDD"),
         party: trainParty,
+        roundparty: roundtrainParty,
       };
     }
 
@@ -750,9 +753,9 @@ const handleRoundSearch = () => {
         <Select
           labelId="demo-simple-select-helper-label"
           id="demo-simple-select-helper"
-          value={party}
+          value={roundparty}
           label="Age"
-          onChange={handleParty}
+          onChange={handleRoundParty}
           >
           {[...Array(10)].map((_, index) => (
             <MenuItem key={index + 1} value={index + 1}>

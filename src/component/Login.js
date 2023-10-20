@@ -10,6 +10,7 @@
   import Grid from '@mui/material/Unstable_Grid2';
   import Button from '@mui/material/Button';
   import ButtonGroup from "react-bootstrap/ButtonGroup";
+import calluserInfo from './calluserInfo';
 
   const Login = ({ onLogin,setLogin }) => {
     const [idError, setidError] = useState('');
@@ -64,7 +65,7 @@
 
     };
 
-    const kakaoLoginAPIKey = process.env.REACT_APP_KAKAO_LOGIN_API_KEY
+    const kakaoLoginAPIKey = process.env.REACT_APP_KAKAO_LOGIN_API_KEY;
 
 
 
@@ -76,7 +77,7 @@
   const kakaoLogin = (event) => {
     event.preventDefault();
 
-    console.log(kakaoLoginAPIKey);
+    // console.log(kakaoLoginAPIKey);
 
     // Kakao SDK 초기화
     if (!window.Kakao.isInitialized()) {
@@ -91,19 +92,40 @@
           const kakaoLoginRes = await axios.post(
             "/kakaoLogin",
             {
-              accessToken: response.access_token,
+              accessToken: response.access_token
+
             }
           );
           if (kakaoLoginRes.status === 200) {
             // accessToken을 쿠키에 저장
-           
+          //  console.log(kakaoLoginRes.accessToken);
             const saveData = (
               kakaoLoginRes.data.accessToken,
               kakaoLoginRes.data.tokenExpiresIn
+
             );
             const token = kakaoLoginRes.data.accessToken;
-            sessionStorage.setItem("token", saveData);
-            history("/");
+
+
+
+            if(token) {
+
+              sessionStorage.setItem("token", token);
+               onLogin(true);
+                history("/");
+
+              const userInfo = calluserInfo();
+
+              if (userInfo) {
+                const userid = userInfo.sub;
+                sessionStorage.setItem('userId', userid);
+                if (userid) {
+                 onLogin(true);
+                 history("/");
+                }
+              }
+             
+            }
           } else {
             alert("로그인 실패. 다시 로그인 해주세요.");
             history("/login");
