@@ -22,6 +22,21 @@ import calluserInfo from './calluserInfo';
     const [idpwError, setIdpwError] = useState('');
     const history = useNavigate();
 
+    // useEffect(() => {
+    //   // 페이지가 로드될 때 저장된 아이디를 검색하여 필드에 입력
+    //   const savedUsername = Cookies.get('username');
+    //   if (savedUsername) {
+    //     setUsername(savedUsername);
+    //   }
+    //   // 아이디 저장 체크박스의 상태를 복원
+    //   const rememberMeStatus = Cookies.get('rememberMe');
+    //   if (rememberMeStatus === 'true') {
+    //     setRememberMe(true);
+    //   } else {
+    //     setRememberMe(false);
+    //   }
+    // }, []);
+
     const handleUsernameChange = (e) => {
       setUsername(e.target.value);
     };
