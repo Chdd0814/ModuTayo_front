@@ -9,7 +9,7 @@ import dayjs from "dayjs";
 const PaymentHistoryBus=(props)=>{
     const {open,handleOpen}=props
     const [formData,setFormData]=useState([]);
-    const TableColor=['#EBD4FF','#F0FFF0','#AFFFEE'];
+    const TableColor=['#EEFFFE','#F0FFF0','#AFFFEE'];
     const [busTitle,setBusTitle]= useState(['결재번호','결재날짜','결재수단','이름','ID','Tel','비용']);
     const [busContent,setBusContent]=useState([
         {key:'number',width:60},
@@ -87,7 +87,7 @@ const PaymentHistoryBus=(props)=>{
         }
     },[])
     useEffect(()=>{
-        handlePaymentHistoryBus(localStorage.getItem('userId'));
+        handlePaymentHistoryBus(sessionStorage.getItem('userId'));
     },[handlePaymentHistoryBus]);
     return(
         <Grid2 container direction='row'>

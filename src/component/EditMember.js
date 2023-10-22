@@ -3,6 +3,7 @@ import Mypage from './Mypage';
 import {Unstable_Grid2,Table,TableCell,TableRow,TableBody,TextField,TableContainer,Paper,Button,Typography,Alert,AlertTitle,Snackbar } from '@mui/material';
 import axios from 'axios';
 import './FontCss.css';
+import './EditMember.css';
 
 const AlertSnackBar=(props)=>{
     return(
