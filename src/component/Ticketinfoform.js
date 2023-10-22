@@ -24,6 +24,7 @@ function Ticketinfoform() {
   const [datevalue, setdatevalue] = useState(dayjs()); // 날짜 
   const [rounddatevalue, setrounddatevalue] = useState(dayjs()); // 날짜 
   const [party, setParty] = useState(1); // 인원
+  const [roundparty, setRoundParty] = useState(1); // 인원
   const [anchorEL, setanchorEL] = useState(null); // 폼 상태 변수
   const [Province, setProvince] = useState(null); // 폼에서 지역 선택 했을때 기차 or 버스 예약 페이지로 보내는 변수.
   const [selectLocation, setSelectLocation] = useState([]);
@@ -816,7 +817,7 @@ const handleRoundSearch = () => {
               </Select>
             </FormControl>
             <div>
-            <Button variant="contained" color="secondary" type="submit" sx={{ marginTop: 3, backgroundColor: '#e6eeff', color: '#3b3b3b' }} onClick={handleSubmit}>검색</Button>
+            <Button type="sumbit" variant="contained" color="secondary" sx={{marginTop:3}} onClick={handleSearch} >검색</Button>
             </div>
           </form>
           <Modal

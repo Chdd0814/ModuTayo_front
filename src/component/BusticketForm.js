@@ -489,7 +489,16 @@ function BusTicketForm({ isLoggedIn }) {
       }
     };
     
- 
+    const handleRSelection2 = (item2) => {
+      // 선택된 데이터(selectedItem)를 예매 페이지로 전달하는 로직을 구현
+      // 예: 예매 페이지로 이동하면서 선택된 데이터를 URL 매개변수로 전달
+      handleLoginCheck();
+      setRoundSecondTicketPrice(item2.Fare * Rparty);
+      setTotalPrice(roundFirstticketPrice + item2.Fare * Rparty);
+      setSelectedItem2(item2);
+      setIsModalOpen2(true);
+      handleroundBusInfo();
+    };
 
     const handleRSelection3 = (item) => {
       // 선택된 데이터(selectedItem)를 예매 페이지로 전달하는 로직을 구현
@@ -510,7 +519,7 @@ function BusTicketForm({ isLoggedIn }) {
       setTotalPrice(roundFirstticketPrice + item2.Fare * Rparty);
       setSelectedItem2(item2);
       setIsModalOpen2(true);
-      handleroundBusInfo();
+      //handleroundBusInfo();
     };
 
     const handleSuccessCloseModal = () => {
