@@ -57,7 +57,7 @@ const AdminMember=(props)=>{
     useEffect(()=>{
         allMember();
     },[allMember]);    
-    const TableColor=['#AE905E','#FAEBD7','#FDF5E6']
+    const TableColor=['#FAFFF9','#FAEBD7','#FDF5E6']
     const memberTitle=['아이디','비밀번호','이름','폰번호','마일리지','이메일','주소']
     const memberContent=[
         {key:'id',width:120},
