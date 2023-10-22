@@ -68,11 +68,11 @@ const Mypage = (props) =>{
                 <Subcontentbar open={props.open.paymentOpen} 
                       firstcontent={<Subcontent movelink={handleNavigation} link="/PaymentHistoryBus" icon={<DirectionsBus />} content="버스"/>}
                       secondcontent={<Subcontent movelink={handleNavigation} link="/PaymentHistoryTrain" icon={<DirectionsTransit />} content="기차"/>} />
-                <SubTitlebar icon={Person} content="회원정보" isOpen={props.open.memberOpen} open="memberOpen" setOpen={props.handleOpen} />
+                 <SubTitlebar icon={Person} content="회원정보" isOpen={props.open.memberOpen} open="memberOpen" setOpen={props.handleOpen} />
                 <Subcontentbar open={props.open.memberOpen} 
                       firstcontent={<Subcontent movelink={handleNavigation} link="/EditMember" icon={<PersonSearch />} content="회원수정"/>}
                       secondcontent={<Subcontent movelink={handleNavigation} link="/DeleteMember" icon={<PersonOff />} content="회원탈퇴"/>}
-                      thirdcontent={<Subcontent movelink={handleNavigation} link="/EditPass" icon={<Key/>} content="비밀번호재설정"/>} />
+                      thirdcontent={<Subcontent movelink={handleNavigation} link="/EditPass" icon={<Key/>} content="비밀번호재설정"/>}/> 
 
                 {isAdmin && (<><SubTitlebar icon={ManageAccounts} content="관리자" isOpen={props.open.adminOpen} open="adminOpen"  setOpen={props.handleOpen}/>
                 <Subcontentbar open={props.open.adminOpen} 
