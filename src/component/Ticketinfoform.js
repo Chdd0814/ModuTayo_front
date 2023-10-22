@@ -819,7 +819,7 @@ const handleRoundSearch = () => {
               </Select>
             </FormControl>
             <div>
-            <Button variant="contained" color="secondary" type="submit" sx={{ marginTop: 3, backgroundColor: '#e6eeff', color: '#3b3b3b' }} onClick={handleSubmit}>검색</Button>
+            <Button type="sumbit" variant="contained" color="secondary" sx={{marginTop:3}} onClick={handleSearch} >검색</Button>
             </div>
           </form>
           <Modal
