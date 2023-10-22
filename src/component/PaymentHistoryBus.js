@@ -5,11 +5,12 @@ import DataTable from './DataTable';
 import axios from 'axios';
 import TableSearch from './TablePaymentSearch';
 import dayjs from "dayjs";
-
+import calluserInfo from './calluserInfo';
+import vaildAdmin from './vaildAdmin';
 const PaymentHistoryBus=(props)=>{
     const {open,handleOpen}=props
     const [formData,setFormData]=useState([]);
-    const TableColor=['#EBD4FF','#F0FFF0','#AFFFEE'];
+    const TableColor=['#EEFFFE','#F0FFF0','#AFFFEE'];
     const [busTitle,setBusTitle]= useState(['결재번호','결재날짜','결재수단','이름','ID','Tel','비용']);
     const [busContent,setBusContent]=useState([
         {key:'number',width:60},
@@ -62,9 +63,14 @@ const PaymentHistoryBus=(props)=>{
         }
     })
     const handlePaymentHistoryBus=useCallback(async(id)=>{
+        let response=null;
         try{
-            const response=await axios.get(`/payment/PaymentBus/${id}`);
-            if (Array.isArray(response.data)) {
+            if(vaildAdmin()){
+                response=await axios.get(`/payment/PaymentBus_admin`);
+            }else{
+            response=await axios.get(`/payment/PaymentBus/${id}`);
+            }
+            if (response&&Array.isArray(response.data)) {
                 var i=1;
                 response.data = response.data.map((item) => {
                     return {
@@ -78,16 +84,18 @@ const PaymentHistoryBus=(props)=>{
             else {
                 response.data.seatNumber = `${response.data.seatNumber}${response.data.trainCarNumber}`;
             }
+            if(response){
             setFormData(response.data);
-           
-            
             console.log(response.data);
+            }
         }catch(e){
             console.error(e);
         }
     },[])
     useEffect(()=>{
-        handlePaymentHistoryBus(localStorage.getItem('userId'));
+        const userInfo = calluserInfo();
+        if(userInfo.sns){
+        handlePaymentHistoryBus(sessionStorage.getItem('userId'));}
     },[handlePaymentHistoryBus]);
     return(
         <Grid2 container direction='row'>

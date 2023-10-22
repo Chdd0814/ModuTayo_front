@@ -5,11 +5,12 @@ import DataTable from './DataTable';
 import axios from 'axios';
 import TableSearch from './TablePaymentSearch';
 import dayjs from "dayjs";
-
+import calluserInfo from './calluserInfo';
+import vaildAdmin from './vaildAdmin';
 const PaymentHistoryTrain=(props)=>{
     const {open,handleOpen}=props
     const [formData,setFormData]=useState([]);
-    const TableColor=['#EBD4FF','#F0FFF0','#AFFFEE'];
+    const TableColor=['#EEFFFE','#F0FFF0','#AFFFEE'];
     const [TrainTitle,setBusTitle]= useState(['결재번호','결재날짜','결재수단','이름','ID','Tel','비용']);
     const [TrainContent,setBusContent]=useState([
         {key:'number',width:60},
@@ -44,6 +45,7 @@ const PaymentHistoryTrain=(props)=>{
         e.preventDefault();
         try{
             console.log(SearchFilter)
+
             const response=await axios.get('/payment/Train_searchFilter',{ params: SearchFilter })
             console.log(response.data)
             if (Array.isArray(response.data)) {
@@ -62,10 +64,15 @@ const PaymentHistoryTrain=(props)=>{
         }
     })
     const handlePaymentHistoryTrain=useCallback(async(id)=>{
+        let response=null;
         try{
             console.log({id})
-            const response=await axios.get(`/payment/PaymentTrain/${id}`);
-            if (Array.isArray(response.data)) {
+            if(vaildAdmin()){
+                response=await axios.get(`/payment/PaymentTrain_admin`);
+            }else{
+            response=await axios.get(`/payment/PaymentTrain/${id}`);
+            }
+            if (response&&Array.isArray(response.data)) {
                 var i=1;
                 response.data = response.data.map((item) => {
                     return {
@@ -75,13 +82,18 @@ const PaymentHistoryTrain=(props)=>{
                     }
                 });
             } 
-            setFormData(response.data);     
+            if(response){
+            setFormData(response.data);
+            }     
         }catch(e){
             console.error(e);
         }
     },[])
     useEffect(()=>{
-        handlePaymentHistoryTrain(localStorage.getItem('userId'));
+        const userInfo = calluserInfo();
+        if(!userInfo.sns){
+        handlePaymentHistoryTrain(sessionStorage.getItem('userId'));
+        }
     },[handlePaymentHistoryTrain]);
     return(
         <Grid2 container direction='row'>
