@@ -179,7 +179,7 @@ function BusTicketForm({ isLoggedIn }) {
       setbusRoundTicketinfo2([]);
       setbusRoundFastTicketinfo1([]);
       setbusRoundFastTicketinfo2([]);
-      setrouteId("NAEK" + selectedRoundTerminalId+selectedRoundTerminalId2)
+      setRrouteId("NAEK" + selectedRoundTerminalId+selectedRoundTerminalId2)
       const depTid = "NAEK" + selectedRoundTerminalId;
       const arrTid = "NAEK" + selectedRoundTerminalId2;
       const depTime = rounddatevalue;
@@ -488,6 +488,7 @@ function BusTicketForm({ isLoggedIn }) {
         setShowTable2(false);
       }
     };
+
   const handleRSelection2 = (item2) => {
     // 선택된 데이터(selectedItem)를 예매 페이지로 전달하는 로직을 구현
     // 예: 예매 페이지로 이동하면서 선택된 데이터를 URL 매개변수로 전달
@@ -498,7 +499,6 @@ function BusTicketForm({ isLoggedIn }) {
     setIsModalOpen2(true);
     handleroundBusInfo();
   };
- 
 
     const handleRSelection3 = (item) => {
       // 선택된 데이터(selectedItem)를 예매 페이지로 전달하는 로직을 구현
@@ -519,7 +519,7 @@ function BusTicketForm({ isLoggedIn }) {
       setTotalPrice(roundFirstticketPrice + item2.Fare * Rparty);
       setSelectedItem2(item2);
       setIsModalOpen2(true);
-      handleroundBusInfo();
+      //handleroundBusInfo();
     };
 
     const handleSuccessCloseModal = () => {
@@ -533,58 +533,66 @@ function BusTicketForm({ isLoggedIn }) {
       // 모달 닫기
       setIsModalOpen2(false);
       //setIsUsingMileage(false);
-      saveRoundDataTobeforePay();
+      saveDataTobeforePay();
       navigate("/BusPayment");
     };
 
     const saveDataTobeforePay = () => {
-      const BusdataToSave = {
-        routeId : routeId,
-        depPlace: selectedItem.depPlaceName, // 출발지
-        arrPlace: selectedItem.arrPlaceName, // 도착지
-        depPlandTime: selectedItem.depPlandTime, // 출발시간
-        arrPlandTime: selectedItem.arrPlandTime, // 도착시간
-        BusGradeName: selectedItem.BusGradeName, // 버스등급
-        datevalue: datevalue.format("YYYYMMDD"), // 선택한 날짜
-        selectedItem: selectedItem, //버스정보 전부 다
-        party: party, // 인원수
-        name: name, // 예매자 이름
-        id : id, //예매자 아이디
-        phoneNumber: phoneNumber, // 예매자 번호
-        totalPrice: totalPrice, // 총 가격
-        ticketPrice : ticketPrice, //기차표 가격
-        Mileage: usedMileage, // 사용하고 남은 마일리지
-        useMileage : mileageDiscount, //사용한 마일리지 (결제 내역에 뽑아주기 위함)
-        //trainSeatNumber : selectedSeat, // 선택한 좌석
-      };
-    
-      // 데이터를 JSON 문자열로 변환하여 `sessionStorage`에 저장
+      if(tripType === 'one-way'){
+        const BusdataToSave = {
+          routeId : routeId,
+          depPlace: selectedItem.depPlaceName, // 출발지
+          arrPlace: selectedItem.arrPlaceName, // 도착지
+          depPlandTime: selectedItem.depPlandTime, // 출발시간
+          arrPlandTime: selectedItem.arrPlandTime, // 도착시간
+          BusGradeName: selectedItem.BusGradeName, // 버스등급
+          datevalue: datevalue.format("YYYYMMDD"), // 선택한 날짜
+          selectedItem: selectedItem, //버스정보 전부 다
+          party: party, // 인원수
+          name: name, // 예매자 이름
+          id : id, //예매자 아이디
+          phoneNumber: phoneNumber, // 예매자 번호
+          totalPrice: totalPrice, // 총 가격
+          ticketPrice : ticketPrice, //버스표 가격
+          Mileage: usedMileage, // 사용하고 남은 마일리지
+          useMileage : mileageDiscount, //사용한 마일리지 (결제 내역에 뽑아주기 위함)
+          //trainSeatNumber : selectedSeat, // 선택한 좌석
+          tripType : tripType,
+        };
+        sessionStorage.setItem('saveBusTicketinfo', JSON.stringify(BusdataToSave));
+      }else if (tripType === 'round-trip') {
+        const BusdataToSave = {
+          routeId: routeId, //가는편 routeId
+          depPlace: selectedItem.depPlaceName, //가는편 출발지
+          arrPlace: selectedItem.arrPlaceName, //가는편 도착지
+          depPlandTime: selectedItem.depPlandTime, //가는편 출발시간
+          arrPlandTime: selectedItem.arrPlandTime, //가는편 도착시간
+          BusGradeName: selectedItem.BusGradeName, //가는편 버스등급
+          datevalue: datevalue.format("YYYYMMDD"), //가는편 선택한 날짜
+          party: party, //가는편 인원수
+          name: name, // 예매자 이름
+          id : id, //예매자 아이디
+          phoneNumber: phoneNumber, // 예매자 번호
+          totalPrice: totalPrice, // 총 가격
+          ticketPrice : roundFirstticketPrice, //가는편 버스표 가격
+          Mileage: usedMileage, // 사용하고 남은 마일리지
+          useMileage : mileageDiscount, //사용한 마일리지 (결제 내역에 뽑아주기 위함)
+          selectedItem: selectedItem, //버스정보 전부 다
+          RrouteId: RrouteId, //오는편 routeId
+          RdepPlace: selectedItem2.depPlaceName, //오는편 출발지
+          RarrPlace: selectedItem2.arrPlaceName, //오는편 도착지
+          RdepPlandTime: selectedItem2.depPlandTime, //오는편 출발시간
+          RarrPlandTime: selectedItem2.arrPlandTime, //오는편 도착시간
+          RBusGradeName: selectedItem2.BusGradeName, //오는편 버스등급
+          Rdatevalue: rounddatevalue.format("YYYYMMDD"), //오는편 선택한 날짜
+          Rparty: Rparty, //가는편 인원수
+          RticketPrice : roundSecondticketPrice, //오는편 버스표 가격
+          selectedItem2: selectedItem2, //버스정보 전부 다
+          tripType : tripType,
+        };
+        // 데이터를 JSON 문자열로 변환하여 `sessionStorage`에 저장
       sessionStorage.setItem('saveBusTicketinfo', JSON.stringify(BusdataToSave));
-    };
-
-    const saveRoundDataTobeforePay = () => {
-      const roundBusdataToSave = {
-        RrouteId : RrouteId,
-        RdepPlace: selectedItem2.depPlaceName, // 출발지
-        RarrPlace: selectedItem2.arrPlaceName, // 도착지
-        RdepPlandTime: selectedItem2.depPlandTime, // 출발시간
-        RarrPlandTime: selectedItem2.arrPlandTime, // 도착시간
-        RBusGradeName: selectedItem2.BusGradeName, // 버스등급
-        Rdatevalue: rounddatevalue.format("YYYYMMDD"), // 선택한 날짜
-        RselectedItem: selectedItem2, //버스정보 전부 다
-        Rparty: Rparty, // 인원수
-        Rname: name, // 예매자 이름
-        id : id, //예매자 아이디
-        RphoneNumber: phoneNumber, // 예매자 번호
-        totalPrice: totalPrice, // 총 가격
-        RticketPrice : roundSecondticketPrice, //버스표 가격
-        Mileage: usedMileage, // 사용하고 남은 마일리지
-        useMileage : mileageDiscount, //사용한 마일리지 (결제 내역에 뽑아주기 위함)
-        //trainSeatNumber : selectedSeat, // 선택한 좌석
-      };
-    
-      // 데이터를 JSON 문자열로 변환하여 `sessionStorage`에 저장
-      sessionStorage.setItem('saveRoundBusTicketinfo', JSON.stringify(roundBusdataToSave));
+      }
     };
 
   return (
