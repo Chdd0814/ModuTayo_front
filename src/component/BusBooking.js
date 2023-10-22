@@ -24,6 +24,7 @@ const BusBooking=(props)=>{
         {key:'arrivalTime',width:80},
         {key:'seatNumber',width:80}
     ])
+    const [beforeMileage, setbeforeMileage] = useState([]);
     const [SearchFilter,setSearchFilter]=useState({
         id:sessionStorage.getItem('userId'),
         start:'',
@@ -58,10 +59,30 @@ const BusBooking=(props)=>{
             setFormData(response.data); 
         }catch(error){
             console.error(error);
-        }
+        }        
     },[])
+
     useEffect(()=>{
         handlebusbooking(sessionStorage.getItem('userId'));
+
+       
+            try { 
+            axios.get(`/payment/PaymentBus/${sessionStorage.getItem('userId')}`)
+            .then(response => {
+                if (response.data && Array.isArray(response.data)) {
+                    const beforeMileageList = response.data.map(item => item.beforeMileage);
+                    // beforeMileageList에는 beforeMileage 항목만 들어있음
+                    console.log(beforeMileageList);
+                    setbeforeMileage(beforeMileageList);
+                }
+            })
+            .catch(error => {
+                console.error(error);
+            });
+            } catch(error) {
+                console.error(error);
+            }
+        
     },[handlebusbooking]);
     const formatDate=(input)=> {
         const year = input.substring(0, 4);

@@ -23,6 +23,7 @@ const TrainBooking=(props)=>{
         {key:'arrivalTime',width:80},
         {key:'seatNumber',width:80}
     ])
+    const [beforeMileage, setbeforeMileage] = useState([]);
     const [SearchFilter,setSearchFilter]=useState({
         id:localStorage.getItem('userId'),
         start:'',
@@ -78,6 +79,22 @@ const TrainBooking=(props)=>{
     }, []);
     useEffect(()=>{
         handlebusbooking(localStorage.getItem('userId'));
+        try { 
+            axios.get(`/payment/PaymentTrain/${sessionStorage.getItem('userId')}`)
+            .then(response => {
+                if (response.data && Array.isArray(response.data)) {
+                    const beforeMileageList = response.data.map(item => item.beforeMileage);
+                    // beforeMileageList에는 beforeMileage 항목만 들어있음
+                    console.log(beforeMileageList);
+                    setbeforeMileage(beforeMileageList);
+                }
+            })
+            .catch(error => {
+                console.error(error);
+            });
+            } catch(error) {
+                console.error(error);
+            }
     },[handlebusbooking]);
     const searchBooking=useCallback(async(e)=>{
         e.preventDefault();
