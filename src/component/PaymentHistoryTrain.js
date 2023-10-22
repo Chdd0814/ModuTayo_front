@@ -10,7 +10,7 @@ import vaildAdmin from './vaildAdmin';
 const PaymentHistoryTrain=(props)=>{
     const {open,handleOpen}=props
     const [formData,setFormData]=useState([]);
-    const TableColor=['#EBD4FF','#F0FFF0','#AFFFEE'];
+    const TableColor=['#EEFFFE','#F0FFF0','#AFFFEE'];
     const [TrainTitle,setBusTitle]= useState(['결재번호','결재날짜','결재수단','이름','ID','Tel','비용']);
     const [TrainContent,setBusContent]=useState([
         {key:'number',width:60},
