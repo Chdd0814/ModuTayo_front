@@ -12,12 +12,13 @@ function BusPayment() {
     const [pg,setpg] = useState("kakaopay.TC0ONETIME");
     const [payMethod, setpayMethod] = useState("card");
     const [routeId, setrouteId] = useState("");
+    const [RrouteId, setRrouteId] = useState("");
     const [depPlace, setdepPlace] = useState(""); // 출발지
     const [arrPlace, setarrPlace] = useState(""); // 도착지
     const [depTime, setdepTime] = useState(""); // 출발시간 
     const [arrTime, setarrTime] = useState(""); // 도착시간
-    const [busGrade, setbusGrade] = useState(""); // 기차 종류
-    const [busNum, setbusNum] = useState(''); // 기차번호
+    const [busGrade, setbusGrade] = useState(""); //가는 버스 종류
+    const [RbusGrade, setRbusGrade] = useState(""); //오는 버스 종류
     const [dateValue, setdateValue] = useState(""); // 
     const [Party, setParty] = useState('');
     const [buyerName, setbuyerName] = useState(''); // 이름 상태
@@ -33,6 +34,15 @@ function BusPayment() {
     const randomticketnumber = `bus_${dateValue}_${Math.floor(Math.random() * 10000)}`;
     const navigate = useNavigate();
     const [ticketStatus, setticketStatus] = useState(false);
+    const [rounddepPlace, setrounddepPlace] = useState("");
+    const [roundarrPlace, setroundarrPlace] = useState("");
+    const [rounddepTime, setrounddepTime] = useState("");
+    const [roundarrTime, setroundarrTime] = useState("");
+    const [rounddateValue, setrounddateValue] = useState("");
+    const [roundParty, setroundParty] = useState("");
+    const [roundticketPrice, setroundticketPrice] = useState("");
+    const [tripType, settripType] = useState("one-way");
+    const roundrandomticketnumber = `bus_${rounddateValue}_${Math.floor(Math.random() * 10000)}`;
 
 
 
@@ -41,23 +51,56 @@ function BusPayment() {
 
         if (token) {
           const dataToken = JSON.parse(token);
-
-          setrouteId(dataToken.routeId);
-          setdepPlace(dataToken.depPlace);
-          setarrPlace(dataToken.arrPlace);
-          setarrTime(dataToken.arrPlandTime);
-          setdepTime(dataToken.depPlandTime);
-          setbusGrade(dataToken.BusGradeName);
-          setdateValue(dataToken.datevalue);
-          setParty(dataToken.party);
-          setbuyerName(dataToken.name);
-          setPhoneNumber(dataToken.phoneNumber);
-          setid(dataToken.id);
-          setTicketPrice(dataToken.ticketPrice);
-          setTotalPrice(dataToken.totalPrice);
-          setMileage(dataToken.Mileage);
-          setusedMileage(dataToken.useMileage);
-          setbusSeatnumber(dataToken.busSeatNumber);
+          const checktripType = dataToken.tripType;
+          console.log(checktripType);
+          if (checktripType === 'one-way') {
+            setrouteId(dataToken.routeId);
+            setdepPlace(dataToken.depPlace);
+            setarrPlace(dataToken.arrPlace);
+            setarrTime(dataToken.arrPlandTime);
+            setdepTime(dataToken.depPlandTime);
+            setbusGrade(dataToken.BusGradeName);
+            setdateValue(dataToken.datevalue);
+            setParty(dataToken.party);
+            setbuyerName(dataToken.name);
+            setPhoneNumber(dataToken.phoneNumber);
+            setid(dataToken.id);
+            setTicketPrice(dataToken.ticketPrice);
+            setTotalPrice(dataToken.totalPrice);
+            setMileage(dataToken.Mileage);
+            setusedMileage(dataToken.useMileage);
+            setbusSeatnumber(dataToken.busSeatNumber);
+            settripType(dataToken.tripType);
+          } else if (checktripType === 'round-trip') {
+            setrouteId(dataToken.routeId);
+            setRrouteId(dataToken.RrouteId);
+            setdepPlace(dataToken.depPlace);
+            setarrPlace(dataToken.arrPlace);
+            setrounddepPlace(dataToken.RdepPlace);
+            setroundarrPlace(dataToken.RarrPlace);
+            setarrTime(dataToken.arrPlandTime);
+            setdepTime(dataToken.depPlandTime);
+            setroundarrTime(dataToken.RarrPlandTime);
+            setrounddepTime(dataToken.RdepPlandTime);
+            setbusGrade(dataToken.BusGradeName);
+            setRbusGrade(dataToken.RBusGradeName);
+            //setbusNum(dataToken.trainNum);
+            setdateValue(dataToken.datevalue);
+            setrounddateValue(dataToken.Rdatevalue);
+            setParty(dataToken.party);
+            setroundParty(dataToken.Rparty);
+            //setroundbusNum(dataToken.roundtrainNum);
+            setbuyerName(dataToken.name);
+            setPhoneNumber(dataToken.phoneNumber);
+            setid(dataToken.id);
+            setTicketPrice(dataToken.ticketPrice);
+            setroundticketPrice(dataToken.RticketPrice);
+            setTotalPrice(dataToken.totalPrice);
+            setMileage(dataToken.Mileage);
+            setusedMileage(dataToken.useMileage);
+            //setbusSeatnumber(dataToken.trainSeatNumber);
+            settripType(dataToken.tripType);
+          }
         }
       }, []);
 
@@ -97,6 +140,26 @@ async function sendbusTicketData(ticketData) {
 
 }
 
+async function MileageUpdate(id,mileage,paidAmount) {
+
+  try {
+    const response = await axios.put('/Mileage/UpdateMileage', null, {
+      params: {
+        id: id,
+        mileage: mileage,
+        paidAmount: paidAmount
+      },
+      headers : {
+        'Content-Type' : 'application/json',
+      },
+    });
+    return true;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+}
+
     const requestpay = () => {
 
         if (!window.IMP) return;
@@ -130,9 +193,22 @@ async function sendbusTicketData(ticketData) {
         if (success) {
           
           const crateTicketnumber = randomticketnumber;
+          const roundcrateTicketnumber = roundrandomticketnumber;
 
           const PaycallbackData = {
             busticketNumber : crateTicketnumber,
+            impUid : imp_uid,
+            merchantUid : merchant_uid,
+            paidAmount : paid_amount,
+            payMethod : pay_method,
+            buyerName : buyer_name,
+            buyerTel : buyer_tel,
+            buyerid : id,
+            paymentDate : paymentDate,
+          }
+
+          const roundPaycallbackData = {
+            busticketNumber : roundcrateTicketnumber,
             impUid : imp_uid,
             merchantUid : merchant_uid,
             paidAmount : paid_amount,
@@ -151,7 +227,6 @@ async function sendbusTicketData(ticketData) {
             departureStation : depPlace,
             arrivalStation : arrPlace,
             fare : ticketPrice,
-            busNumber : busNum,
             seatNumber : busSeatnumber,
             ticketNumber : crateTicketnumber,
             id : id,
@@ -159,28 +234,57 @@ async function sendbusTicketData(ticketData) {
             reservationDate : dateValue,
           }
 
+          const roundreservationTicketData = {
+
+            RrouteId : RrouteId,
+            RbusClass : RbusGrade,
+            departureTime : rounddepTime,
+            arrivalTime : roundarrTime,
+            departureStation : rounddepPlace,
+            arrivalStation : roundarrPlace,
+            fare : roundticketPrice,
+            seatNumber : busSeatnumber, // 좌석시스템 수정 후, 재수정바랍니다. (왕복처리 해야함)
+            ticketNumber : roundcrateTicketnumber,
+            id : id,
+            name : buyerName,
+            reservationDate : rounddateValue,
+          }
+
         // 예매 내역을 먼저 저장
     
     try {
       
-      const ticketSaved = await sendbusTicketData(reservationTicketData);
+      if (tripType === 'one-way') {
+        const ticketSaved = await sendbusTicketData(reservationTicketData);
 
       if (ticketSaved) {
         await sendPaymentData(PaycallbackData);
+        await MileageUpdate(id,mileage,paid_amount);
         alert("결제 성공");
         navigate('/');
       } else {
         console.log ("예매내역 저장실패");
       }
-    } catch (error) {
-      console.error(error);
+    } else if (tripType === 'round-trip') {
+      const ticketSaved = await sendbusTicketData(reservationTicketData); // 왕복일 때, 가는편 예매내역 
+      const roundticketSaved = await sendbusTicketData(roundreservationTicketData); // 왕복일 때, 오는편 예매내역
 
-    }
-
-        } else {
-          alert(`결제 실패: ${error_msg}`);
-        }
+      if (ticketSaved && roundticketSaved) {
+        await sendPaymentData(PaycallbackData); // 왕복 일 때, 가는편 결제내역 // 이 둘은 똑같음
+        await sendPaymentData(roundPaycallbackData); // 왕복일 때, 오는편 결제내역 // 이 둘은 똑같음. 실제로 사용자는 총금액 한번만 결제
+        await MileageUpdate(id,mileage,paid_amount); // 마일리지 관련
+        sessionStorage.removeItem("saveTicketinfo");
+        alert("결제 성공");
+        navigate('/');
+      } else {
+        console.log("예매내역 저장 실패");
       }
+    }
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  }
 
   return (
 <Grid container justifyContent="center" alignItems="center" style={{ minHeight: "100vh" }}>
@@ -214,11 +318,29 @@ async function sendbusTicketData(ticketData) {
             </Grid>
              <Grid container>
               <Grid item xs = {12}>
-              <Typography sx={{ fontSize: 12, fontWeight: 'bold' }}>{dateValue}</Typography>
-              <Typography sx={{ fontSize: 12, fontWeight: 'bold' }}>{busGrade} | {busSeatnumber}</Typography>
-              <Typography sx={{ fontSize: 12, fontWeight: 'bold' }}>{depPlace} - {arrPlace}</Typography>
-              <Typography sx={{ fontSize: 12, fontWeight: 'bold' }}>{depTime} - {arrTime}</Typography>
-              </Grid>
+              {tripType === 'one-way' ? (
+                  <>
+                <Divider sx={{ fontSize: 15, fontWeight: 'bold' }}>버스</Divider>
+                <Typography sx={{ fontSize: 12, fontWeight: 'bold' }}>{dateValue}</Typography>
+                <Typography sx={{ fontSize: 12, fontWeight: 'bold' }}>{busGrade} | {busSeatnumber}</Typography>
+                <Typography sx={{ fontSize: 12, fontWeight: 'bold' }}>{depPlace} - {arrPlace}</Typography>
+                <Typography sx={{ fontSize: 12, fontWeight: 'bold' }}>{depTime} - {arrTime}</Typography>
+                </>
+                ) : tripType === 'round-trip' ? (
+                  <>
+                  <Divider sx={{ fontSize: 15, fontWeight: 'bold', marginTop : 5}}>버스(가는편)</Divider>
+                  <Typography sx={{ fontSize: 12, fontWeight: 'bold' }}>{dateValue}</Typography>
+                  <Typography sx={{ fontSize: 12, fontWeight: 'bold' }}>{busGrade} | {busSeatnumber}</Typography>
+                  <Typography sx={{ fontSize: 12, fontWeight: 'bold' }}>{depPlace} - {arrPlace}</Typography>
+                  <Typography sx={{ fontSize: 12, fontWeight: 'bold' }}>{depTime} - {arrTime}</Typography>
+                  <Divider sx={{ fontSize: 15, fontWeight: 'bold', marginTop : 2 }}>버스(오는편)</Divider>
+                  <Typography sx={{ fontSize: 12, fontWeight: 'bold' }}>{rounddateValue}</Typography>
+                  <Typography sx={{ fontSize: 12, fontWeight: 'bold' }}>{RbusGrade} | {busSeatnumber}</Typography>
+                  <Typography sx={{ fontSize: 12, fontWeight: 'bold' }}>{rounddepPlace} - {roundarrPlace}</Typography>
+                  <Typography sx={{ fontSize: 12, fontWeight: 'bold' }}>{rounddepTime} - {roundarrTime}</Typography>
+                  </>
+                ) : null}
+                </Grid>
               
              
               </Grid>   
@@ -226,7 +348,7 @@ async function sendbusTicketData(ticketData) {
             </Grid>
           </Grid>
     
-          <Divider style={{ marginBottom: "16px" }} />
+          <Divider style={{ marginTop : "16px", marginBottom: "16px" }} />
 
           {/* Paper 추가 */}
           <Paper elevation={3} style={{ padding: "16px", margin : "16px"}}>
@@ -234,12 +356,23 @@ async function sendbusTicketData(ticketData) {
             <Typography variant="subtitle1" sx = {{ textAlign : 'center', fontWeight : 'bold', fontSize : 20}} gutterBottom>
               결제 상세 정보
             </Typography>
+            {tripType === 'one-way' ? (
+              <>
             <Typography>버스표 운임</Typography>
                 <Typography sx = {{ textAlign: 'center', fontWeight : 'light', fontSize : 12}}>{ticketPrice} 원</Typography>
-                <Typography>마일리지 할인</Typography>
-                <Typography sx = {{ textAlign: 'center', fontWeight : 'light', fontSize : 12}}>{usedMileage} 원</Typography>
-                <Typography>총금액</Typography>
-                <Typography sx = {{ textAlign: 'center', fontWeight : 'light', fontSize : 12}}> {totalPrice}원</Typography>
+                </>
+             ) : tripType === 'round-trip' ? (
+                <>
+                <Typography>버스표 운임(가는편)</Typography>
+                <Typography sx = {{ textAlign: 'center', fontWeight : 'light', fontSize : 12}}>{ticketPrice} 원</Typography>
+                <Typography>버스표 운임(오는편)</Typography>
+                <Typography sx = {{ textAlign: 'center', fontWeight : 'light', fontSize : 12}}>{roundticketPrice} 원</Typography>  
+                </>
+             ) : null}
+            <Typography>마일리지 할인</Typography>
+            <Typography sx = {{ textAlign: 'center', fontWeight : 'light', fontSize : 12}}>{usedMileage} 원</Typography>
+            <Typography>총금액</Typography>
+            <Typography sx = {{ textAlign: 'center', fontWeight : 'light', fontSize : 12}}> {totalPrice}원</Typography>
             {/* ... 결제 상세 정보 컴포넌트 내용 ... */}
           </Paper>
     
