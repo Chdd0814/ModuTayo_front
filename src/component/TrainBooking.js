@@ -24,7 +24,7 @@ const TrainBooking=(props)=>{
         {key:'seatNumber',width:80}
     ])
     const [SearchFilter,setSearchFilter]=useState({
-        id:localStorage.getItem('userId'),
+        id:sessionStorage.getItem('userId'),
         start:'',
         end:'',
         startDay: dayjs().format('YYYY-MM-DD'),
@@ -77,7 +77,7 @@ const TrainBooking=(props)=>{
         }
     }, []);
     useEffect(()=>{
-        handlebusbooking(localStorage.getItem('userId'));
+        handlebusbooking(sessionStorage.getItem('userId'));
     },[handlebusbooking]);
     const searchBooking=useCallback(async(e)=>{
         e.preventDefault();
@@ -108,7 +108,7 @@ const TrainBooking=(props)=>{
         try{
         await axios.delete(`/trainTicket/delete/${booking.ticketNumber}`)
         setAlert_open(true);
-        handlebusbooking(localStorage.getItem('userId'));
+        handlebusbooking(sessionStorage.getItem('userId'));
         setDialog_open(false);
         }catch(error){
             console.error(error);
