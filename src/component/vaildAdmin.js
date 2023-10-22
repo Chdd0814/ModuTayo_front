@@ -3,7 +3,7 @@ import jwt_decode from "jwt-decode"; // npm install jwt-decode 하세요. 23-09-
 
 
 function vaildAdmin() {
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
     if (token) {
         const decodeToken = jwt_decode(token);
         const userAuth = decodeToken.auth;

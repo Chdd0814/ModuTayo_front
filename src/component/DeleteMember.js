@@ -16,14 +16,12 @@ const DeleteMember=(props)=>{
         
         const userInfo = calluserInfo();
         console.log(userInfo);
-        if(userInfo) {
+        if(userInfo.sns) {
             setLoginType(userInfo.sns);
             console.log(LoginType);
         }
-
         if(LoginType === 'Normal') {
             setId(sessionStorage.getItem('userId'));
-
         } else {
             setId(userInfo.sub);
         }
@@ -38,7 +36,6 @@ const DeleteMember=(props)=>{
                     props.onLogout();
                     alert('회원탈퇴가 완료되었습니다.')
                     navigate('/');
-
                 } else {
                     window.Kakao.API.request({
                         url: '/v1/user/unlink',
@@ -49,13 +46,13 @@ const DeleteMember=(props)=>{
                         .catch(function(error) {
                           console.log(error);
                         });
-
                         props.onLogout();
                         alert('회원탈퇴가 완료되었습니다.')
                         navigate('/');
                 }
             })
             .catch(error=>{
+                console.log(checkPass)
                 setAlertOpen({
                     errorOpen:true
                 })
