@@ -16,7 +16,7 @@ const DeleteMember=(props)=>{
         
         const userInfo = calluserInfo();
         console.log(userInfo);
-        if(userInfo) {
+        if(userInfo.sns) {
             setLoginType(userInfo.sns);
             console.log(LoginType);
         }
