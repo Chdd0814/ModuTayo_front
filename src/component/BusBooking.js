@@ -25,7 +25,7 @@ const BusBooking=(props)=>{
         {key:'seatNumber',width:80}
     ])
     const [SearchFilter,setSearchFilter]=useState({
-        id:localStorage.getItem('userId'),
+        id:sessionStorage.getItem('userId'),
         start:'',
         end:'',
         startDay: dayjs().format('YYYY-MM-DD'),
@@ -61,7 +61,7 @@ const BusBooking=(props)=>{
         }
     },[])
     useEffect(()=>{
-        handlebusbooking(localStorage.getItem('userId'));
+        handlebusbooking(sessionStorage.getItem('userId'));
     },[handlebusbooking]);
     const formatDate=(input)=> {
         const year = input.substring(0, 4);
@@ -102,7 +102,7 @@ const BusBooking=(props)=>{
         try{
         await axios.delete(`/busTicket/delete/${booking.ticketNumber}`)
         setAlert_open(true);
-        handlebusbooking(localStorage.getItem('userId'));
+        handlebusbooking(sessionStorage.getItem('userId'));
         setDialog_open(false);
         }catch(error){
             console.error(error);
