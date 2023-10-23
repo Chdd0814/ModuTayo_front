@@ -393,11 +393,11 @@ const handleRoundSearch = () => {
       {transportType === 'train' && tripType === 'one-way' && (
 
 <form onSubmit = {handleSubmit} className = "form-ticketinfo-form">
-  <FormControl sx={{ m: 1, minWidth: 120, marginTop : 2 }}>
+  <FormControl sx={{ m: 1, minWidth: 120, marginTop : 2,width:120 }}>
         <TextField value={depStationName} id="grouped-select" label="출발지" onClick={handleTrainModalOpen} 
          readOnly />
     </FormControl>
-<FormControl sx={{ m: 1, minWidth: 120, marginTop : 2}}>
+<FormControl sx={{ m: 1, minWidth: 120, marginTop : 2,width:120}}>
 <TextField value={arrStationName} id="grouped-select" label="도착지" onClick={handleTrainModalOpen} 
          readOnly />
       </FormControl>
@@ -508,7 +508,7 @@ const handleRoundSearch = () => {
             </Select>
           </FormControl>
           <div>
-            <Button variant="contained" color="secondary" type="submit" sx={{ marginTop: 3, backgroundColor: '#e6eeff', color: '#3b3b3b' }} onClick={handleSubmit}>검색</Button>
+            <Button variant="contained" color="secondary" type="submit" sx={{ marginTop: 3 }} onClick={handleSubmit}>검색</Button>
           </div>
         </form>
       )}
@@ -519,15 +519,15 @@ const handleRoundSearch = () => {
       {transportType === 'train' && tripType === 'round-trip' && (
 
         <>
-          <form onSubmit={handleSubmit} className="form-ticketinfo-form" style={{ marginTop: 15 }} >
+          <form onSubmit={handleSubmit} className="form-ticketinfo-form"  >
 
 
-            <FormControl sx={{ m: 1, minWidth: 120, marginTop: 2 }}>
+            <FormControl sx={{ m: 1, minWidth: 120, marginTop: 2,width:120 }}>
               <TextField value={depStationName} id="grouped-select" label="출발지" onClick={handleTrainModalOpen}
                 readOnly />
             </FormControl>
 
-            <FormControl sx={{ m: 1, minWidth: 120, marginTop: 2 }}>
+            <FormControl sx={{ m: 1, minWidth: 120, marginTop: 2 ,width:120}}>
               <TextField value={arrStationName} id="grouped-select" label="도착지" onClick={handleTrainModalOpen}
                 readOnly />
             </FormControl>
@@ -622,7 +622,7 @@ const handleRoundSearch = () => {
               </LocalizationProvider>
             </FormControl>
 
-            <FormControl sx={{ m: 1, minWidth: 120, paddingTop: 1 }}>
+            <FormControl sx={{ m: 1, minWidth: 120, paddingTop: 1,width:120 }}>
               <InputLabel sx={{ paddingTop: 1 }} id="demo-simple-select-helper-label">인원</InputLabel>
               <Select
                 labelId="demo-simple-select-helper-label"
@@ -646,11 +646,11 @@ const handleRoundSearch = () => {
 
 
           <form onSubmit={handleSubmit} className="form-ticketinfo-form">
-            <FormControl sx={{ m: 1, minWidth: 120, marginTop: 2 }}>
+            <FormControl sx={{ m: 1, minWidth: 120, paddingTop: 3 ,width:120}}>
               <TextField value={rounddepStationName} id="grouped-select" label="출발지" onClick={handleRoundTrainModalOpen}
                 readOnly />
             </FormControl>
-            <FormControl sx={{ m: 1, minWidth: 120, marginTop: 2 }}>
+            <FormControl sx={{ m: 1, minWidth: 120, paddingTop: 3,width:120 }}>
               <TextField value={roundarrStationName} id="grouped-select" label="도착지" onClick={handleRoundTrainModalOpen}
                 readOnly />
             </FormControl>
@@ -733,7 +733,7 @@ const handleRoundSearch = () => {
 
 
 
-<FormControl sx={{ m: 1, minWidth: 120 }}>
+<FormControl sx={{ m: 1, minWidth: 120 ,paddingTop: 2 }}>
        <LocalizationProvider dateAdapter={AdapterDayjs}>
         <DemoContainer components={['DatePicker']}>
         <DatePicker
@@ -748,8 +748,8 @@ const handleRoundSearch = () => {
 
 
 
-        <FormControl sx={{ m: 1, minWidth: 120, paddingTop:1 }}>
-        <InputLabel sx={{paddingTop:1}} id="demo-simple-select-helper-label">인원</InputLabel>
+        <FormControl sx={{ m: 1, minWidth: 120, paddingTop:3 }}>
+        <InputLabel sx={{paddingTop:3}} id="demo-simple-select-helper-label">인원</InputLabel>
         <Select
           labelId="demo-simple-select-helper-label"
           id="demo-simple-select-helper"
@@ -777,12 +777,10 @@ const handleRoundSearch = () => {
         <  >
           <form onSubmit={handleSubmit} className="form-ticketinfo-form">
             <FormControl sx={{ m: 1, minWidth: 120, width: 120, paddingTop: 1 }}>
-              {selectedTerminal ? null : <InputLabel sx={{ paddingTop: 1 }} htmlFor="grouped-select">출발지</InputLabel>}
               <TextField value={selectedTerminal} id="grouped-select" label="출발지" onClick={handleModalOpen} variant="outlined" />
             </FormControl>
 
             <FormControl sx={{ m: 1, minWidth: 120, width: 120, paddingTop: 1 }}>
-              {selectedTerminal2 ? null : <InputLabel sx={{ paddingTop: 1 }} htmlFor="grouped-select">도착지</InputLabel>}
               <TextField value={selectedTerminal2} id="grouped-select" label="도착지" onClick={handleModalOpen} variant="outlined" />
             </FormControl>
 
@@ -896,12 +894,10 @@ const handleRoundSearch = () => {
           <form onSubmit={handleSubmit} className="form-ticketinfo-form">
 
             <FormControl sx={{ m: 1, minWidth: 120, width: 120, paddingTop: 1 }}>
-              {selectedTerminal ? null : <InputLabel htmlFor="grouped-select" sx={{ paddingTop: 1 }}>출발지</InputLabel>}
               <TextField value={selectedTerminal} id="grouped-select" label="출발지" onClick={handleModalOpen} variant="outlined" />
             </FormControl>
 
             <FormControl sx={{ m: 1, minWidth: 120, width: 120, paddingTop: 1 }}>
-              {selectedTerminal2 ? null : <InputLabel htmlFor="grouped-select" sx={{ paddingTop: 1 }}>도착지</InputLabel>}
               <TextField value={selectedTerminal2} id="grouped-select" label="도착지" onClick={handleModalOpen} variant="outlined" />
             </FormControl>
 
@@ -941,12 +937,10 @@ const handleRoundSearch = () => {
           {/*왕복 */}<form onSubmit={handleSubmit} className="form-ticketinfo-form">
 
             <FormControl sx={{ m: 1, minWidth: 120, width: 120, paddingTop: 3 }}>
-              {selectedTerminal ? null : <InputLabel htmlFor="grouped-select" sx={{ paddingTop: 3 }}>출발지</InputLabel>}
               <TextField value={selectedroundTerminal} id="grouped-select" label="출발지" onClick={handleSecondModalOpen} variant="outlined" />
             </FormControl>
 
             <FormControl sx={{ m: 1, minWidth: 120, width: 120, paddingTop: 3 }}>
-              {selectedTerminal2 ? null : <InputLabel htmlFor="grouped-select" sx={{ paddingTop: 3 }}>도착지</InputLabel>}
               <TextField value={selectedroundTerminal2} id="grouped-select" label="도착지" onClick={handleSecondModalOpen} variant="outlined" />
             </FormControl>
 

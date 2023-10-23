@@ -44,8 +44,13 @@ const PaymentHistoryBus=(props)=>{
     const searchPayment=useCallback(async(e)=>{
         e.preventDefault();
         try{
-            console.log(SearchFilter)
-            const response=await axios.get('/payment/Bus_searchFilter',{ params: SearchFilter })
+            let response=null;
+            if(vaildAdmin()){
+                response=await axios.get('/payment/Bus_searchFilter',{ params: SearchFilter })
+            }else{
+                response=await axios.get('/payment/Bus_searchFilter_user',{ params: SearchFilter })
+            }
+            
             console.log(response.data)
             if (Array.isArray(response.data)) {
                 var i=1;
@@ -97,6 +102,9 @@ const PaymentHistoryBus=(props)=>{
         const userInfo = calluserInfo();
         if(!userInfo.sns){
         handlePaymentHistoryBus(sessionStorage.getItem('userId'));}
+        else{
+            
+        }
     },[handlePaymentHistoryBus]);
     return(
         <Grid2 container direction='row'>

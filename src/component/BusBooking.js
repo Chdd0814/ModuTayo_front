@@ -92,7 +92,13 @@ const BusBooking=(props)=>{
         }
          else{
         try{
-            const response=await axios.get('/busTicket/SearchFilter',{ params: SearchFilter })
+            let response=null;
+            if(vaildAdmin()){
+                response=await axios.get('/busTicket/SearchFilter',{ params: SearchFilter })
+            }else{
+                response=await axios.get('/busTicket/SearchFilter_user',{ params: SearchFilter })
+            }
+             
             console.log(response.data)
             console.log(SearchFilter)
             if (Array.isArray(response.data)) {
