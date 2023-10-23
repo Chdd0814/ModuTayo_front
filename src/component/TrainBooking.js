@@ -6,6 +6,8 @@ import TableSearch from './TableBookingSearch';
 import axios from 'axios';
 import dayjs from "dayjs";
 import Dialog_Booking from './Dialog_Booking';
+import calluserInfo from './calluserInfo';
+import vaildAdmin from './vaildAdmin';
 const TrainBooking=(props)=>{
     const {open,handleOpen}=props
     const [dialog_open,setDialog_open]=useState(false);
@@ -56,8 +58,13 @@ const TrainBooking=(props)=>{
     }
     const handlebusbooking = useCallback(async(id) => {
         try {
-            const response = await axios.get(`/trainTicket/TrainBooking/${id}`);
-            if (Array.isArray(response.data)) {
+            let response=null;
+            if(vaildAdmin()){
+                response = await axios.get(`/trainTicket/TrainBooking_admin`);
+            }else{
+                response = await axios.get(`/trainTicket/TrainBooking/${id}`);
+            }
+            if (response&&Array.isArray(response.data)) {
                 response.data = response.data.map(item => {
                     return {
                         ...item,
@@ -67,17 +74,22 @@ const TrainBooking=(props)=>{
                 });
             } 
             // response.data가 객체인 경우 직접 수정
-            else {
+            else if(response) {
                 response.data.seatNumber = `${response.data.seatNumber}${response.data.trainCarNumber}`;
             }
+            if(response){
             setFormData(response.data);
             console.log(response.data);
+            }
         } catch(e) {
             console.error(e);
         }
     }, []);
     useEffect(()=>{
+        const userInfo = calluserInfo();
+        if(!userInfo.sns){
         handlebusbooking(sessionStorage.getItem('userId'));
+        }
     },[handlebusbooking]);
     const searchBooking=useCallback(async(e)=>{
         e.preventDefault();
@@ -122,7 +134,8 @@ const TrainBooking=(props)=>{
                     <TableSearch   handleChangeSearch={handleChangeSearch} SearchFilter={SearchFilter} searchBooking={searchBooking}/>
                 </Grid2>
                 <Grid2 item xs={12} marginLeft={15}>
-                    <DataTable handleOpen={handleDialogOpen} searchitem={TrainContent[0].key} title={TrainTitle} TableColor={TableColor} membercontent={TrainContent} member={formData}/>
+                    {!vaildAdmin()?<DataTable handleOpen={handleDialogOpen} searchitem={TrainContent[0].key} title={TrainTitle} TableColor={TableColor} membercontent={TrainContent} member={formData}/>
+                    :<DataTable title={TrainTitle} TableColor={TableColor} membercontent={TrainContent} member={formData}/>}
                 </Grid2>
             </Grid2>
             <Dialog_Booking handleDelete={handleDelete} openprops={alert_open} setOpenprops={setAlert_open}  item={booking} open={dialog_open} handleClose={handleClose}/>

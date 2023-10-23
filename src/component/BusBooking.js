@@ -6,6 +6,8 @@ import TableSearch from './TableBookingSearch';
 import axios from 'axios';
 import dayjs from "dayjs";
 import Dialog_Booking from './Dialog_Booking';
+import calluserInfo from './calluserInfo';
+import vaildAdmin from './vaildAdmin';
 /*moment */
 const BusBooking=(props)=>{
     const {open,handleOpen}=props
@@ -45,9 +47,15 @@ const BusBooking=(props)=>{
         setDialog_open(true);
     }
     const handlebusbooking=useCallback(async(id)=>{
+        let response=null;
         try{
-            const response=await axios.get(`/busTicket/BusBooking/${id}`);
-            if (Array.isArray(response.data)) {
+            if(vaildAdmin()){
+                response=await axios.get(`/busTicket/BusBooking_admin`);
+        }else{
+            response=await axios.get(`/busTicket/BusBooking/${id}`);
+        }
+        
+        if (response&&Array.isArray(response.data)) {
                 response.data = response.data.map(item => {
                     return {
                         ...item,
@@ -55,13 +63,18 @@ const BusBooking=(props)=>{
                     }
                 });
             }
-            setFormData(response.data); 
+        if(response){
+            setFormData(response.data);
+        } 
         }catch(error){
             console.error(error);
         }
     },[])
     useEffect(()=>{
+        const userInfo = calluserInfo();
+        if(!userInfo.sns){
         handlebusbooking(sessionStorage.getItem('userId'));
+    }
     },[handlebusbooking]);
     const formatDate=(input)=> {
         const year = input.substring(0, 4);
@@ -116,7 +129,8 @@ const BusBooking=(props)=>{
                     <TableSearch handleChangeSearch={handleChangeSearch} SearchFilter={SearchFilter} searchBooking={searchBooking} />
                 </Grid2>
                 <Grid2 item xs={12} marginLeft={15}>
-                    <DataTable handleOpen={handleDialogOpen} searchitem={busContent[0].key} title={busTitle} TableColor={TableColor} membercontent={busContent} member={formData}/>
+                    {vaildAdmin()?<DataTable handleOpen={handleDialogOpen} searchitem={busContent[0].key} title={busTitle} TableColor={TableColor} membercontent={busContent} member={formData}/>:
+                    <DataTable title={busTitle} TableColor={TableColor} membercontent={busContent} member={formData}/>}
                 </Grid2>
             </Grid2>
             <Dialog_Booking handleDelete={handleDelete} openprops={alert_open} setOpenprops={setAlert_open}   item={booking} open={dialog_open} handleClose={handleClose}  />
