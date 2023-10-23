@@ -73,6 +73,7 @@ import Traintabpanel from "./Traintabpanel";
           
         }
       };
+      
 
 
       const handleSubmit = async (event) => {
@@ -211,6 +212,29 @@ import Traintabpanel from "./Traintabpanel";
         setarrStationName, setdatevalue, setrounddepStation, 
         setroundarrStation, setrounddepStationName, setroundarrStationName, 
         setrounddepPlaceTime,setParty,setroundParty]);
+
+      
+        useEffect(() => {
+          const fetchMileage = async () => {
+            try {
+              const response = await axios.get("/Mileage/getMileage", {
+                params: {
+                  id: id,
+                },
+              });
+      
+              if (response.status === 200) {
+                setMileage(response.data);
+              } else {
+                console.error('Failed to fetch mileage.');
+              }
+            } catch (error) {
+              console.error('An error occurred:', error);
+            }
+          };
+      
+          fetchMileage();
+        }, [id]);
 
 
 
