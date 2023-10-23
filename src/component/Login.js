@@ -2,6 +2,7 @@
   import axios from 'axios';
   import './Login.css';
   import mainLogo from '../ModuTayo.png'; // 로고 이미지의 경로 설정
+  import Cookies from 'js-cookie';
   import kakaoLoginImg from '../images/kakao_login.png';
   import { useNavigate } from 'react-router-dom';
   import TextField from '@mui/material/TextField';
@@ -21,21 +22,20 @@ import calluserInfo from './calluserInfo';
     const [idpwError, setIdpwError] = useState('');
     const history = useNavigate();
 
-    // useEffect(() => {
-    //     // 페이지가 로드될 때 저장된 아이디를 검색하여 필드에 입력
-    //     const savedUsername = Cookies.get('username');
-    //     if (savedUsername) {
-    //       setUsername(savedUsername);
-    //     }
-    //     // 아이디 저장 체크박스의 상태를 복원
-    //     const rememberMeStatus = Cookies.get('rememberMe');
-    //     if (rememberMeStatus === 'true') {
-    //       setRememberMe(true);
-    //     } else {
-    //       setRememberMe(false);
-    //     }
-    //   }, []);
-
+    useEffect(() => {
+        // 페이지가 로드될 때 저장된 아이디를 검색하여 필드에 입력
+        const savedUsername = Cookies.get('username');
+        if (savedUsername) {
+          setUsername(savedUsername);
+        }
+        // 아이디 저장 체크박스의 상태를 복원
+        const rememberMeStatus = Cookies.get('rememberMe');
+        if (rememberMeStatus === 'true') {
+          setRememberMe(true);
+        } else {
+          setRememberMe(false);
+        }
+      }, []);
 
     const handleUsernameChange = (e) => {
       setUsername(e.target.value);
@@ -63,10 +63,20 @@ import calluserInfo from './calluserInfo';
             // 토큰이 존재하는 경우 로그인 성공 처리
             sessionStorage.setItem('token', token);
             sessionStorage.setItem('userId', data.username);
+            if(rememberMe) {
+              const userInfo = calluserInfo();
+              if(userInfo)
+              Cookies.set('username', data.username);
+               Cookies.set('rememberMe', 'true');
+            } else {
+              Cookies.remove('username');
+              Cookies.remove('rememberMe');
+            }
             // 로그인 상태를 설정하거나 필요한 작업을 수행하세요.
             // setLogin(true); // 예시: 로그인 상태를 true로 설정
             onLogin(true);
             history("/");
+
           } else {
             // 토큰이 존재하지 않는 경우 로그인 실패 처리
             setLoginError('로그인에 실패했습니다.');
