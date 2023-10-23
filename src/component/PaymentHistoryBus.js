@@ -29,7 +29,7 @@ const PaymentHistoryBus=(props)=>{
         return `${year}-${month}-${day}`;
     }
     const [SearchFilter,setSearchFilter]=useState({
-        id:localStorage.getItem('userId'),
+        id:sessionStorage.getItem('userId'),
         paymentType: '',
         startDay: dayjs().format('YYYY-MM-DD'),
         endDay:dayjs().format('YYYY-MM-DD')
@@ -67,6 +67,7 @@ const PaymentHistoryBus=(props)=>{
         try{
             if(vaildAdmin()){
                 response=await axios.get(`/payment/PaymentBus_admin`);
+                console.log(response.data);
             }else{
             response=await axios.get(`/payment/PaymentBus/${id}`);
             }
@@ -94,7 +95,7 @@ const PaymentHistoryBus=(props)=>{
     },[])
     useEffect(()=>{
         const userInfo = calluserInfo();
-        if(userInfo.sns){
+        if(!userInfo.sns){
         handlePaymentHistoryBus(sessionStorage.getItem('userId'));}
     },[handlePaymentHistoryBus]);
     return(

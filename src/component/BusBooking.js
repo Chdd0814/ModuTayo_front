@@ -50,7 +50,7 @@ const BusBooking=(props)=>{
         let response=null;
         try{
             if(vaildAdmin()){
-                response=await axios.get(`/busTicket/BusBooking_admin`);
+            response=await axios.get(`/busTicket/BusBooking_admin`);
         }else{
             response=await axios.get(`/busTicket/BusBooking/${id}`);
         }
@@ -156,7 +156,7 @@ const BusBooking=(props)=>{
                     <TableSearch handleChangeSearch={handleChangeSearch} SearchFilter={SearchFilter} searchBooking={searchBooking} />
                 </Grid2>
                 <Grid2 item xs={12} marginLeft={15}>
-                    {vaildAdmin()?<DataTable handleOpen={handleDialogOpen} searchitem={busContent[0].key} title={busTitle} TableColor={TableColor} membercontent={busContent} member={formData}/>:
+                    {!vaildAdmin()?<DataTable handleOpen={handleDialogOpen} searchitem={busContent[0].key} title={busTitle} TableColor={TableColor} membercontent={busContent} member={formData}/>:
                     <DataTable title={busTitle} TableColor={TableColor} membercontent={busContent} member={formData}/>}
                 </Grid2>
             </Grid2>

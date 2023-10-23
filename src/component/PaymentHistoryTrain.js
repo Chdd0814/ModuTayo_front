@@ -29,7 +29,7 @@ const PaymentHistoryTrain=(props)=>{
         return `${year}-${month}-${day}`;
     }
     const [SearchFilter,setSearchFilter]=useState({
-        id:localStorage.getItem('userId'),
+        id:sessionStorage.getItem('userId'),
         paymentType: '',
         startDay: dayjs().format('YYYY-MM-DD'),
         endDay:dayjs().format('YYYY-MM-DD')
@@ -69,6 +69,7 @@ const PaymentHistoryTrain=(props)=>{
             console.log({id})
             if(vaildAdmin()){
                 response=await axios.get(`/payment/PaymentTrain_admin`);
+                console.log(response.data);
             }else{
             response=await axios.get(`/payment/PaymentTrain/${id}`);
             }
@@ -89,7 +90,7 @@ const PaymentHistoryTrain=(props)=>{
             console.error(e);
         }
     },[])
-    useEffect(()=>{
+    useEffect(()=>{ 
         const userInfo = calluserInfo();
         if(!userInfo.sns){
         handlePaymentHistoryTrain(sessionStorage.getItem('userId'));
