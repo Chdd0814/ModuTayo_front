@@ -25,6 +25,7 @@ const TrainBooking=(props)=>{
         {key:'arrivalTime',width:80},
         {key:'seatNumber',width:80}
     ])
+    const [usedMileage, setusedMileage] = useState([]);
     const [SearchFilter,setSearchFilter]=useState({
         id:sessionStorage.getItem('userId'),
         start:'',
@@ -116,9 +117,37 @@ const TrainBooking=(props)=>{
             console.error(error);
         }
     }})
+
+    const getusedMileage = async (ticketNumber) => {
+        try {
+          const response = await axios.get(`/trainTicket/getusedMileage/${ticketNumber}`);
+          const mileage = response.data;
+          return mileage; // 사용된 마일리지를 반환
+        } catch (error) {
+          console.error(error);
+          return null;
+        }
+      };
+
     const handleDelete=useCallback(async()=>{
         try{
-        await axios.delete(`/trainTicket/delete/${booking.ticketNumber}`)
+            const usedMileage = await getusedMileage(booking.ticketNumber); // 사용된 마일리지를 받아옴
+            console.log(usedMileage);
+            if (usedMileage !== null) {
+              await axios.delete(`/trainTicket/delete/${booking.ticketNumber}`);
+              const response = await axios.put("/Mileage/rollbackMileage", null, {
+                params: {
+                  id: sessionStorage.getItem('userId'),
+                  usedMileage: usedMileage,
+                },
+              });
+        
+              if (response.status === 200) {
+                console.log('마일리지 환불 성공');
+              } else {
+                console.error('마일리지 환불 실패');
+              }
+            }
         setAlert_open(true);
         handlebusbooking(sessionStorage.getItem('userId'));
         setDialog_open(false);

@@ -232,6 +232,7 @@ async function MileageUpdate(id,mileage,paidAmount) {
             id : id,
             name : buyerName,
             reservationDate : dateValue,
+            usedMileage : usedMileage,
           }
 
           const roundreservationTicketData = {
@@ -248,6 +249,7 @@ async function MileageUpdate(id,mileage,paidAmount) {
             id : id,
             name : buyerName,
             reservationDate : rounddateValue,
+            usedMileage : usedMileage,
           }
 
         // 예매 내역을 먼저 저장

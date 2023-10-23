@@ -12,4 +12,6 @@ function vaildAdmin() {
       return false; // 토큰이 없는 경우 또는 역할이 없는 경우 false를 반환
       }
     }
+
+
     export default vaildAdmin;
