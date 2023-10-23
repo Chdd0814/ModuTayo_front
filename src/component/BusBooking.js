@@ -26,7 +26,6 @@ const BusBooking=(props)=>{
         {key:'arrivalTime',width:80},
         {key:'seatNumber',width:80}
     ])
-    const [beforeMileage, setbeforeMileage] = useState([]);
     const [SearchFilter,setSearchFilter]=useState({
         id:sessionStorage.getItem('userId'),
         start:'',
@@ -75,25 +74,7 @@ const BusBooking=(props)=>{
     useEffect(()=>{
         const userInfo = calluserInfo();
         if(!userInfo.sns){
-        handlebusbooking(sessionStorage.getItem('userId'));
-
-            try { 
-            axios.get(`/payment/PaymentBus/${sessionStorage.getItem('userId')}`)
-            .then(response => {
-                if (response.data && Array.isArray(response.data)) {
-                    const beforeMileageList = response.data.map(item => item.beforeMileage);
-                    // beforeMileageList에는 beforeMileage 항목만 들어있음
-                    console.log(beforeMileageList);
-                    setbeforeMileage(beforeMileageList);
-                }
-            })
-            .catch(error => {
-                console.error(error);
-            });
-            } catch(error) {
-                console.error(error);
-            }
-        
+        handlebusbooking(sessionStorage.getItem('userId'));  
     }
     },[handlebusbooking]);
     const formatDate=(input)=> {
@@ -131,9 +112,35 @@ const BusBooking=(props)=>{
     const handleClose=()=>{
         setDialog_open(false);
     }
+
+    const getusedMileage = async (ticketNumber) => {
+        try {
+          const response = await axios.get(`/busTicket/getusedMileage/${ticketNumber}`);  
+          const mileage = response.data;
+          return mileage; // 사용된 마일리지를 반환
+        } catch (error) {
+          console.error(error);
+          return null;
+        }
+      };
     const handleDelete=useCallback(async()=>{
         try{
-        await axios.delete(`/busTicket/delete/${booking.ticketNumber}`)
+            const usedMileage = await getusedMileage(booking.ticketNumber); // 사용된 마일리지를 받아옴
+            if (usedMileage !== null) {
+              await axios.delete(`/busTicket/delete/${booking.ticketNumber}`);
+              const response = await axios.put("/Mileage/rollbackMileage", null, {
+                params: {
+                  id: sessionStorage.getItem('userId'),
+                  usedMileage: usedMileage,
+                },
+              });
+        
+              if (response.status === 200) {
+                console.log('마일리지 환불 성공');
+              } else {
+                console.error('마일리지 환불 실패');
+              }
+            }
         setAlert_open(true);
         handlebusbooking(sessionStorage.getItem('userId'));
         setDialog_open(false);

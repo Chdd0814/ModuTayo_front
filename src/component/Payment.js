@@ -28,7 +28,6 @@ function Payment() {
     const [usedMileage, setusedMileage] = useState(0);
     const [trainSeatnumber, settrainSeatnumber] = useState('');
     const [trainCarnumber, settrainCarnumber] = useState('');
-    const [beforeMileage, setbeforeMileage] = useState(mileage + usedMileage);
     const randomticketnumber = `train_${dateValue}_${Math.floor(Math.random() * 10000)}`;
     const navigate = useNavigate();
     const [ticketStatus, setticketStatus] = useState(false);
@@ -76,7 +75,7 @@ function Payment() {
             settrainSeatnumber(dataToken.trainSeatNumber);
             settrainCarnumber(dataToken.trainCarNumber);
             settripType(dataToken.tripType);
-            setbeforeMileage(dataToken.Mileage + dataToken.useMileage);
+  
           } else if (checktripType === 'round-trip') {
 
             setdepPlace(dataToken.depPlace);
@@ -106,7 +105,7 @@ function Payment() {
             settrainSeatnumber(dataToken.trainSeatNumber);
             settrainCarnumber(dataToken.trainCarNumber);
             settripType(dataToken.tripType);
-            setbeforeMileage(dataToken.Mileage + dataToken.useMileage);
+       
           }
             
             
@@ -181,7 +180,6 @@ async function MileageUpdate(id,mileage,paidAmount) {
 
         const merchantUid = `ticket_${new Date().getTime()}`;
         const nameConcatenated = `모두타요_${depPlace}_${arrPlace}`;
-        console.log(beforeMileage);
 
         const data = {
             pg: pg, // PG사 : https://developers.portone.io/docs/ko/tip/pg-2 참고
@@ -216,7 +214,6 @@ async function MileageUpdate(id,mileage,paidAmount) {
             buyerTel : buyer_tel,
             buyerid : id,
             paymentDate : paymentDate,
-            beforeMileage : beforeMileage,
           }
           const roundPaycallbackData = {
             trainticketNumber : roundcrateTicketnumber,
@@ -228,7 +225,6 @@ async function MileageUpdate(id,mileage,paidAmount) {
             buyerTel : buyer_tel,
             buyerid : id,
             paymentDate : paymentDate,
-            beforeMileage : beforeMileage,
           }
 
           const reservationTicketData = {
@@ -245,6 +241,7 @@ async function MileageUpdate(id,mileage,paidAmount) {
             id : id,
             name : buyerName,
             reservationDate : dateValue,
+            usedMileage : usedMileage,
           }
 
           const roundreservationTicketData = {
@@ -262,6 +259,7 @@ async function MileageUpdate(id,mileage,paidAmount) {
             id : id,
             name : buyerName,
             reservationDate : rounddateValue,
+            usedMileage : usedMileage,
           }
          
 
