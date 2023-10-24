@@ -28,6 +28,8 @@ function Payment() {
     const [usedMileage, setusedMileage] = useState(0);
     const [trainSeatnumber, settrainSeatnumber] = useState('');
     const [trainCarnumber, settrainCarnumber] = useState('');
+    const [roundtrainSeatnumber, setroundtrainSeatnumber] = useState('');
+    const [roundtrainCarnumber, setroundtrainCarnumber] = useState('');
     const randomticketnumber = `train_${dateValue}_${Math.floor(Math.random() * 10000)}`;
     const navigate = useNavigate();
     const [ticketStatus, setticketStatus] = useState(false);
@@ -104,6 +106,8 @@ function Payment() {
             setusedMileage(dataToken.useMileage);
             settrainSeatnumber(dataToken.trainSeatNumber);
             settrainCarnumber(dataToken.trainCarNumber);
+            setroundtrainSeatnumber(dataToken.roundtrainSeat);
+            setroundtrainCarnumber(dataToken.roundtrainCar);
             settripType(dataToken.tripType);
        
           }
@@ -253,8 +257,8 @@ async function MileageUpdate(id,mileage,paidAmount) {
             arrivalStation : roundarrPlace,
             fare : roundticketPrice,
             trainNumber : roundtrainNum,
-            seatNumber : trainSeatnumber, // 좌석시스템 수정 후, 재수정바랍니다. (왕복처리 해야함)
-            trainCarNumber : trainCarnumber, // 좌석시스템 수정 후, 재수정바랍니다. (왕복처리 해야함)
+            seatNumber : roundtrainSeatnumber, // 좌석시스템 수정 후, 재수정바랍니다. (왕복처리 해야함)
+            trainCarNumber : roundtrainCarnumber, // 좌석시스템 수정 후, 재수정바랍니다. (왕복처리 해야함)
             ticketNumber : roundcrateTicketnumber,
             id : id,
             name : buyerName,
@@ -354,7 +358,7 @@ async function MileageUpdate(id,mileage,paidAmount) {
                   <Typography sx={{ fontSize: 12, fontWeight: 'bold' }}>{depTime} - {arrTime}</Typography>
                   <Divider sx={{ fontSize: 15, fontWeight: 'bold', marginTop : 2 }}>기차(오는편)</Divider>
                   <Typography sx={{ fontSize: 12, fontWeight: 'bold' }}>{rounddateValue}</Typography>
-                  <Typography sx={{ fontSize: 12, fontWeight: 'bold' }}>{roundtrainGrade}-{roundtrainNum} | {trainCarnumber}호차-{trainSeatnumber}</Typography>
+                  <Typography sx={{ fontSize: 12, fontWeight: 'bold' }}>{roundtrainGrade}-{roundtrainNum} | {roundtrainCarnumber}호차-{roundtrainSeatnumber}</Typography>
                   <Typography sx={{ fontSize: 12, fontWeight: 'bold' }}>{rounddepPlace} - {roundarrPlace}</Typography>
                   <Typography sx={{ fontSize: 12, fontWeight: 'bold' }}>{rounddepTime} - {roundarrTime}</Typography>
                   </>
