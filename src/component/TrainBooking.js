@@ -101,14 +101,20 @@ const TrainBooking=(props)=>{
         }
         else{
         try{
-            const response=await axios.get('/trainTicket/SearchFilter',{ params: SearchFilter })
+            let response=null;
+            if(vaildAdmin()){
+                response=await axios.get('/trainTicket/SearchFilter',{ params: SearchFilter })
+            }else{
+                response = await axios.get('/trainTicket/SearchFilter_user',{ params: SearchFilter })
+            }
             console.log(response.data)
             console.log(SearchFilter)
             if (Array.isArray(response.data)) {
                 response.data = response.data.map(item => {
                     return {
                         ...item,
-                        reservationDate: formatDate(item.reservationDate)
+                        reservationDate: formatDate(item.reservationDate),
+                        seatNumber: `${item.seatNumber}-${item.trainCarNumber}`
                     }
                 });
             }
