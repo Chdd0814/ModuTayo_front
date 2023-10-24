@@ -64,6 +64,8 @@ function BusTicketForm({ isLoggedIn }) {
     const [showTable1, setShowTable1] = useState(true);
     const [showTable2, setShowTable2] = useState(true);
     const [showTable3, setShowTable3] = useState(true);
+    const [selectedSeat, setSelectedSeat] = useState(null);
+    const [roundSelectedSeat, setroundSelectedSeat] = useState(null);
 
     const handleTripTypeChange = (type) => {
         setTripType(type);
@@ -79,6 +81,28 @@ function BusTicketForm({ isLoggedIn }) {
 
         }
       };
+
+  function generateRandomBusSeat() {
+    const randomSeatNumber = Math.floor(Math.random() * 28) + 1; // 1부터 28까지의 숫자
+  
+    return randomSeatNumber;
+  }
+  function bookRandomBusSeat() {
+    const busSeatNumber = generateRandomBusSeat();
+    setSelectedSeat(busSeatNumber);
+  }
+  
+  function roundbookRandomBusSeat() {
+    const busSeatNumber = generateRandomBusSeat();
+    setroundSelectedSeat(busSeatNumber); 
+  }
+  
+  useEffect(() => {
+    bookRandomBusSeat();
+    roundbookRandomBusSeat();
+  }, []);
+  
+
     /*bus편도*/
     const handleBusInfo = () => {
       setbusTicketinfo([]);
@@ -556,7 +580,7 @@ function BusTicketForm({ isLoggedIn }) {
           ticketPrice : ticketPrice, //버스표 가격
           Mileage: usedMileage, // 사용하고 남은 마일리지
           useMileage : mileageDiscount, //사용한 마일리지 (결제 내역에 뽑아주기 위함)
-          //trainSeatNumber : selectedSeat, // 선택한 좌석
+          busSeatNumber : selectedSeat,
           tripType : tripType,
         };
         sessionStorage.setItem('saveBusTicketinfo', JSON.stringify(BusdataToSave));
@@ -588,6 +612,8 @@ function BusTicketForm({ isLoggedIn }) {
           Rparty: Rparty, //가는편 인원수
           RticketPrice : roundSecondticketPrice, //오는편 버스표 가격
           selectedItem2: selectedItem2, //버스정보 전부 다
+          busSeatNumber: selectedSeat,
+          roundbusSeatNumber: roundSelectedSeat,
           tripType : tripType,
         };
         // 데이터를 JSON 문자열로 변환하여 `sessionStorage`에 저장
@@ -785,7 +811,7 @@ function BusTicketForm({ isLoggedIn }) {
                <DatePicker
                    label="날짜"
                    value={rounddatevalue}
-                   minDate={dayjs()} // 현재 날짜 이전의 날짜를 선택하지 못하게 함
+                   minDate={datevalue} // 현재 날짜 이전의 날짜를 선택하지 못하게 함
                    onChange={(newdatevalue) => setrounddatevalue(newdatevalue)}
                />
              </DemoContainer>
@@ -1243,7 +1269,7 @@ function BusTicketForm({ isLoggedIn }) {
                 <Typography>{selectedItem.depPlaceName} - {selectedItem.arrPlaceName} </Typography>
                 <Typography>{datevalue.format("YYYYMMDD")}</Typography>
                 <Typography>{selectedItem.depPlandTime} ~ {selectedItem.arrPlandTime} </Typography>
-                <Typography>{selectedItem.trainGradeName} - {selectedItem.trainNum}</Typography>
+                <Typography>{selectedItem.BusGradeName} - {selectedSeat}</Typography>
                 {/* <Typography>가격 : {selectedItem.Fare}</Typography> */}
               </Box>
             </Grid>
@@ -1418,14 +1444,14 @@ function BusTicketForm({ isLoggedIn }) {
                 <Typography>{selectedItem.depPlaceName} - {selectedItem.arrPlaceName} </Typography>
                 <Typography>{datevalue.format("YYYYMMDD")}</Typography>
                 <Typography>{selectedItem.depPlandTime} ~ {selectedItem.arrPlandTime} </Typography>
-                <Typography>{selectedItem.trainGradeName} - {selectedItem.trainNum}</Typography>
+                <Typography>{selectedItem.BusGradeName} - {selectedSeat}</Typography>
                 {selectedItem2 && (
                 <div>
                 <Typography sx={{ textAlign: 'left', fontWeight: 'bold', fontSize: 14 }}>버스정보(귀환 행)</Typography>
                 <Typography>{selectedItem2.depPlaceName} - {selectedItem2.arrPlaceName} </Typography>
                 <Typography>{rounddatevalue.format("YYYYMMDD")}</Typography>
                 <Typography>{selectedItem2.depPlandTime} ~ {selectedItem2.arrPlandTime} </Typography>
-                <Typography>{selectedItem2.trainGradeName} - {selectedItem2.trainNum}</Typography>
+                <Typography>{selectedItem2.BusGradeName} - {roundSelectedSeat}</Typography>
                 </div>
                 )}
               </Box>

@@ -898,7 +898,7 @@ useEffect(() => {
         <DatePicker
           label="날짜"
           value={rounddepPlaceTime}
-          minDate={dayjs()} // 현재 날짜 이전의 날짜를 선택하지 못하게 함
+          minDate={datevalue} // 현재 날짜 이전의 날짜를 선택하지 못하게 함
           onChange={(newdatevalue) => setrounddepPlaceTime(newdatevalue)}
           />
         </DemoContainer>

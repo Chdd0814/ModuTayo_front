@@ -261,6 +261,34 @@ useEffect(() => {
             [name]: formattedValue
         }));
     };
+//아이디 중복 확인
+    const handleDuplicateCheck = async () => {
+      try {
+          const response = await axios.get(`/vaildRegister?id=${formData.id}`);
+          console.log(response.data);
+          if (!response.data) {
+              setErrorData(prevErrorData => ({
+                  ...prevErrorData,
+                  idError: '이미 사용 중인 아이디입니다.'
+              }));
+              setValid(prevValid => ({
+                  ...prevValid,
+                  isId: false
+              }));
+          } else {
+              setErrorData(prevErrorData => ({
+                  ...prevErrorData,
+                  idError: '사용 가능한 아이디입니다.'
+              }));
+              setValid(prevValid => ({
+                  ...prevValid,
+                  isId: true
+              }));
+          }
+      } catch (error) {
+          console.error('중복 확인 에러:', error);
+      }
+  };
     
 return (
   <Container className='main' maxWidth="sm" >
@@ -271,6 +299,7 @@ return (
       <Grid container direction="column" alignItems="center">
         <Grid>
       <TextField  color={valid.isId?'primary':'error'} value={formData.id} type="text" name="id" label="ID" onChange={handleChange} variant="standard"/>
+      <Button variant="outlined" onClick={handleDuplicateCheck}>중복확인</Button>
       </Grid>
       {formData.id.length>0&&<Grid margin={1} className={`error${valid.isId?'true':'false'}`}>       
         {errorData.idError}
