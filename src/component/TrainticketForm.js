@@ -73,7 +73,36 @@ import Traintabpanel from "./Traintabpanel";
           
         }
       };
-      
+
+   // 무작위로 기차 좌석(trainCarNumber)과 좌석 번호(trainseatNumber)를 생성하는 함수
+function generateRandomTrainSeat() {
+  const maxCarNumber = 10; // 총 량 수 (예: 10량)
+  const seatsPerCar = 40; // 각 량의 좌석 수 (예: 40개 좌석)
+
+  // 무작위로 량 번호(trainCarNumber) 생성 (1부터 maxCarNumber까지)
+  const randomCarNumber = Math.floor(Math.random() * maxCarNumber) + 1;
+
+  // 무작위로 좌석 번호(trainseatNumber) 생성 (A1부터 D10까지)
+  const seatLetters = ["A", "B", "C", "D"];
+  const randomLetter = seatLetters[Math.floor(Math.random() * seatLetters.length)];
+  const randomSeatNumber = Math.floor(Math.random() * seatsPerCar) + 1;
+
+  return { trainCarNumber: randomCarNumber, trainseatNumber: `${randomLetter}${randomSeatNumber}` };
+}
+function bookRandomTrainSeat() {
+  const { trainCarNumber, trainseatNumber } = generateRandomTrainSeat();
+  
+  // trainCarNumber와 trainseatNumber 상태 변수에 값을 설정
+  setSelectedCar(trainCarNumber);
+  setSelectedSeat(trainseatNumber);
+
+  // 예매 정보를 출력하거나 저장하는 로직을 추가할 수 있습니다.
+  // 이 정보를 TrainBooking 테이블에 삽입하여 예매 정보를 생성할 수 있습니다.
+}
+
+useEffect(() => {
+  bookRandomTrainSeat();
+}, []);
 
 
       const handleSubmit = async (event) => {
@@ -1005,7 +1034,7 @@ import Traintabpanel from "./Traintabpanel";
                 <Typography sx={{ textAlign: 'left', fontWeight: 'bold', fontSize: 14 }}>탑승정보</Typography>
                 <TextField id="standard-basic" label="이름" variant="standard" className="fieldStyles" defaultValue= {name} InputProps={{ readOnly: true }}/>
                 <TextField id="standard-basic" label="전화번호" variant="standard" className="fieldStyles" defaultValue = {phoneNumber} InputProps={{ readOnly: true }} />
-                <ChildModal onSelectSeat={handleSeatSelect} selectedItems= {selectedItems} />
+                {/* <ChildModal onSelectSeat={handleSeatSelect} selectedItems= {selectedItems} /> */}
                 
                 {/* 좌석 선택 칸 만들기 */}
               </Box>
@@ -1184,7 +1213,7 @@ import Traintabpanel from "./Traintabpanel";
                 <Typography sx={{ textAlign: 'left', fontWeight: 'bold', fontSize: 14 }}>탑승정보</Typography>
                 <TextField id="standard-basic" label="이름" variant="standard" className="fieldStyles" defaultValue= {name} InputProps={{ readOnly: true }}/>
                 <TextField id="standard-basic" label="전화번호" variant="standard" className="fieldStyles" defaultValue = {phoneNumber} InputProps={{ readOnly: true }} />
-                <ChildModal onSelectSeat={handleSeatSelect} selectedItems= {selectedItems} />
+                {/* <ChildModal onSelectSeat={handleSeatSelect} selectedItems= {selectedItems} /> */}
                 
                 {/* 좌석 선택 칸 만들기 */}
               </Box>
