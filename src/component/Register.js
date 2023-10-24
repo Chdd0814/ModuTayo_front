@@ -42,7 +42,7 @@ const Register = () => {
         try {
           await axios.post('/Register', formData);
           console.log('Register success');
-          navigate("/");
+          navigate("/login");
         } catch (error) {
           console.error('Register error:', error);
         }
