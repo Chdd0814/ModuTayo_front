@@ -29,6 +29,8 @@ import Traintabpanel from "./Traintabpanel";
       const [selectedroundItems, setSelectedroundItems] = useState(null);
       const [selectedSeat, setSelectedSeat] = useState(null);
       const [selectedCar, setSelectedCar] = useState(null);
+      const [roundselectedSeat, setroundSelectedSeat] = useState(null);
+      const [roundselectedCar, setroundSelectedCar] = useState(null);
       const [name, setName] = useState(''); // 이름 상태
       const [phoneNumber, setPhoneNumber] = useState(''); // 전화번호 상태
       const [mileage, setMileage] = useState(''); // 마일리지 상태
@@ -85,23 +87,31 @@ function generateRandomTrainSeat() {
   // 무작위로 좌석 번호(trainseatNumber) 생성 (A1부터 D10까지)
   const seatLetters = ["A", "B", "C", "D"];
   const randomLetter = seatLetters[Math.floor(Math.random() * seatLetters.length)];
-  const randomSeatNumber = Math.floor(Math.random() * seatsPerCar) + 1;
+  const randomSeatNumber = Math.floor(Math.random() * 10) + 1; // 1부터 10까지의 숫자
 
   return { trainCarNumber: randomCarNumber, trainseatNumber: `${randomLetter}${randomSeatNumber}` };
 }
 function bookRandomTrainSeat() {
   const { trainCarNumber, trainseatNumber } = generateRandomTrainSeat();
   
-  // trainCarNumber와 trainseatNumber 상태 변수에 값을 설정
+
   setSelectedCar(trainCarNumber);
   setSelectedSeat(trainseatNumber);
 
-  // 예매 정보를 출력하거나 저장하는 로직을 추가할 수 있습니다.
-  // 이 정보를 TrainBooking 테이블에 삽입하여 예매 정보를 생성할 수 있습니다.
+}
+
+function roundbookRandomTrainSeat() {
+  const { trainCarNumber, trainseatNumber } = generateRandomTrainSeat();
+  
+
+  setroundSelectedCar(trainCarNumber);
+  setroundSelectedSeat(trainseatNumber);
+
 }
 
 useEffect(() => {
   bookRandomTrainSeat();
+  roundbookRandomTrainSeat();
 }, []);
 
 
@@ -462,6 +472,7 @@ useEffect(() => {
       };
     
       const saveDataTobeforePay = () => {
+        
         if (tripType === 'one-way') {
 
           const dataToSave = {
@@ -503,8 +514,6 @@ useEffect(() => {
             roundtrainNum : selectedroundItems.roundtrainNum,
             datevalue: datevalue.format("YYYYMMDD"), // 선택한 날짜
             rounddatevalue : rounddepPlaceTime.format("YYYYMMDD"), // 오는편 선택날짜
-            selectedItem: selectedItems, // 혹시 몰라서 기차정보 전부다 들고감.
-            roundselectedItem : selectedroundItems,
             party: party, // 인원수
             roundparty : roundparty,
             name: name, // 예매자 이름
@@ -517,6 +526,8 @@ useEffect(() => {
             useMileage : mileageDiscount, //사용한 마일리지 (결제 내역에 뽑아주기 위함)
             trainCarNumber : selectedCar, // 선택한 호차 
             trainSeatNumber : selectedSeat, // 선택한 좌석
+            roundtrainCar : roundselectedCar, // 선택한 호차 
+            roundtrainSeat : roundselectedSeat, // 선택한 좌석
             tripType : tripType,
           };
 
