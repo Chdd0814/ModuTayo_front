@@ -29,6 +29,8 @@ import Traintabpanel from "./Traintabpanel";
       const [selectedroundItems, setSelectedroundItems] = useState(null);
       const [selectedSeat, setSelectedSeat] = useState(null);
       const [selectedCar, setSelectedCar] = useState(null);
+      const [roundselectedSeat, setroundSelectedSeat] = useState(null);
+      const [roundselectedCar, setroundSelectedCar] = useState(null);
       const [name, setName] = useState(''); // 이름 상태
       const [phoneNumber, setPhoneNumber] = useState(''); // 전화번호 상태
       const [mileage, setMileage] = useState(''); // 마일리지 상태
@@ -73,7 +75,44 @@ import Traintabpanel from "./Traintabpanel";
           
         }
       };
-      
+
+   // 무작위로 기차 좌석(trainCarNumber)과 좌석 번호(trainseatNumber)를 생성하는 함수
+function generateRandomTrainSeat() {
+  const maxCarNumber = 10; // 총 량 수 (예: 10량)
+  const seatsPerCar = 40; // 각 량의 좌석 수 (예: 40개 좌석)
+
+  // 무작위로 량 번호(trainCarNumber) 생성 (1부터 maxCarNumber까지)
+  const randomCarNumber = Math.floor(Math.random() * maxCarNumber) + 1;
+
+  // 무작위로 좌석 번호(trainseatNumber) 생성 (A1부터 D10까지)
+  const seatLetters = ["A", "B", "C", "D"];
+  const randomLetter = seatLetters[Math.floor(Math.random() * seatLetters.length)];
+  const randomSeatNumber = Math.floor(Math.random() * 10) + 1; // 1부터 10까지의 숫자
+
+  return { trainCarNumber: randomCarNumber, trainseatNumber: `${randomLetter}${randomSeatNumber}` };
+}
+function bookRandomTrainSeat() {
+  const { trainCarNumber, trainseatNumber } = generateRandomTrainSeat();
+  
+
+  setSelectedCar(trainCarNumber);
+  setSelectedSeat(trainseatNumber);
+
+}
+
+function roundbookRandomTrainSeat() {
+  const { trainCarNumber, trainseatNumber } = generateRandomTrainSeat();
+  
+
+  setroundSelectedCar(trainCarNumber);
+  setroundSelectedSeat(trainseatNumber);
+
+}
+
+useEffect(() => {
+  bookRandomTrainSeat();
+  roundbookRandomTrainSeat();
+}, []);
 
 
       const handleSubmit = async (event) => {
@@ -433,6 +472,7 @@ import Traintabpanel from "./Traintabpanel";
       };
     
       const saveDataTobeforePay = () => {
+        
         if (tripType === 'one-way') {
 
           const dataToSave = {
@@ -474,8 +514,6 @@ import Traintabpanel from "./Traintabpanel";
             roundtrainNum : selectedroundItems.roundtrainNum,
             datevalue: datevalue.format("YYYYMMDD"), // 선택한 날짜
             rounddatevalue : rounddepPlaceTime.format("YYYYMMDD"), // 오는편 선택날짜
-            selectedItem: selectedItems, // 혹시 몰라서 기차정보 전부다 들고감.
-            roundselectedItem : selectedroundItems,
             party: party, // 인원수
             roundparty : roundparty,
             name: name, // 예매자 이름
@@ -488,6 +526,8 @@ import Traintabpanel from "./Traintabpanel";
             useMileage : mileageDiscount, //사용한 마일리지 (결제 내역에 뽑아주기 위함)
             trainCarNumber : selectedCar, // 선택한 호차 
             trainSeatNumber : selectedSeat, // 선택한 좌석
+            roundtrainCar : roundselectedCar, // 선택한 호차 
+            roundtrainSeat : roundselectedSeat, // 선택한 좌석
             tripType : tripType,
           };
 
@@ -1005,7 +1045,7 @@ import Traintabpanel from "./Traintabpanel";
                 <Typography sx={{ textAlign: 'left', fontWeight: 'bold', fontSize: 14 }}>탑승정보</Typography>
                 <TextField id="standard-basic" label="이름" variant="standard" className="fieldStyles" defaultValue= {name} InputProps={{ readOnly: true }}/>
                 <TextField id="standard-basic" label="전화번호" variant="standard" className="fieldStyles" defaultValue = {phoneNumber} InputProps={{ readOnly: true }} />
-                <ChildModal onSelectSeat={handleSeatSelect} selectedItems= {selectedItems} />
+                {/* <ChildModal onSelectSeat={handleSeatSelect} selectedItems= {selectedItems} /> */}
                 
                 {/* 좌석 선택 칸 만들기 */}
               </Box>
@@ -1184,7 +1224,7 @@ import Traintabpanel from "./Traintabpanel";
                 <Typography sx={{ textAlign: 'left', fontWeight: 'bold', fontSize: 14 }}>탑승정보</Typography>
                 <TextField id="standard-basic" label="이름" variant="standard" className="fieldStyles" defaultValue= {name} InputProps={{ readOnly: true }}/>
                 <TextField id="standard-basic" label="전화번호" variant="standard" className="fieldStyles" defaultValue = {phoneNumber} InputProps={{ readOnly: true }} />
-                <ChildModal onSelectSeat={handleSeatSelect} selectedItems= {selectedItems} />
+                {/* <ChildModal onSelectSeat={handleSeatSelect} selectedItems= {selectedItems} /> */}
                 
                 {/* 좌석 선택 칸 만들기 */}
               </Box>
