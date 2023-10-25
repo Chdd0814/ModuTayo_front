@@ -24,7 +24,7 @@ function Trainticket({ isLoggedIn }) {
     return (
 
         <div className = "TrainTicketForm">
-            <Typography variant="h5" fontFamily='GmarketSansMedium'>기차표</Typography>
+            <Typography variant="h5" fontFamily='GmarketSansMedium' marginTop={5}>기차표</Typography>
             <TrainTicketForm isLoggedIn = {isLoggedIn}/>
         </div>
 

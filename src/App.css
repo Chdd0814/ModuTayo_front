@@ -1,4 +1,6 @@
-
+body{
+  margin-bottom: 50px;
+}
 
 @media (prefers-reduced-motion: no-preference) {
   
@@ -15,8 +17,8 @@
 
 .App-main {
   position : relative;
-  padding-top: 60px;
   padding : 30px; /* 네비바 높이만큼 상단 패딩 추가 */
+  padding-top: 0px;
   
 }
 .App-footer {
