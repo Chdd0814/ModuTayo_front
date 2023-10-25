@@ -24,7 +24,7 @@ function Busticket({ isLoggedIn }) {
     return (
 
         <div className = "BusticketForm">
-            <Typography fontFamily='GmarketSansMedium' variant="h5">버스표</Typography>
+            <Typography fontFamily='GmarketSansMedium' variant="h5" marginTop={5}>버스표</Typography>
             <BusticketForm isLoggedIn = {isLoggedIn}/>
         </div>
 
