@@ -360,4 +360,4 @@ return (
 );
 };
 
-export default Register
+export default Register;
