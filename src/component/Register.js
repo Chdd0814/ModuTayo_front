@@ -14,6 +14,7 @@ const Register = () => {
   const [formData, setFormData] = useState({
     id: '',
     pass: '',
+    confirmPassword: '', // 추가: 비밀번호 확인 필드
     name: '',
     phonenumber: '',
     mileage: 0,
@@ -24,6 +25,7 @@ const Register = () => {
   const [errorData, setErrorData] = useState({
     idError: '',
     passError: '',
+    confirmPasswordError: '', // 추가: 비밀번호 확인 필드 에러
     nameError: '',
     tellError: '',
     emailError: '',
@@ -32,6 +34,7 @@ const Register = () => {
   const [valid, setValid] = useState({
     isId: false,
     isPass: false,
+    isConfirmPassword: false, // 추가: 비밀번호 확인 필드 유효성
     isName: false,
     isTell: false,
     isEmail: false,
@@ -67,6 +70,9 @@ const Register = () => {
     const hasNumber = /[0-9]/.test(pass);
     const isAtLeast8Chars = pass.length >= 8;
     return hasAlpha && hasNumber && isAtLeast8Chars;
+  };
+  const isValidConfirmPassword = (confirmPassword) => {
+    return formData.pass === confirmPassword;
   };
   const isValidTel = (tel) => {
     const hasNumber = /[0-9]/.test(tel);
@@ -130,6 +136,30 @@ const Register = () => {
       }));
     }
   }, [formData.pass]);
+  useEffect(() => {
+    // 비밀번호 확인 유효성 검사
+    const isConfirmPasswordValid = isValidConfirmPassword(formData.confirmPassword);
+
+    if (isConfirmPasswordValid) {
+      setErrorData(prevErrorData => ({
+        ...prevErrorData,
+        confirmPasswordError: '비밀번호가 일치합니다.'
+      }));
+      setValid(prevValid => ({
+        ...prevValid,
+        isConfirmPassword: true
+      }));
+    } else {
+      setErrorData(prevErrorData => ({
+        ...prevErrorData,
+        confirmPasswordError: '비밀번호가 일치하지 않습니다.'
+      }));
+      setValid(prevValid => ({
+        ...prevValid,
+        isConfirmPassword: false
+      }));
+    }
+  }, [formData.confirmPassword, formData.pass]);
   useEffect(() => {
     if (isValidName(formData.name)) {
       setErrorData(prevErrorData => ({
@@ -308,13 +338,13 @@ const Register = () => {
 
   return (
     <Container className='main' maxWidth="sm" >
+          <form onSubmit={handleSubmit}>
       <Grid className='maingrid' container alignItems="flex-start" justifyContent="center">
         <Grid>
           <Grid fontSize={30} marginTop={5}>회원가입</Grid>
-          <form onSubmit={handleSubmit}>
             <Grid container direction="column" alignItems="center">
               <Grid marginLeft={10}>
-                <TextField color={valid.isId ? 'primary' : 'error'} value={formData.id} type="text" name="id" label="ID" onChange={handleChange} variant="standard" disabled={idButtonCheck}/>
+                <TextField color={valid.isId ? 'primary' : 'error'} value={formData.id} type="text" name="id" label="ID" onChange={handleChange} variant="standard" disabled={idButtonCheck} sx={{width: '300px', height: '70px'}}/>
                 <Button variant="outlined" onClick={handleDuplicateCheck} size='small' style={{ marginLeft: '8px', marginTop: '18px' }}>중복확인</Button>
               </Grid>
               {formData.id.length > 0 && <Grid margin={1} className={`error${valid.isId ? 'true' : 'false'}`}>
@@ -323,7 +353,7 @@ const Register = () => {
             </Grid >
             <Grid container direction="column" alignItems="center">
               <Grid>
-                <PassWordField color={valid.isPass ? 'primary' : 'error'} value={formData.pass} type="password" name="pass" label="Password" onChange={handleChange} variant="standard" />
+                <PassWordField color={valid.isPass ? 'primary' : 'error'} value={formData.pass} type="password" name="pass" label="Password" onChange={handleChange} variant="standard" sx={{width: '300px', height: '70px'}}/>
               </Grid>
               {formData.pass.length > 0 && <Grid margin={1} className={`error${valid.isPass ? 'true' : 'false'}`}>
                 {errorData.passError}
@@ -331,7 +361,17 @@ const Register = () => {
             </Grid>
             <Grid container direction="column" alignItems="center">
               <Grid>
-                <TextField color={valid.isName ? 'primary' : 'error'} value={formData.name} type="text" name="name" label="Name" onChange={handleChange} variant="standard" />
+                <PassWordField color={valid.isConfirmPassword ? 'primary' : 'error'} value={formData.confirmPassword} type="password" name="confirmPassword" label="Password Check" 
+                  onChange={handleChange} variant="standard" sx={{width: '300px', height: '70px'}}
+                />
+              </Grid>
+              {formData.confirmPassword.length > 0 && <Grid margin={1} className={`error${valid.isConfirmPassword ? 'true' : 'false'}`}>
+                {errorData.confirmPasswordError}
+              </Grid>}
+            </Grid>
+            <Grid container direction="column" alignItems="center">
+              <Grid>
+                <TextField color={valid.isName ? 'primary' : 'error'} value={formData.name} type="text" name="name" label="Name" onChange={handleChange} variant="standard" sx={{width: '300px', height: '70px'}}/>
               </Grid>
               {formData.name.length > 0 && <Grid margin={1} className={`error${valid.isName ? 'true' : 'false'}`}>
                 {errorData.nameError}
@@ -339,7 +379,7 @@ const Register = () => {
             </Grid>
             <Grid container direction="column" alignItems="center" >
               <Grid>
-                <TextField inputProps={{ maxLength: 13 }} color={valid.isTell ? 'primary' : 'error'} value={formData.phonenumber} type="text" name="phonenumber" label="tel" onChange={handleTellChange} variant="standard" />
+                <TextField inputProps={{ maxLength: 13 }} color={valid.isTell ? 'primary' : 'error'} value={formData.phonenumber} type="text" name="phonenumber" label="tel" onChange={handleTellChange} variant="standard" sx={{width: '300px', height: '70px'}}/>
               </Grid>
               {formData.phonenumber.length > 0 && <Grid margin={1} className={`error${valid.isTell ? 'true' : 'false'}`}>
                 {errorData.tellError}
@@ -347,7 +387,7 @@ const Register = () => {
             </Grid>
             <Grid container direction="column" alignItems="center">
               <Grid>
-                <TextField color={valid.isEmail ? 'primary' : 'error'} value={formData.email} type="text" name="email" onChange={handleChange} variant="standard" label="email" />
+                <TextField color={valid.isEmail ? 'primary' : 'error'} value={formData.email} type="text" name="email" onChange={handleChange} variant="standard" label="email" sx={{width: '300px', height: '70px'}}/>
               </Grid>
               {formData.email.length > 0 && <Grid margin={1} className={`error${valid.isEmail ? 'true' : 'false'}`}>
                 {errorData.emailError}
@@ -355,23 +395,23 @@ const Register = () => {
             </Grid>
             <Grid container direction="column" alignItems="center">
               <Grid>
-                <TextField color={valid.isAddress ? 'primary' : 'error'} type="text" name="address" label="Address" value={formData.address} onChange={handleChange} onClick={handleAddressSearch} variant="standard" />
+                <TextField color={valid.isAddress ? 'primary' : 'error'} type="text" name="address" label="Address" value={formData.address} onChange={handleChange} onClick={handleAddressSearch} variant="standard" sx={{width: '300px', height: '70px'}}/>
               </Grid>
               {formData.address.length > 0 && <Grid margin={1} className={`error${valid.isAddress ? 'true' : 'false'}`}>
                 {errorData.addressError}
               </Grid>}
             </Grid>
-            <Grid margin={5} container direction="column" alignItems="center">
-              <Button variant="text" type="submit" disabled={!valid.isId || !valid.isPass || !valid.isName || !valid.isTell || !valid.isEmail || !valid.
-                isAddress || !idButtonCheck}>Register</Button>
-            </Grid>
-          </form>
-        </Grid>
         <Addressapi
           onComplete={handleAddressSelect}
           style={{ display: isAddressModalOpen ? 'block' : 'none' }}
-        />
+          />
+            <Grid margin={5} container direction="column" alignItems="center">
+              <Button variant="text" type="submit" disabled={!valid.isId || !valid.isPass || !valid.isName || !valid.isTell || !valid.isEmail || !valid.
+                isAddress || !idButtonCheck || !valid.isConfirmPassword}>Register</Button>
+            </Grid>
+        </Grid>
       </Grid>
+          </form>
     </Container>
   );
 };
