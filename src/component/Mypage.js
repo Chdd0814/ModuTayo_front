@@ -58,7 +58,7 @@ const Mypage = (props) =>{
                 aria-labelledby="profile"
                 subheader={
                     <ListSubheader component="div" id="profile">
-                       <Typography fontFamily="GmarketSansMedium"> Profile</Typography>
+                       <Typography fontFamily="GmarketSansMedium" margin={3}> Profile</Typography>
                     </ListSubheader>}>
                     <SubTitlebar icon={ContentPaste} content="예매내역" isOpen={props.open.ticketingOpen} open="ticketingOpen" setOpen={props.handleOpen} />
                       <Subcontentbar open={props.open.ticketingOpen} 

@@ -75,7 +75,7 @@ const NoticeWrite = (props) => {
     };
 
     return (
-        <Unstable_Grid2 container   direction="row" justifyContent="center">
+        <Unstable_Grid2 container   direction="row" justifyContent="center" marginTop={5}>
       <form onSubmit={handleSubmit} >
       <Unstable_Grid2 width={1200}>
         <TableContainer component={Paper} elevation={3}>
