@@ -633,12 +633,10 @@ function BusTicketForm({ isLoggedIn }) {
           <>
           <form onSubmit={handleSubmit} className="form-ticketinfo-form" style = {{marginTop : 15}}>
             <FormControl sx={{ m: 1, minWidth: 120, marginTop : 2 }}>
-              {selectedTerminal ? null : <InputLabel htmlFor="grouped-select">출발지</InputLabel>}
-              <TextField value={selectedTerminal} id="grouped-select" label="출발지" onClick={handleModalOpen} variant="outlined" />
+               <TextField value={selectedTerminal} id="grouped-select" label="출발지" onClick={handleModalOpen} variant="outlined" />
             </FormControl>
     
             <FormControl sx={{ m: 1, minWidth: 120, marginTop : 2 }}>
-              {selectedTerminal2 ? null : <InputLabel htmlFor="grouped-select">도착지</InputLabel>}
               <TextField value={selectedTerminal2} id="grouped-select" label="도착지" onClick={handleModalOpen} variant="outlined" />
             </FormControl>
     
