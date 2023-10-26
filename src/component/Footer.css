@@ -6,10 +6,13 @@
     padding: 10px;
     text-align: center;
     font-family: 'GmarketSansMedium';
+    position: fixed;
+    padding-top: 30px;
+    height: 50px;
   }
   
   #main-footer p {
-    margin: 0;
+    margin: 0 auto;
   }
   
   #main-footer span {
@@ -18,7 +21,7 @@
   
   /* 여백 추가 */
   #main-footer .col {
-    margin: 10px;
+    margin: 5px;
   }
 
   @font-face {

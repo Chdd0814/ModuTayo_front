@@ -28,7 +28,8 @@ function BusPayment() {
     const [ticketPrice, setTicketPrice] = useState(0);
     const [totalPrice, setTotalPrice] = useState(0);
     const [usedMileage, setusedMileage] = useState(0);
-    const [busSeatnumber, setbusSeatnumber] = useState('');
+    const [busSeatnumber, setbusSeatnumber] = useState(null);
+    const [roundbusSeatnumber, setroundbusSeatnumber] = useState(null);
     // const [callbackData, setcallbackData] = useState({});
     // const [ticketData, settrainticketData] = useState({});
     const randomticketnumber = `bus_${dateValue}_${Math.floor(Math.random() * 10000)}`;
@@ -98,7 +99,8 @@ function BusPayment() {
             setTotalPrice(dataToken.totalPrice);
             setMileage(dataToken.Mileage);
             setusedMileage(dataToken.useMileage);
-            //setbusSeatnumber(dataToken.trainSeatNumber);
+            setbusSeatnumber(dataToken.busSeatNumber);
+            setroundbusSeatnumber(dataToken.roundbusSeatNumber);
             settripType(dataToken.tripType);
           }
         }
@@ -237,14 +239,14 @@ async function MileageUpdate(id,mileage,paidAmount) {
 
           const roundreservationTicketData = {
 
-            RrouteId : RrouteId,
-            RbusClass : RbusGrade,
+            routeId : RrouteId,
+            busClass : RbusGrade,
             departureTime : rounddepTime,
             arrivalTime : roundarrTime,
             departureStation : rounddepPlace,
             arrivalStation : roundarrPlace,
             fare : roundticketPrice,
-            seatNumber : busSeatnumber, // 좌석시스템 수정 후, 재수정바랍니다. (왕복처리 해야함)
+            seatNumber : roundbusSeatnumber,
             ticketNumber : roundcrateTicketnumber,
             id : id,
             name : buyerName,
@@ -324,7 +326,7 @@ async function MileageUpdate(id,mileage,paidAmount) {
                   <>
                 <Divider sx={{ fontSize: 15, fontWeight: 'bold' }}>버스</Divider>
                 <Typography sx={{ fontSize: 12, fontWeight: 'bold' }}>{dateValue}</Typography>
-                <Typography sx={{ fontSize: 12, fontWeight: 'bold' }}>{busGrade} | {busSeatnumber}</Typography>
+                <Typography sx={{ fontSize: 12, fontWeight: 'bold' }}>{busGrade} - {busSeatnumber}</Typography>
                 <Typography sx={{ fontSize: 12, fontWeight: 'bold' }}>{depPlace} - {arrPlace}</Typography>
                 <Typography sx={{ fontSize: 12, fontWeight: 'bold' }}>{depTime} - {arrTime}</Typography>
                 </>
@@ -332,12 +334,12 @@ async function MileageUpdate(id,mileage,paidAmount) {
                   <>
                   <Divider sx={{ fontSize: 15, fontWeight: 'bold', marginTop : 5}}>버스(가는편)</Divider>
                   <Typography sx={{ fontSize: 12, fontWeight: 'bold' }}>{dateValue}</Typography>
-                  <Typography sx={{ fontSize: 12, fontWeight: 'bold' }}>{busGrade} | {busSeatnumber}</Typography>
+                  <Typography sx={{ fontSize: 12, fontWeight: 'bold' }}>{busGrade} - {busSeatnumber}</Typography>
                   <Typography sx={{ fontSize: 12, fontWeight: 'bold' }}>{depPlace} - {arrPlace}</Typography>
                   <Typography sx={{ fontSize: 12, fontWeight: 'bold' }}>{depTime} - {arrTime}</Typography>
                   <Divider sx={{ fontSize: 15, fontWeight: 'bold', marginTop : 2 }}>버스(오는편)</Divider>
                   <Typography sx={{ fontSize: 12, fontWeight: 'bold' }}>{rounddateValue}</Typography>
-                  <Typography sx={{ fontSize: 12, fontWeight: 'bold' }}>{RbusGrade} | {busSeatnumber}</Typography>
+                  <Typography sx={{ fontSize: 12, fontWeight: 'bold' }}>{RbusGrade} - {roundbusSeatnumber}</Typography>
                   <Typography sx={{ fontSize: 12, fontWeight: 'bold' }}>{rounddepPlace} - {roundarrPlace}</Typography>
                   <Typography sx={{ fontSize: 12, fontWeight: 'bold' }}>{rounddepTime} - {roundarrTime}</Typography>
                   </>

@@ -20,7 +20,7 @@ function Ticketinfoform() {
   const [oneWayinfo, setoneWayinfo] = useState({});
   const [Roundinfo, setRoundinfo] = useState({});
   const [transportType, setTransportType] = useState("train"); // 속성값에 따라 폼의 내용이 바뀌는 함수에 들어가는 변수
-  const [selectedType, setSelectedType] = useState(''); // 속성값에 따라 폼의 내용이 바뀌는 함수에 들어가는 변수
+  const [selectedType, setSelectedType] = useState("종류"); // 속성값에 따라 폼의 내용이 바뀌는 함수에 들어가는 변수
   const [datevalue, setdatevalue] = useState(dayjs()); // 날짜 
   const [rounddatevalue, setrounddatevalue] = useState(dayjs()); // 날짜 
   const [party, setParty] = useState(1); // 인원
@@ -375,7 +375,7 @@ const handleRoundSearch = () => {
           <Button onClick={() => handleTripTypeChange('one-way')}>편도</Button>
           <Button onClick={() => handleTripTypeChange('round-trip')}>왕복</Button>
           <Button id="Dropdonw-menu" aria-haspopup="true" onClick={handlebuttonClick}  >
-            종류
+            {selectedType}
           </Button>
           <Menu
             id="dropdown-menu"
@@ -738,8 +738,8 @@ const handleRoundSearch = () => {
         <DemoContainer components={['DatePicker']}>
         <DatePicker
           label="날짜"
-          value={datevalue}
-          minDate={dayjs()} // 현재 날짜 이전의 날짜를 선택하지 못하게 함
+          value={rounddatevalue}
+          minDate={datevalue} // 현재 날짜 이전의 날짜를 선택하지 못하게 함
           onChange={(newdatevalue) => setrounddatevalue(newdatevalue)}
           />
         </DemoContainer>
@@ -950,7 +950,7 @@ const handleRoundSearch = () => {
                <DatePicker
                    label="날짜"
                    value={rounddatevalue}
-                   minDate={dayjs()} // 현재 날짜 이전의 날짜를 선택하지 못하게 함
+                   minDate={datevalue} // 현재 날짜 이전의 날짜를 선택하지 못하게 함
                    onChange={(newdatevalue) => setrounddatevalue(newdatevalue)}
                />
              </DemoContainer>

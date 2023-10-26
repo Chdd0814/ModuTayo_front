@@ -34,7 +34,7 @@
 }
 
 .mainSentence{
-  margin-bottom: 50px;
+  margin-bottom: 30px;
   color: #ffb01e;
   font-family: 'GmarketSansMedium';
 }
@@ -97,4 +97,3 @@
   }
   /* 기타 모바일 스타일 변경 사항 추가 */
 }
-

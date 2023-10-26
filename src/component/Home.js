@@ -18,6 +18,7 @@ import mainLogoBG from '../ModuTayoBG.png';
 import mainLogoBGTitle from '../ModuTayoBGTitle.png';
 import Ticketinfoform from './Ticketinfoform';
 import {Skeleton,Typography} from '@mui/material';
+import Footer from './Footer.js';
 
 export default function Home() {
   const [notices, setNotices] = useState([]);
@@ -82,8 +83,8 @@ export default function Home() {
           {banner.map((item,index)=>(
       <Carousel.Item interval={5000}>
          {imageData[index]?
-        <img className = "d-block w-100" src = {imageData[index]}  alt = "First Slide" height={359}/>:
-        <Skeleton variant="rectangular"  className = "d-block w-100" height={359}/>}  
+        <img className = "d-block w-100" src = {imageData[index]}  alt = "First Slide" height={550}/>:
+        <Skeleton variant="rectangular"  className = "d-block w-100" height={550}/>}  
         <Carousel.Caption>
           <h3>{item.title}</h3>
           <p>{item.content}</p>
