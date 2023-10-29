@@ -18,7 +18,7 @@ function Payment() {
     const [trainGrade, settrainGrade] = useState(""); // 기차 종류
     const [trainNum, settrainNum] = useState(''); // 기차번호
     const [dateValue, setdateValue] = useState(""); // 
-    const [Party, setParty] = useState('');
+    const [Party, setParty] = useState(1);
     const [buyerName, setbuyerName] = useState(''); // 이름 상태
     const [phoneNumber, setPhoneNumber] = useState(''); // 전화번호 상태
     const [mileage, setMileage] = useState(''); // 마일리지 상태
@@ -40,7 +40,7 @@ function Payment() {
     const [roundtrainGrade, setroundtrainGrade] = useState("");
     const [roundtrainNum, setroundtrainNum] = useState("");
     const [rounddateValue, setrounddateValue] = useState("");
-    const [roundParty, setroundParty] = useState("");
+    const [roundParty, setroundParty] = useState(1);
     const [roundticketPrice, setroundticketPrice] = useState("");
     const [tripType, settripType] = useState("one-way");
     const roundrandomticketnumber = `train_${rounddateValue}_${Math.floor(Math.random() * 10000)}`;
@@ -66,7 +66,7 @@ function Payment() {
             settrainGrade(dataToken.trainGradeName);
             settrainNum(dataToken.trainNum);
             setdateValue(dataToken.datevalue);
-            setParty(dataToken.party);
+            const party = dataToken.party;
             setbuyerName(dataToken.name);
             setPhoneNumber(dataToken.phoneNumber);
             setid(dataToken.id);
@@ -77,6 +77,8 @@ function Payment() {
             settrainSeatnumber(dataToken.trainSeatNumber);
             settrainCarnumber(dataToken.trainCarNumber);
             settripType(dataToken.tripType);
+
+            setParty(party);
   
           } else if (checktripType === 'round-trip') {
 
@@ -91,11 +93,11 @@ function Payment() {
             settrainGrade(dataToken.trainGradeName);
             settrainNum(dataToken.trainNum);
             setdateValue(dataToken.datevalue);
-            setParty(dataToken.party);
+            const party = dataToken.party;
             setroundtrainGrade(dataToken.roundtrainGradeName);
             setroundtrainNum(dataToken.roundtrainNum);
             setrounddateValue(dataToken.rounddatevalue);
-            setroundParty(dataToken.roundparty);
+            const roundparty = dataToken.roundparty;
             setbuyerName(dataToken.name);
             setPhoneNumber(dataToken.phoneNumber);
             setid(dataToken.id);
@@ -110,6 +112,9 @@ function Payment() {
             setroundtrainCarnumber(dataToken.roundtrainCar);
             settripType(dataToken.tripType);
        
+
+            setParty(party);
+            setroundParty(roundparty);
           }
             
             
@@ -120,6 +125,24 @@ function Payment() {
 async function sendPaymentData(paymentData) {
   // Axios를 사용하여 결제 데이터를 서버로 전송
   axios.post('/payment/getPaymentinfo', paymentData, {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+    .then(response => {
+      // 서버 응답 처리
+      console.log(response.data);
+    })
+    .catch(error => {
+      // 오류 처리
+      console.error(error);
+    });
+}
+
+ // 결제 성공 데이터를 서버로 보내는 함수
+ async function sendroundPaymentData(paymentData) {
+  // Axios를 사용하여 결제 데이터를 서버로 전송
+  axios.post('/payment/roundPaymentinfo', paymentData, {
     headers: {
       'Content-Type': 'application/json',
     },
@@ -152,6 +175,23 @@ async function sendtrainTicketData(ticketData) {
 
 }
 
+async function sendroundtrainTicketData(ticketData) {
+
+
+  try {
+    const response = await axios.post('/trainTicket/roundSuccess', ticketData, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    console.log(response.data);
+    return true;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+
+}
 async function MileageUpdate(id,mileage,paidAmount) {
 
   try {
@@ -204,7 +244,7 @@ async function MileageUpdate(id,mileage,paidAmount) {
        
     
         if (success) {
-          
+
           const crateTicketnumber = randomticketnumber;
           const roundcrateTicketnumber = roundrandomticketnumber;
 
@@ -246,6 +286,7 @@ async function MileageUpdate(id,mileage,paidAmount) {
             name : buyerName,
             reservationDate : dateValue,
             usedMileage : usedMileage,
+            Party : Party,
           }
 
           const roundreservationTicketData = {
@@ -264,6 +305,7 @@ async function MileageUpdate(id,mileage,paidAmount) {
             name : buyerName,
             reservationDate : rounddateValue,
             usedMileage : usedMileage,
+            Party : roundParty,
           }
          
 
