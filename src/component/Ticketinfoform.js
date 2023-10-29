@@ -738,8 +738,8 @@ const handleRoundSearch = () => {
         <DemoContainer components={['DatePicker']}>
         <DatePicker
           label="날짜"
-          value={datevalue}
-          minDate={dayjs()} // 현재 날짜 이전의 날짜를 선택하지 못하게 함
+          value={rounddatevalue}
+          minDate={datevalue} // 현재 날짜 이전의 날짜를 선택하지 못하게 함
           onChange={(newdatevalue) => setrounddatevalue(newdatevalue)}
           />
         </DemoContainer>
@@ -950,7 +950,7 @@ const handleRoundSearch = () => {
                <DatePicker
                    label="날짜"
                    value={rounddatevalue}
-                   minDate={dayjs()} // 현재 날짜 이전의 날짜를 선택하지 못하게 함
+                   minDate={datevalue} // 현재 날짜 이전의 날짜를 선택하지 못하게 함
                    onChange={(newdatevalue) => setrounddatevalue(newdatevalue)}
                />
              </DemoContainer>

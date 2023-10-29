@@ -64,8 +64,8 @@ table {
 
 .write-button {
   position: absolute;
-  bottom : 2px; /* 원하는 간격으로 조정하세요 */
-  right: 20px;
+  bottom : -10px; /* 원하는 간격으로 조정하세요 */
+  right: 50px;
   padding: 10px 20px;
   background-color: #007bff;
   color: #fff;
