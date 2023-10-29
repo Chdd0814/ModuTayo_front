@@ -220,6 +220,11 @@ async function MileageUpdate(id,mileage,paidAmount) {
         const { IMP } = window;
         IMP.init(userCode);
 
+
+        function generateUniqueTicketNumber() {
+          // 고유한 ticketNumber 생성 로직을 구현
+          return `ticket_${new Date().getTime()}_${Math.random()}`;
+        }
          
 
         const merchantUid = `ticket_${new Date().getTime()}`;
@@ -245,9 +250,11 @@ async function MileageUpdate(id,mileage,paidAmount) {
     
         if (success) {
 
-          const crateTicketnumber = randomticketnumber;
-          const roundcrateTicketnumber = roundrandomticketnumber;
-
+          
+  
+        const crateTicketnumber = randomticketnumber;
+        const roundcrateTicketnumber = roundrandomticketnumber;
+       
           const PaycallbackData = {
             trainticketNumber : crateTicketnumber,
             impUid : imp_uid,
